@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Llista de Formadors</title>
+</head>
+<body>
+    <h1>Llista de Formadors (Prova DAO)</h1>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Primer Cognom</th>
+                <th>Email Contacte</th>
+                <th>Especialitat</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="formador : ${formadors}">
+                <td th:text="${formador.nom}"></td>
+                <td th:text="${formador.cognom1}"></td>
+                <td th:text="${formador.emailContacte}"></td>
+                <td th:text="${formador.especialitat}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/">Tornar a l'inici</a>
+</body>
+</html>
