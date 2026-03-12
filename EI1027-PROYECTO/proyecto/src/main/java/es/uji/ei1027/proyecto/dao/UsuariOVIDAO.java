@@ -21,12 +21,11 @@ public class UsuariOVIDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-     // ROW MAPPER
     private static final class UsuariOVIRowMapper implements RowMapper<UsuariOVI> {
         public UsuariOVI mapRow(ResultSet rs, int rowNum) throws SQLException {
             UsuariOVI usuari = new UsuariOVI();
 
-            usuari.setIdUsuari(rs.getInt("idUsuari"));
+            usuari.setIdUsuari(rs.getInt("id_usuari"));
             usuari.setDni(rs.getString("dni"));
             usuari.setNom(rs.getString("nom"));
             usuari.setCognom1(rs.getString("cognom1"));
@@ -34,19 +33,18 @@ public class UsuariOVIDAO {
             usuari.setTelefon(rs.getString("telefon"));
             usuari.setEmail(rs.getString("email"));
             usuari.setDireccio(rs.getString("direccio"));
-            usuari.setContrasenyaInicial(rs.getString("contrasenyaInicial"));
-            usuari.setConsentimentLOPD(rs.getBoolean("consentimentLOPD"));
-            usuari.setAcceptatPerTecnic(rs.getString("acceptatPerTecnic"));
+            usuari.setContrasenyaInicial(rs.getString("contrasenya"));
+            usuari.setConsentimentLOPD(rs.getBoolean("consentiment_LOPD"));
+            usuari.setAcceptatPerTecnic(rs.getString("estat_usuari"));
 
             return usuari;
         }
     }
 
     public void addUsuariOVI(UsuariOVI usuari) {
-        String sql = "INSERT INTO usuariOVI (idUsuari, dni, nom, cognom1, cognom2, telefon, email, direccio, contrasenyaInicial, consentimentLOPD, acceptatPerTecnic) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuariovi (dni, nom, cognom1, cognom2, telefon, email, direccio, contrasenya, consentiment_LOPD, estat_usuari) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
-                usuari.getIdUsuari(),
                 usuari.getDni(),
                 usuari.getNom(),
                 usuari.getCognom1(),
@@ -60,8 +58,8 @@ public class UsuariOVIDAO {
     }
 
     public void updateUsuariOVI(UsuariOVI usuari) {
-        String sql = "SET dni=?, nom=?, cognom1=?, cognom2=?, telefon=?, email=?, direccio=?, contrasenyaInicial=?, consentimentLOPD=?, acceptatPerTecnic=? " +
-                "WHERE idUsuari=?";
+        String sql = "UPDATE usuariovi SET dni=?, nom=?, cognom1=?, cognom2=?, telefon=?, email=?, direccio=?, contrasenya=?, consentiment_LOPD=?, estat_usuari=? " +
+                "WHERE id_usuari=?";
         jdbcTemplate.update(sql,
                 usuari.getDni(),
                 usuari.getNom(),
@@ -73,16 +71,16 @@ public class UsuariOVIDAO {
                 usuari.getContrasenyaInicial(),
                 usuari.getConsentimentLOPD(),
                 usuari.getAcceptatPerTecnic(),
-                usuari.getIdUsuari()); // El ID va al final por el WHERE
+                usuari.getIdUsuari()); 
     }
 
     public void deleteUsuariOVI(Integer idUsuari) {
-        String sql = "DELETE FROM usuariOVI WHERE idUsuari=?";
+        String sql = "DELETE FROM usuariovi WHERE id_usuari=?";
         jdbcTemplate.update(sql, idUsuari);
     }
 
     public UsuariOVI getUsuariOVI(Integer idUsuari) {
-        String sql = "SELECT * FROM usuariOVI WHERE idUsuari=?";
+        String sql = "SELECT * FROM usuariovi WHERE id_usuari=?";
         try {
             return jdbcTemplate.queryForObject(sql, new UsuariOVIRowMapper(), idUsuari);
         } catch (EmptyResultDataAccessException e) {
@@ -91,7 +89,7 @@ public class UsuariOVIDAO {
     }
 
     public List<UsuariOVI> getUsuarisOVI() {
-        String sql = "SELECT * FROM usuariOVI";
+        String sql = "SELECT * FROM usuariovi";
         return jdbcTemplate.query(sql, new UsuariOVIRowMapper());
     }
 }

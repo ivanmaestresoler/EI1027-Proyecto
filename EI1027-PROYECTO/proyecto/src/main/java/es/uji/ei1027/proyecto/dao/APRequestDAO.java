@@ -25,40 +25,40 @@ public class APRequestDAO {
         public APRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
             APRequest request = new APRequest();
 
-            request.setIdRequest(rs.getInt("idRequest"));
-            request.setIdUsuari(rs.getInt("idUsuari"));
+            request.setIdRequest(rs.getInt("id_request"));
+            request.setIdUsuari(rs.getInt("id_usuari"));
 
-            if (rs.getDate("dataSolicitud") != null) {
-                request.setDataSollicitud(rs.getDate("dataSolicitud").toLocalDate());
+            if (rs.getDate("data_solicitud") != null) {
+                request.setDataSollicitud(rs.getDate("data_solicitud").toLocalDate());
             }
 
             request.setPreferencies(rs.getString("preferencies"));
-            request.setEstatRequest(rs.getString("estatRequest"));
-            request.setTipusAssistencia(rs.getString("tipusAssistencia"));
+            request.setEstatRequest(rs.getString("estat_request"));
+            request.setTipusAssistencia(rs.getString("tipus_assistencia"));
 
             return request;
         }
     }
 
     public void addAPRequest(APRequest request) {
-        String sql = "INSERT INTO apRequest (idRequest, idUsuari, dataSolicitud, preferencies, estatRequest, tipusAssistencia) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, request.getIdRequest(), request.getIdUsuari(), request.getDataSollicitud(), request.getPreferencies(), request.getEstatRequest(), request.getTipusAssistencia());
+        String sql = "INSERT INTO aprequest (id_usuari, data_solicitud, preferencies, estat_request, tipus_assistencia) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getPreferencies(), request.getEstatRequest(), request.getTipusAssistencia());
     }
 
     public void updateAPRequest(APRequest request) {
-        String sql = "UPDATE apRequest SET idUsuari=?, dataSolicitud=?, preferencies=?, estatRequest=?, tipusAssistencia=? " +
-                "WHERE idRequest=?";
+        String sql = "UPDATE aprequest SET id_usuari=?, data_solicitud=?, preferencies=?, estat_request=?, tipus_assistencia=? " +
+                "WHERE id_request=?";
         jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getPreferencies(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
     }
 
     public void deleteAPRequest(Integer idRequest) {
-        String sql = "DELETE FROM apRequest WHERE idRequest=?";
+        String sql = "DELETE FROM aprequest WHERE id_request=?";
         jdbcTemplate.update(sql, idRequest);
     }
 
     public APRequest getAPRequest(Integer idRequest) {
-        String sql = "SELECT * FROM apRequest WHERE idRequest=?";
+        String sql = "SELECT * FROM aprequest WHERE id_request=?";
         try {
             return jdbcTemplate.queryForObject(sql, new APRequestRowMapper(), idRequest);
         } catch (EmptyResultDataAccessException e) {
@@ -67,12 +67,12 @@ public class APRequestDAO {
     }
 
     public List<APRequest> getAPRequests() {
-        String sql = "SELECT * FROM apRequest";
+        String sql = "SELECT * FROM aprequest";
         return jdbcTemplate.query(sql, new APRequestRowMapper());
     }
 
-    public List<APRequest> getAPRequestsPerUsuari(Integer idUsuari) { // Parámetro cambiado a Integer
-        String sql = "SELECT * FROM apRequest WHERE idUsuari=?";
+    public List<APRequest> getAPRequestsPerUsuari(Integer idUsuari) { 
+        String sql = "SELECT * FROM aprequest WHERE id_usuari=?";
         return jdbcTemplate.query(sql, new APRequestRowMapper(), idUsuari);
     }
 }
