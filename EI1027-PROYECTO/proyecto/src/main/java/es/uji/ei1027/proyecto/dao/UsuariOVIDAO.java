@@ -16,16 +16,12 @@ public class UsuariOVIDAO {
 
     private JdbcTemplate jdbcTemplate;
 
-    // Inyección de dependencias del JdbcTemplate
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /* -------------------------------------------------------------------
-     * ROW MAPPER
-     * Mapea una fila de la base de datos a un objeto de la clase UsuariOVI
-     * ------------------------------------------------------------------- */
+     // ROW MAPPER
     private static final class UsuariOVIRowMapper implements RowMapper<UsuariOVI> {
         public UsuariOVI mapRow(ResultSet rs, int rowNum) throws SQLException {
             UsuariOVI usuari = new UsuariOVI();

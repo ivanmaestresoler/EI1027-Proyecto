@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Llista d'usuaris</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Llista de Peticions d'Assistència Personal</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID Petició</th>
+            <th>ID Usuari</th>
+            <th>Data Sol·licitud</th>
+            <th>Tipus Assistència</th>
+            <th>Preferències</th>
+            <th>Estat</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="req : ${requests}">
+            <td th:text="${req.idRequest}"></td>
+            <td th:text="${req.idUsuari}"></td>
+            <td th:text="${req.dataSollicitud}"></td>
+            <td th:text="${req.tipusAssistencia}"></td>
+            <td th:text="${req.preferencies}"></td>
+            <td th:text="${req.estatRequest}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

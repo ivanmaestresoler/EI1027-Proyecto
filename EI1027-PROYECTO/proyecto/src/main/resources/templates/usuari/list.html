@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Llista d'usuaris</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Llista d'Assistents Personals</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>DNI</th>
+            <th>Nom</th>
+            <th>Primer Cognom</th>
+            <th>Telèfon</th>
+            <th>Email</th>
+            <th>Direcció</th>
+            <th>Estat</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usuari : ${usuaris}">
+            <td th:text="${usuari.dni}"></td>
+            <td th:text="${usuari.nom}"></td>
+            <td th:text="${usuari.cognom1}"></td>
+            <td th:text="${usuari.telefon}"></td>
+            <td th:text="${usuari.email}"></td>
+            <td th:text="${usuari.direccio}"></td>
+            <td th:text="${usuari.acceptatPerTecnic}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

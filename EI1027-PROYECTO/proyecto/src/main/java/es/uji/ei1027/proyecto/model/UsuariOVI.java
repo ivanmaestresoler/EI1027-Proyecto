@@ -13,7 +13,7 @@ public class UsuariOVI {
     private String contrasenyaInicial;
 
     private Boolean consentimentLOPD = false;
-    private String acceptatPerTecnic = "Pendent"; // Utiliza el enumerado estatUsuari ('Pendent', 'Acceptat', 'Rebutjat')
+    private String acceptatPerTecnic = "Pendent";
 
     public UsuariOVI() {
     }
