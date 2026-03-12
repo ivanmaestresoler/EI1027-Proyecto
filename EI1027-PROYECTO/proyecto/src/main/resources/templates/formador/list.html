@@ -5,28 +5,37 @@
     <title>Llista de Formadors</title>
 </head>
 <body>
-    <h1>Llista de Formadors (Prova DAO)</h1>
-    
+    <h1>Llista de Formadors</h1>
+
+    <a th:href="@{/formador/add}">➕ Afegir nou Formador</a>
+    <br><br>
+
     <table border="1">
         <thead>
             <tr>
                 <th>Nom</th>
-                <th>Primer Cognom</th>
-                <th>Email Contacte</th>
+                <th>Cognoms</th>
+                <th>Email de contacte</th>
                 <th>Especialitat</th>
+                <th>Accions</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="formador : ${formadors}">
                 <td th:text="${formador.nom}"></td>
-                <td th:text="${formador.cognom1}"></td>
+                <td th:text="${formador.cognom1 + ' ' + (formador.cognom2 != null ? formador.cognom2 : '')}"></td>
                 <td th:text="${formador.emailContacte}"></td>
                 <td th:text="${formador.especialitat}"></td>
+                <td>
+                    <a th:href="@{/formador/update/{id}(id=${formador.idFormador})}">✏️ Editar</a> | 
+                    <a th:href="@{/formador/delete/{id}(id=${formador.idFormador})}" onclick="return confirm('Estàs segur que vols esborrar aquest formador?')">🗑️ Esborrar</a>
+                </td>
             </tr>
         </tbody>
     </table>
-
+    
     <br>
-    <a href="/">Tornar a l'inici</a>
+    <a href="/">Tornar al menú principal</a>
+
 </body>
 </html>
