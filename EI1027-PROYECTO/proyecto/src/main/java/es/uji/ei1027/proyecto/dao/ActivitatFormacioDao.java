@@ -59,7 +59,7 @@ public class ActivitatFormacioDao {
 
     public void addActivitat(ActivitatFormacio activitat) {
         jdbcTemplate.update(
-                "INSERT INTO ActivitatFormacio (id_formador, titol, descripcio, data_hora, tipus_activitat, aforament_maxim) VALUES (?, ?, ?, ?, CAST(? AS enum_tipus_activitat), ?)",
+                "INSERT INTO ActivitatFormacio (id_formador, titol, descripcio, data_hora, tipus_activitat, aforament_maxim) VALUES (?, ?, ?, ?, ?::enum_tipus_activitat, ?)",
                 activitat.getIdFormador(), activitat.getTitol(), activitat.getDescripcio(),
                 activitat.getDataHora(), activitat.getTipusActivitat(), activitat.getAforamentMaxim()
         );
@@ -67,7 +67,7 @@ public class ActivitatFormacioDao {
 
     public void updateActivitat(ActivitatFormacio activitat) {
         jdbcTemplate.update(
-                "UPDATE ActivitatFormacio SET id_formador=?, titol=?, descripcio=?, data_hora=?, tipus_activitat=CAST(? AS enum_tipus_activitat), aforament_maxim=? WHERE id_activitat=?",
+                "UPDATE ActivitatFormacio SET id_formador=?, titol=?, descripcio=?, data_hora=?, tipus_activitat=?::enum_tipus_activitat, aforament_maxim=? WHERE id_activitat=?",
                 activitat.getIdFormador(), activitat.getTitol(), activitat.getDescripcio(),
                 activitat.getDataHora(), activitat.getTipusActivitat(), activitat.getAforamentMaxim(),
                 activitat.getIdActivitat()

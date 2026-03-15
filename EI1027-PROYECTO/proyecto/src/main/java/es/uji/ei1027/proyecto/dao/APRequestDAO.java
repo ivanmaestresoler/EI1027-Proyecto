@@ -42,12 +42,12 @@ public class APRequestDAO {
 
     public void addAPRequest(APRequest request) {
         String sql = "INSERT INTO aprequest (id_usuari, data_solicitud, preferencies, estat_request, tipus_assistencia) " +
-                "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?::enum_estat_request, ?::enum_tipus_assistent)";
         jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getPreferencies(), request.getEstatRequest(), request.getTipusAssistencia());
     }
 
     public void updateAPRequest(APRequest request) {
-        String sql = "UPDATE aprequest SET id_usuari=?, data_solicitud=?, preferencies=?, estat_request=?, tipus_assistencia=? " +
+        String sql = "UPDATE aprequest SET id_usuari=?, data_solicitud=?, preferencies=?, estat_request=?::enum_estat_request, tipus_assistencia=?::enum_tipus_assistent " +
                 "WHERE id_request=?";
         jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getPreferencies(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
     }

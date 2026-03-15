@@ -43,7 +43,7 @@ public class UsuariOVIDAO {
 
     public void addUsuariOVI(UsuariOVI usuari) {
         String sql = "INSERT INTO usuariovi (dni, nom, cognom1, cognom2, telefon, email, direccio, contrasenya, consentiment_LOPD, estat_usuari) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?::enum_estat_usuari)";
         jdbcTemplate.update(sql,
                 usuari.getDni(),
                 usuari.getNom(),
@@ -58,7 +58,7 @@ public class UsuariOVIDAO {
     }
 
     public void updateUsuariOVI(UsuariOVI usuari) {
-        String sql = "UPDATE usuariovi SET dni=?, nom=?, cognom1=?, cognom2=?, telefon=?, email=?, direccio=?, contrasenya=?, consentiment_LOPD=?, estat_usuari=? " +
+        String sql = "UPDATE usuariovi SET dni=?, nom=?, cognom1=?, cognom2=?, telefon=?, email=?, direccio=?, contrasenya=?, consentiment_LOPD=?, estat_usuari=?::enum_estat_usuari " +
                 "WHERE id_usuari=?";
         jdbcTemplate.update(sql,
                 usuari.getDni(),
