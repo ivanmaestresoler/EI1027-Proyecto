@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Selecció</title>
+</head>
+<body>
+<h1>Editar Selecció</h1>
+<form th:action="@{/seleccion/update}" th:object="${seleccion}" method="post">
+    <input type="hidden" th:field="*{idSeleccion}" />
+    <label>ID Request:</label> <input type="number" th:field="*{idRequest}" required /><br/>
+    <label>ID Assistent:</label> <input type="number" th:field="*{idAssistent}" required /><br/>
+    <label>Data Proposta:</label> <input type="datetime-local" th:field="*{dataProposta}" required /><br/><br/>
+    <button type="submit">Actualitzar</button>
+</form>
+<br><a th:href="@{/seleccion/list}">Tornar</a>
+</body>
+</html>

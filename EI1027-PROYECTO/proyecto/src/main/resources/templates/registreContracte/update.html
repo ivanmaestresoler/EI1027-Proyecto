@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Contracte</title>
+</head>
+<body>
+<h1>Editar Contracte</h1>
+<form th:action="@{/registreContracte/update}" th:object="${registreContracte}" method="post">
+    <input type="hidden" th:field="*{idContracte}" />
+    <label>ID Request:</label> <input type="number" th:field="*{idRequest}" required /><br/>
+    <label>ID Assistent:</label> <input type="number" th:field="*{idAssistent}" required /><br/>
+    <label>Data Inici:</label> <input type="date" th:field="*{dataInici}" required /><br/>
+    <label>Data Fi:</label> <input type="date" th:field="*{dataFi}" /><br/>
+    <label>Ruta PDF:</label> <input type="text" th:field="*{rutaPdf}" /><br/><br/>
+    <button type="submit">Actualitzar</button>
+</form>
+<br><a th:href="@{/registreContracte/list}">Tornar</a>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Comunicació</title>
+</head>
+<body>
+<h1>Editar Comunicació</h1>
+<form th:action="@{/comunicacio/update}" th:object="${comunicacio}" method="post">
+    <input type="hidden" th:field="*{idComunicacio}" />
+    <label>ID Selecció:</label> <input type="number" th:field="*{idSeleccion}" required /><br/>
+    <label>Missatge:</label> <textarea th:field="*{missatge}" required></textarea><br/>
+    <label>Remitent:</label>
+    <select th:field="*{remitent}" required>
+        <option value="Tecnic">Tècnic</option>
+        <option value="Usuari">Usuari</option>
+        <option value="Assistent">Assistent</option>
+    </select><br/>
+    <label>Data Enviament:</label> <input type="datetime-local" th:field="*{dataEnviament}" required /><br/><br/>
+    <button type="submit">Actualitzar</button>
+</form>
+<br><a th:href="@{/comunicacio/list}">Tornar</a>
+</body>
+</html>

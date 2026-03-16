@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Llista de Contractes</title>
+</head>
+<body>
+<h1>Llista de Contractes</h1>
+<a th:href="@{/registreContracte/add}">+ Nou Contracte</a>
+<br><br>
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID Contracte</th>
+    <th>Request</th>
+    <th>Assistent</th>
+    <th>Data Inici</th>
+    <th>Data Fi</th>
+    <th>Ruta PDF</th>
+    <th>Accions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="contracte : ${contractes}">
+    <td th:text="${contracte.idContracte}"></td>
+    <td th:text="${contracte.idRequest}"></td>
+    <td th:text="${contracte.idAssistent}"></td>
+    <td th:text="${contracte.dataInici}"></td>
+    <td th:text="${contracte.dataFi}"></td>
+    <td th:text="${contracte.rutaPdf}"></td>
+    <td>
+      <a th:href="@{/registreContracte/update/{id}(id=${contracte.idContracte})}">Editar</a> |
+      <a th:href="@{/registreContracte/delete/{id}(id=${contracte.idContracte})}" onclick="return confirm('Esborrar?');">Esborrar</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Llista de Seleccions</title>
+</head>
+<body>
+<h1>Llista de Seleccions</h1>
+<a th:href="@{/seleccion/add}">+ Nova Selecció</a>
+<br><br>
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID Selecció</th>
+    <th>ID Request</th>
+    <th>ID Assistent</th>
+    <th>Data Proposta</th>
+    <th>Accions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="selec : ${seleccions}">
+    <td th:text="${selec.idSeleccion}"></td>
+    <td th:text="${selec.idRequest}"></td>
+    <td th:text="${selec.idAssistent}"></td>
+    <td th:text="${selec.dataProposta}"></td>
+    <td>
+      <a th:href="@{/seleccion/update/{id}(id=${selec.idSeleccion})}">Editar</a> |
+      <a th:href="@{/seleccion/delete/{id}(id=${selec.idSeleccion})}" onclick="return confirm('Esborrar?');">Esborrar</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

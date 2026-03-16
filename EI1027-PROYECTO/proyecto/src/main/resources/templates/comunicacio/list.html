@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Llista de Comunicacions</title>
+</head>
+<body>
+<h1>Llista de Comunicacions</h1>
+<a th:href="@{/comunicacio/add}">+ Nova Comunicació</a>
+<br><br>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>ID Selecció</th>
+        <th>Missatge</th>
+        <th>Remitent</th>
+        <th>Data Enviament</th>
+        <th>Accions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="com : ${comunicacions}">
+        <td th:text="${com.idComunicacio}"></td>
+        <td th:text="${com.idSeleccion}"></td>
+        <td th:text="${com.missatge}"></td>
+        <td th:text="${com.remitent}"></td>
+        <td th:text="${com.dataEnviament}"></td>
+        <td>
+            <a th:href="@{/comunicacio/update/{id}(id=${com.idComunicacio})}">Editar</a> |
+            <a th:href="@{/comunicacio/delete/{id}(id=${com.idComunicacio})}" onclick="return confirm('Esborrar?');">Esborrar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
