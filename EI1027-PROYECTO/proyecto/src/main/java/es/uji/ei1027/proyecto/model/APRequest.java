@@ -7,9 +7,9 @@ public class APRequest {
     private Integer idRequest;
     private Integer idUsuari; // Cambiado a Integer
     private LocalDate dataSollicitud;
-    private String preferencies;
-
-    private String estatRequest = "En Revisió";
+    private String experienciaPrevia;
+    private String formacioAcademica;
+    private String estatRequest = "En revisió";
     private String tipusAssistencia;
 
     public APRequest() {
@@ -38,12 +38,20 @@ public class APRequest {
         this.dataSollicitud = dataSollicitud;
     }
 
-    public String getPreferencies() {
-        return preferencies;
+    public String getExperienciaPrevia() {
+        return experienciaPrevia;
     }
 
-    public void setPreferencies(String preferencies) {
-        this.preferencies = preferencies;
+    public void setExperienciaPrevia(String experienciaPrevia) {
+        this.experienciaPrevia = experienciaPrevia;
+    }
+
+    public String getFormacioAcademica() {
+        return formacioAcademica;
+    }
+
+    public void setFormacioAcademica(String formacioAcademica) {
+        this.formacioAcademica = formacioAcademica;
     }
 
     public String getEstatRequest() {

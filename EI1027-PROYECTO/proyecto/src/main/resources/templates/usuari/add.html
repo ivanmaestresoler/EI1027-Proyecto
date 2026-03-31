@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Afegir Usuari OVI</title>
+</head>
+<body>
+<h1>Afegeix un nou Usuari OVI</h1>
+
+<form action="#" th:action="@{/usuari/add}" th:object="${usuari}" method="post">
+
+    <label for="dni">DNI:</label>
+    <input type="text" id="dni" th:field="*{dni}" required /><br><br>
+
+    <label for="nom">Nom:</label>
+    <input type="text" id="nom" th:field="*{nom}" required /><br><br>
+
+    <label for="cognom1">Primer Cognom:</label>
+    <input type="text" id="cognom1" th:field="*{cognom1}" required /><br><br>
+
+    <label for="cognom2">Segon Cognom:</label>
+    <input type="text" id="cognom2" th:field="*{cognom2}" /><br><br>
+
+    <label for="telefon">Telèfon:</label>
+    <input type="text" id="telefon" th:field="*{telefon}" /><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" th:field="*{email}" required /><br><br>
+
+    <label for="direccio">Direcció:</label>
+    <input type="text" id="direccio" th:field="*{direccio}" /><br><br>
+
+    <label for="contrasenyaInicial">Contrasenya Inicial:</label>
+    <input type="password" id="contrasenyaInicial" th:field="*{contrasenyaInicial}" required /><br><br>
+
+    <label for="consentimentLOPD">Consentiment LOPD:</label>
+    <input type="checkbox" id="consentimentLOPD" th:field="*{consentimentLOPD}" /><br><br>
+
+    <label for="acceptatPerTecnic">Estat (Acceptat per Tècnic):</label>
+    <select id="acceptatPerTecnic" th:field="*{acceptatPerTecnic}">
+        <option value="Pendent">Pendent</option>
+        <option value="Acceptat">Acceptat</option>
+        <option value="Rebutjat">Rebutjat</option>
+    </select><br><br>
+
+    <button type="submit">Guardar Usuari</button>
+</form>
+
+<br>
+<a href="/usuari/list">Cancel·lar i tornar a la llista</a>
+</body>
+</html>

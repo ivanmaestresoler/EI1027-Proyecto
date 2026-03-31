@@ -32,7 +32,8 @@ public class APRequestDAO {
                 request.setDataSollicitud(rs.getDate("data_solicitud").toLocalDate());
             }
 
-            request.setPreferencies(rs.getString("preferencies"));
+            request.setExperienciaPrevia(rs.getString("experiencia_previa"));
+            request.setFormacioAcademica(rs.getString("formacio_academica"));
             request.setEstatRequest(rs.getString("estat_request"));
             request.setTipusAssistencia(rs.getString("tipus_assistencia"));
 
@@ -41,15 +42,15 @@ public class APRequestDAO {
     }
 
     public void addAPRequest(APRequest request) {
-        String sql = "INSERT INTO aprequest (id_usuari, data_solicitud, preferencies, estat_request, tipus_assistencia) " +
+        String sql = "INSERT INTO aprequest (id_usuari, data_solicitud, experiencia_previa, formacio_academica, estat_request, tipus_assistencia) " +
                 "VALUES (?, ?, ?, ?::enum_estat_request, ?::enum_tipus_assistent)";
-        jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getPreferencies(), request.getEstatRequest(), request.getTipusAssistencia());
+        jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getEstatRequest(), request.getTipusAssistencia());
     }
 
     public void updateAPRequest(APRequest request) {
-        String sql = "UPDATE aprequest SET id_usuari=?, data_solicitud=?, preferencies=?, estat_request=?::enum_estat_request, tipus_assistencia=?::enum_tipus_assistent " +
+        String sql = "UPDATE aprequest SET id_usuari=?, data_solicitud=?, experiencia_previa=?, formacio_academica=?, estat_request=?::enum_estat_request, tipus_assistencia=?::enum_tipus_assistent " +
                 "WHERE id_request=?";
-        jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getPreferencies(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
+        jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getExperienciaPrevia(),request.getFormacioAcademica(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
     }
 
     public void deleteAPRequest(Integer idRequest) {
