@@ -7,13 +7,17 @@
 </head>
 <body>
 <div class="container">
-    <h1>Llista d'Assistents Personals</h1>
+    <h1>Llista d'Usuaris OVI</h1>
+    <div class="mb-3 text-right">
+        <a th:href="@{/usuari/add}" class="btn btn-success">➕ Afegir Nou Usuari</a>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
             <th>DNI</th>
             <th>Nom</th>
             <th>Primer Cognom</th>
+            <th>Segon Cognom</th>
             <th>Telèfon</th>
             <th>Email</th>
             <th>Direcció</th>
@@ -25,6 +29,7 @@
             <td th:text="${usuari.dni}"></td>
             <td th:text="${usuari.nom}"></td>
             <td th:text="${usuari.cognom1}"></td>
+            <td th:text="${usuari.cognom2}"></td>
             <td th:text="${usuari.telefon}"></td>
             <td th:text="${usuari.email}"></td>
             <td th:text="${usuari.direccio}"></td>

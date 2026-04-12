@@ -1,52 +1,90 @@
 <!DOCTYPE html>
-<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <title>Afegir Usuari OVI</title>
+    <meta charset="UTF-8" />
+    <title>Crear nou usuari OVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <style>
+        .error { color: #dc3545; font-size: 90%; }
+    </style>
 </head>
 <body>
-<h1>Afegeix un nou Usuari OVI</h1>
+<main class="container py-4">
+    <h1 class="mb-4">Nou usuari OVI</h1>
 
-<form action="#" th:action="@{/usuari/add}" th:object="${usuari}" method="post">
+    <form th:action="@{/usuari/add}" th:object="${usuari}" method="post">
 
-    <label for="dni">DNI:</label>
-    <input type="text" id="dni" th:field="*{dni}" required /><br><br>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="dni" class="form-label">DNI</label>
+                <input id="dni" type="text" th:field="*{dni}" class="form-control" placeholder="Ex: 12345678A" />
+                <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class="error"></div>
+            </div>
 
-    <label for="nom">Nom:</label>
-    <input type="text" id="nom" th:field="*{nom}" required /><br><br>
+            <div class="col-md-4">
+                <label for="nom" class="form-label">Nom</label>
+                <input id="nom" type="text" th:field="*{nom}" class="form-control" />
+                <div th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error"></div>
+            </div>
 
-    <label for="cognom1">Primer Cognom:</label>
-    <input type="text" id="cognom1" th:field="*{cognom1}" required /><br><br>
+            <div class="col-md-4">
+                <label for="cognom1" class="form-label">Primer Cognom</label>
+                <input id="cognom1" type="text" th:field="*{cognom1}" class="form-control" />
+                <div th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error"></div>
+            </div>
+        </div>
 
-    <label for="cognom2">Segon Cognom:</label>
-    <input type="text" id="cognom2" th:field="*{cognom2}" /><br><br>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="cognom2" class="form-label">Segon Cognom</label>
+                <input id="cognom2" type="text" th:field="*{cognom2}" class="form-control" />
+                <div th:if="${#fields.hasErrors('cognom2')}" th:errors="*{cognom2}" class="error"></div>
+            </div>
 
-    <label for="telefon">Telèfon:</label>
-    <input type="text" id="telefon" th:field="*{telefon}" /><br><br>
+            <div class="col-md-4">
+                <label for="telefon" class="form-label">Telèfon</label>
+                <input id="telefon" type="text" th:field="*{telefon}" class="form-control" />
+                <div th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}" class="error"></div>
+            </div>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" th:field="*{email}" required /><br><br>
+            <div class="col-md-4">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" type="email" th:field="*{email}" class="form-control" />
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+            </div>
+        </div>
 
-    <label for="direccio">Direcció:</label>
-    <input type="text" id="direccio" th:field="*{direccio}" /><br><br>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="direccio" class="form-label">Direcció</label>
+                <input id="direccio" type="text" th:field="*{direccio}" class="form-control" />
+                <div th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="error"></div>
+            </div>
 
-    <label for="contrasenyaInicial">Contrasenya Inicial:</label>
-    <input type="password" id="contrasenyaInicial" th:field="*{contrasenyaInicial}" required /><br><br>
+            <div class="col-md-6">
+                <label for="contrasenyaInicial" class="form-label">Contrasenya</label>
+                <input id="contrasenyaInicial" type="password" th:field="*{contrasenyaInicial}" class="form-control" />
+                <div th:if="${#fields.hasErrors('contrasenyaInicial')}" th:errors="*{contrasenyaInicial}" class="error"></div>
+            </div>
+        </div>
 
-    <label for="consentimentLOPD">Consentiment LOPD:</label>
-    <input type="checkbox" id="consentimentLOPD" th:field="*{consentimentLOPD}" /><br><br>
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="consentimentLOPD" th:field="*{consentimentLOPD}" />
+                    <label class="form-check-label" for="consentimentLOPD">
+                        Acceptar consentiment LOPD
+                    </label>
+                </div>
+                <div th:if="${#fields.hasErrors('consentimentLOPD')}" th:errors="*{consentimentLOPD}" class="error"></div>
+            </div>
+        </div>
 
-    <label for="acceptatPerTecnic">Estat (Acceptat per Tècnic):</label>
-    <select id="acceptatPerTecnic" th:field="*{acceptatPerTecnic}">
-        <option value="Pendent">Pendent</option>
-        <option value="Acceptat">Acceptat</option>
-        <option value="Rebutjat">Rebutjat</option>
-    </select><br><br>
-
-    <button type="submit">Guardar Usuari</button>
-</form>
-
-<br>
-<a href="/usuari/list">Cancel·lar i tornar a la llista</a>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Afegeix usuari</button>
+            <a th:href="@{/usuari/list}" class="btn btn-secondary ms-2">Cancel·lar</a>
+        </div>
+    </form>
+</main>
 </body>
 </html>
