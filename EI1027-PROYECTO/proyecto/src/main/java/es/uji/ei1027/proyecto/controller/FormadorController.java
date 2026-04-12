@@ -34,7 +34,11 @@ public class FormadorController {
     }
 
     @RequestMapping(value="/add", method=RequestMethod.POST) 
-    public String processAddSubmit(@ModelAttribute("formador") Formador formador) { 
+    public String processAddSubmit(@ModelAttribute("formador") Formador formador, org.springframework.ui.Model model) { 
+        if (formadorDao.getFormadorByEmail(formador.getEmailContacte()) != null) {
+            model.addAttribute("errorEmail", "Aquest correu electrònic ja està registrat.");
+            return "formador/add"; 
+        }
         formadorDao.addFormador(formador); 
         return "redirect:/formador/list"; 
     }
@@ -46,11 +50,18 @@ public class FormadorController {
     }
 
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("formador") Formador formador) {
+    public String processUpdateSubmit(@ModelAttribute("formador") Formador formador, org.springframework.ui.Model model) {
+        Formador existent = formadorDao.getFormadorByEmail(formador.getEmailContacte());
+        
+        if (existent != null && !existent.getIdFormador().equals(formador.getIdFormador())) {
+            model.addAttribute("errorEmail", "Aquest correu electrònic ja el té un altre formador.");
+            return "formador/update";
+        }
+    
         formadorDao.updateFormador(formador);
         return "redirect:/formador/list";
     }
-
+    
     @RequestMapping(value="/delete/{id}")
     public String processDelete(@PathVariable int id) {
         formadorDao.deleteFormador(id);

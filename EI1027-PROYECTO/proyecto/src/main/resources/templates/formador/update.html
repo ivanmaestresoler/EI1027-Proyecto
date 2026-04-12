@@ -3,33 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Formador</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
     <h1>Edita el Formador</h1>
     
-    <form action="#" th:action="@{/formador/update}" th:object="${formador}" method="post">
-        
-        <input type="hidden" th:field="*{idFormador}" />
-        
-        <label for="nom">Nom:</label>
-        <input type="text" id="nom" th:field="*{nom}" required /><br><br>
-        
-        <label for="cognom1">Primer Cognom:</label>
-        <input type="text" id="cognom1" th:field="*{cognom1}" required /><br><br>
-        
-        <label for="cognom2">Segon Cognom:</label>
-        <input type="text" id="cognom2" th:field="*{cognom2}" /><br><br>
-        
-        <label for="emailContacte">Email de contacte:</label>
-        <input type="email" id="emailContacte" th:field="*{emailContacte}" required /><br><br>
-        
-        <label for="especialitat">Especialitat:</label>
-        <input type="text" id="especialitat" th:field="*{especialitat}" required /><br><br>
-        
-        <button type="submit">Actualitzar Formador</button>
-    </form>
+    <div th:if="${errorEmail}" class="alert-error">
+        <strong th:text="${errorEmail}"></strong>
+    </div>
     
-    <br>
-    <a href="/formador/list">Cancel·lar i tornar a la llista</a>
+    <div class="form-container">
+        <form th:action="@{/formador/update}" th:object="${formador}" method="post">
+            
+            <input type="hidden" th:field="*{idFormador}" />
+            
+            <div class="form-group">
+                <label for="nom">Nom:</label>
+                <input type="text" id="nom" th:field="*{nom}" required minlength="2" maxlength="50" />
+            </div>
+            
+            <div class="form-group">
+                <label for="cognom1">Primer Cognom:</label>
+                <input type="text" id="cognom1" th:field="*{cognom1}" required minlength="2" maxlength="50" />
+            </div>
+            
+            <div class="form-group">
+                <label for="cognom2">Segon Cognom:</label>
+                <input type="text" id="cognom2" th:field="*{cognom2}" maxlength="50" />
+            </div>
+            
+            <div class="form-group">
+                <label for="emailContacte">Email de contacte:</label>
+                <input type="email" id="emailContacte" th:field="*{emailContacte}" required maxlength="100" />
+            </div>
+            
+            <div class="form-group">
+                <label for="especialitat">Especialitat:</label>
+                <input type="text" id="especialitat" th:field="*{especialitat}" required minlength="3" maxlength="100" />
+            </div>
+            
+            <button type="submit" class="btn-submit">Actualitzar Formador</button>
+        </form>
+    </div>
+    
+    <a href="/formador/list">🔙 Cancel·lar i tornar a la llista</a>
 </body>
 </html>

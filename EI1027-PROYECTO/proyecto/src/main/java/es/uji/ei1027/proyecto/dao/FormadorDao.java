@@ -67,4 +67,13 @@ public class FormadorDao {
     public void deleteFormador(Integer idFormador) {
         jdbcTemplate.update("DELETE FROM Formador WHERE id_formador = ?", idFormador);
     }
+    
+    public Formador getFormadorByEmail(String email) {
+    try {
+        return jdbcTemplate.queryForObject("SELECT * FROM Formador WHERE email_contacte = ?",
+                new FormadorRowMapper(), email);
+    } catch (EmptyResultDataAccessException e) {
+        return null;
+    }
+}
 }

@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Llista de Formadors</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
     <h1>Llista de Formadors</h1>
 
-    <a th:href="@{/formador/add}">➕ Afegir nou Formador</a>
-    <br><br>
+    <div class="btn-container">
+        <a th:href="@{/formador/add}" class="btn-submit" style="display: inline-block;">➕ Afegir nou Formador</a>
+    </div>
 
-    <table border="1">
+    <table class="data-table">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -35,7 +37,7 @@
     </table>
     
     <br>
-    <a href="/">Tornar al menú principal</a>
+    <a href="/">🔙 Tornar al menú principal</a>
 
 </body>
 </html>

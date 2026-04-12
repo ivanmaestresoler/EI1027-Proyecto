@@ -1,0 +1,113 @@
+/* Estilos Generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+h1 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Enlaces y Botones */
+a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #2980b9;
+}
+
+.btn-container {
+    margin: 20px 0;
+}
+
+/* Estilos de Tablas (Listas) */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 10px;
+}
+
+.data-table th {
+    background-color: #3498db;
+    color: white;
+    text-align: left;
+    padding: 12px;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.data-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilos de Formularios (Añadir/Editar) */
+.form-container {
+    max-width: 600px;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Importante para que el padding no ensanche el input */
+}
+
+.form-group input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52,152,219,0.3);
+}
+
+.btn-submit {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #219150;
+}
+
+/* Alertas de Error */
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
