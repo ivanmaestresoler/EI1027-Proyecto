@@ -5,6 +5,7 @@ import es.uji.ei1027.proyecto.model.AssistentPersonal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,23 @@ public class AssistentPersonalController {
     }
 
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent) {
+    public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
+        // 1. Cridem al validador personalitzat
+        AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
+        assistentValidator.validate(assistent, bindingResult);
+
+        // 2. Comprovem que el DNI no existisca ja a la base de dades
+        if (assistent.getDni() != null && !assistent.getDni().trim().isEmpty()) {
+            if (assistentPersonalDao.getAssistentPersonal(assistent.getDni()) != null) {
+                bindingResult.rejectValue("dni", "repetit", "Aquest DNI ja està registrat al sistema");
+            }
+        }
+
+        // 3. Si hi ha errors, tornem al formulari
+        if (bindingResult.hasErrors()) {
+            return "assistentPersonal/add";
+        }
+
         assistentPersonalDao.addAssistentPersonal(assistent);
         return "redirect:/assistentPersonal/list";
     }
@@ -46,7 +63,15 @@ public class AssistentPersonalController {
     }
 
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("assistent") AssistentPersonal assistent) {
+    public String processUpdateSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
+        // En l'update validem les dades igualment
+        AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
+        assistentValidator.validate(assistent, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "assistentPersonal/update";
+        }
+
         assistentPersonalDao.updateAssistentPersonal(assistent);
         return "redirect:/assistentPersonal/list";
     }

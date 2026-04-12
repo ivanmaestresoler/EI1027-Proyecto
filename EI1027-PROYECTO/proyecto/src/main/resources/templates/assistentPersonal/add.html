@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Afegir Assistent Personal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Afegeix un nou Assistent Personal</h1>
+
+<div class="form-container">
+    <form th:action="@{/assistentPersonal/add}" th:object="${assistent}" method="post">
+
+        <div class="form-group">
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" th:field="*{dni}" />
+            <span th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" th:field="*{nom}" />
+            <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="cognom1">Primer Cognom:</label>
+            <input type="text" id="cognom1" th:field="*{cognom1}" />
+            <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" />
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="contrasenya">Contrasenya:</label>
+            <input type="password" id="contrasenya" th:field="*{contrasenya}" />
+            <span th:if="${#fields.hasErrors('contrasenya')}" th:errors="*{contrasenya}" class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="tipus">Tipus:</label>
+            <select id="tipus" th:field="*{tipus}" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="">-- Selecciona un tipus --</option>
+                <option value="PAP">PAP</option>
+                <option value="PATI">PATI</option>
+            </select>
+            <span th:if="${#fields.hasErrors('tipus')}" th:errors="*{tipus}" class="error-message"></span>
+        </div>
+
+        <button type="submit" class="btn-submit">Guardar Assistent</button>
+    </form>
+</div>
+
+<a href="/assistentPersonal/list">🔙 Cancel·lar i tornar a la llista</a>
+</body>
+</html>

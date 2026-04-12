@@ -1,33 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Llista d'Assistents</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="container">
-    <h1>Llista d'Assistents Personals</h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>DNI</th>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Tipus</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="assistent : ${assistents}">
-            <td th:text="${assistent.dni}"></td>
-            <td th:text="${assistent.nom}"></td>
-            <td th:text="${assistent.email}"></td>
-            <td th:text="${assistent.tipus}"></td>
-        </tr>
-        </tbody>
-    </table>
+<h1>Llista d'Assistents Personals</h1>
+
+<div class="btn-container">
+    <a th:href="@{/assistentPersonal/add}" class="btn-submit" style="display: inline-block;">➕ Afegir nou Assistent</a>
 </div>
+
+<table class="data-table">
+    <thead>
+    <tr>
+        <th>DNI</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Tipus</th>
+        <th>Accions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="assistent : ${assistents}">
+        <td th:text="${assistent.dni}"></td>
+        <td th:text="${assistent.nom}"></td>
+        <td th:text="${assistent.email}"></td>
+        <td th:text="${assistent.tipus}"></td>
+        <td>
+            <a th:href="@{/assistentPersonal/update/{id}(id=${assistent.dni})}">✏️ Editar</a> |
+            <a th:href="@{/assistentPersonal/delete/{id}(id=${assistent.dni})}" onclick="return confirm('Estàs segur que vols esborrar aquest assistent?')">🗑️ Esborrar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
 <br>
-    <a href="/">Tornar a l'inici</a>
+<a href="/">🔙 Tornar al menú principal</a>
+
 </body>
 </html>
