@@ -5,6 +5,7 @@ import es.uji.ei1027.proyecto.model.Formador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,20 +28,26 @@ public class FormadorController {
         return "formador/list";
     }
 
-    @RequestMapping(value="/add") 
+    @RequestMapping(value="/add")
     public String addFormador(Model model) {
         model.addAttribute("formador", new Formador());
         return "formador/add";
     }
 
-    @RequestMapping(value="/add", method=RequestMethod.POST) 
-    public String processAddSubmit(@ModelAttribute("formador") Formador formador, org.springframework.ui.Model model) { 
+    @RequestMapping(value="/add", method=RequestMethod.POST)
+    public String processAddSubmit(@ModelAttribute("formador") Formador formador, BindingResult bindingResult) {
+        FormadorValidator formadorValidator = new FormadorValidator();
+        formadorValidator.validate(formador, bindingResult);
+
         if (formadorDao.getFormadorByEmail(formador.getEmailContacte()) != null) {
-            model.addAttribute("errorEmail", "Aquest correu electrònic ja està registrat.");
-            return "formador/add"; 
+            bindingResult.rejectValue("emailContacte", "repetit", "Aquest email ja existeix");
         }
-        formadorDao.addFormador(formador); 
-        return "redirect:/formador/list"; 
+
+        if (bindingResult.hasErrors()) {
+            return "formador/add";
+        }
+        formadorDao.addFormador(formador);
+        return "redirect:/formador/list";
     }
 
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
@@ -50,18 +57,22 @@ public class FormadorController {
     }
 
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("formador") Formador formador, org.springframework.ui.Model model) {
+    public String processUpdateSubmit(@ModelAttribute("formador") Formador formador, BindingResult bindingResult) {
+        FormadorValidator formadorValidator = new FormadorValidator();
+        formadorValidator.validate(formador, bindingResult);
+
         Formador existent = formadorDao.getFormadorByEmail(formador.getEmailContacte());
-        
         if (existent != null && !existent.getIdFormador().equals(formador.getIdFormador())) {
-            model.addAttribute("errorEmail", "Aquest correu electrònic ja el té un altre formador.");
+            bindingResult.rejectValue("emailContacte", "repetit", "Aquest email ja el té un altre formador");
+        }
+
+        if (bindingResult.hasErrors()) {
             return "formador/update";
         }
-    
         formadorDao.updateFormador(formador);
         return "redirect:/formador/list";
     }
-    
+
     @RequestMapping(value="/delete/{id}")
     public String processDelete(@PathVariable int id) {
         formadorDao.deleteFormador(id);
