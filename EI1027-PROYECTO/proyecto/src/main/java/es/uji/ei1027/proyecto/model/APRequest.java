@@ -1,6 +1,7 @@
 package es.uji.ei1027.proyecto.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class APRequest {
 

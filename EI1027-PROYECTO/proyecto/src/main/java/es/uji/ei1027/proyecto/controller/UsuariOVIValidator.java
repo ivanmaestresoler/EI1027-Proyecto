@@ -1,9 +1,10 @@
 package es.uji.ei1027.proyecto.controller;
 
 import es.uji.ei1027.proyecto.model.UsuariOVI;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
+@Component
 public class UsuariOVIValidator implements Validator {
 
     @Override
@@ -45,10 +46,26 @@ public class UsuariOVIValidator implements Validator {
             errors.rejectValue("direccio", "obligatori", "Cal introduir una direcció");
         }
 
-        if (usuari.getContrasenyaInicial() == null || usuari.getContrasenyaInicial().trim().isEmpty()) {
-            errors.rejectValue("contrasenyaInicial", "obligatori", "Cal introduir una contrasenya");
-        } else if (usuari.getContrasenyaInicial().length() < 6) {
-            errors.rejectValue("contrasenyaInicial", "curta", "La contrasenya ha de tindre almenys 6 caràcters");
+        if (usuari.getGenere() == null || usuari.getGenere().trim().isEmpty()) {
+            errors.rejectValue("genere", "obligatori", "Cal seleccionar un gènere");
+        }
+
+        if (usuari.getDataNaixement() == null) {
+            errors.rejectValue("dataNaixement", "obligatori", "Cal introduir la data de naixement");
+        }
+
+        if (usuari.getNombrePueblo() == null || usuari.getNombrePueblo().trim().isEmpty()) {
+            errors.rejectValue("nombrePueblo", "obligatori", "Cal seleccionar una localitat/poble");
+        }
+
+        if (usuari.getContrasenya() == null || usuari.getContrasenya().trim().isEmpty()) {
+            errors.rejectValue("contrasenya", "obligatori", "Cal introduir una contrasenya");
+        } else if (usuari.getContrasenya().length() < 6) {
+            errors.rejectValue("contrasenya", "curta", "La contrasenya ha de tindre almenys 6 caràcters");
+        }
+
+        if (usuari.getTipusAssistencia() == null || usuari.getTipusAssistencia().trim().isEmpty()) {
+            errors.rejectValue("tipusAssistencia", "obligatori", "Cal seleccionar el tipus d'assistència necessària");
         }
 
         if (usuari.getConsentimentLOPD() == null || !usuari.getConsentimentLOPD()) {

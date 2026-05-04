@@ -14,6 +14,7 @@ public class AssistentPersonal extends Usuario {
     private List<AssistentDisponibilitat> disponibilitats;
 
     public AssistentPersonal() {
+        super();
     }
 
     public String getFormacioAcademica() { return formacioAcademica; }

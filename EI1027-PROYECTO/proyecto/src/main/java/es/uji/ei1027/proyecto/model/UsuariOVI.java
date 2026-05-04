@@ -8,6 +8,7 @@ public class UsuariOVI extends Usuario {
     private String estatUsuari = "Pendent";
 
     public UsuariOVI() {
+        super();
     }
 
     public String getPlaVida() { return plaVida; }
