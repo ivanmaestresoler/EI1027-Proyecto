@@ -1,111 +1,24 @@
 package es.uji.ei1027.proyecto.model;
 
-public class UsuariOVI {
+public class UsuariOVI extends Usuario {
 
-    private Integer idUsuari;
-    private String dni;
-    private String nom;
-    private String cognom1;
-    private String cognom2;
-    private String telefon;
-    private String email;
-    private String direccio;
-    private String contrasenyaInicial;
-
+    private String plaVida;
+    private String tipusAssistencia;
     private Boolean consentimentLOPD = false;
-    private String acceptatPerTecnic = "Pendent";
+    private String estatUsuari = "Pendent";
 
     public UsuariOVI() {
     }
 
-    // GETTERS Y SETTERS
+    public String getPlaVida() { return plaVida; }
+    public void setPlaVida(String plaVida) { this.plaVida = plaVida; }
 
-    public Integer getIdUsuari() {
-        return idUsuari;
-    }
+    public String getTipusAssistencia() { return tipusAssistencia; }
+    public void setTipusAssistencia(String tipusAssistencia) { this.tipusAssistencia = tipusAssistencia; }
 
-    public void setIdUsuari(Integer idUsuari) {
-        this.idUsuari = idUsuari;
-    }
+    public Boolean getConsentimentLOPD() { return consentimentLOPD; }
+    public void setConsentimentLOPD(Boolean consentimentLOPD) { this.consentimentLOPD = consentimentLOPD; }
 
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getCognom1() {
-        return cognom1;
-    }
-
-    public void setCognom1(String cognom1) {
-        this.cognom1 = cognom1;
-    }
-
-    public String getCognom2() {
-        return cognom2;
-    }
-
-    public void setCognom2(String cognom2) {
-        this.cognom2 = cognom2;
-    }
-
-    public String getTelefon() {
-        return telefon;
-    }
-
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDireccio() {
-        return direccio;
-    }
-
-    public void setDireccio(String direccio) {
-        this.direccio = direccio;
-    }
-
-    public String getContrasenyaInicial() {
-        return contrasenyaInicial;
-    }
-
-    public void setContrasenyaInicial(String contrasenyaInicial) {
-        this.contrasenyaInicial = contrasenyaInicial;
-    }
-
-    public Boolean getConsentimentLOPD() {
-        return consentimentLOPD;
-    }
-
-    public void setConsentimentLOPD(Boolean consentimentLOPD) {
-        this.consentimentLOPD = consentimentLOPD;
-    }
-
-    public String getAcceptatPerTecnic() {
-        return acceptatPerTecnic;
-    }
-
-    public void setAcceptatPerTecnic(String acceptatPerTecnic) {
-        this.acceptatPerTecnic = acceptatPerTecnic;
-    }
-
+    public String getEstatUsuari() { return estatUsuari; }
+    public void setEstatUsuari(String estatUsuari) { this.estatUsuari = estatUsuari; }
 }
