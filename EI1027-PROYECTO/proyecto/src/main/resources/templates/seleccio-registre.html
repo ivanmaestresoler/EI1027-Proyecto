@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Selecciona Perfil - Projecte OVI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="form-container" style="text-align: center; margin-top: 50px;">
+        <h1>Com vols registrar-te?</h1>
+        <p style="margin-bottom: 30px;">Tria el tipus de compte que vols crear a la plataforma:</p>
+        
+        <div style="display: flex; justify-content: center; gap: 20px;">
+            <div class="card" style="width: 250px; padding: 20px;">
+                <h3>Usuari OVI</h3>
+                <p>Persona amb diversitat funcional que sol·licita assistència.</p>
+                <a th:href="@{/usuari/add}" class="btn-submit" style="display: block; text-decoration: none; margin-top: 15px;">Soc Usuari OVI</a>
+            </div>
+
+            <div class="card" style="width: 250px; padding: 20px;">
+                <h3>Assistent Personal</h3>
+                <p>Professional que ofereix serveis de suport i acompanyament.</p>
+                <a th:href="@{/assistentPersonal/add}" class="btn-submit" style="display: block; text-decoration: none; margin-top: 15px; background-color: #2ecc71;">Soc Assistent</a>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a th:href="@{/}" style="color: #7f8c8d;">Tornar a l'inici</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sol·licituds d'Usuaris OVI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h1>Sol·licituds de Registre (Usuaris OVI)</h1>
+
+    <div th:if="${#lists.isEmpty(usuarisPendents)}" class="form-container" style="text-align: center;">
+        <p>No hi ha cap sol·licitud pendent de revisió.</p>
+    </div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(usuarisPendents)}">
+        <thead>
+            <tr>
+                <th>DNI/NIE</th>
+                <th>Nom i Cognoms</th>
+                <th>Email</th>
+                <th>Poble</th>
+                <th>Accions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuari : ${usuarisPendents}">
+                <td th:text="${usuari.dni}"></td>
+                <td th:text="${usuari.nom + ' ' + usuari.cognom1}"></td>
+                <td th:text="${usuari.email}"></td>
+                <td th:text="${usuari.nombrePueblo}"></td>
+                <td>
+                    <a th:href="@{/admin/acceptar-ovi/{id}(id=${usuari.idUsuario})}" class="btn-submit" style="padding: 5px 10px; background-color: #2ecc71; text-decoration: none;">✅ Acceptar</a>
+                    <a th:href="@{/admin/rebutjar-ovi/{id}(id=${usuari.idUsuario})}" class="btn-submit" style="padding: 5px 10px; background-color: #e74c3c; text-decoration: none;" onclick="return confirm('Segur que vols rebutjar?')">❌ Rebutjar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 20px;">
+        <a th:href="@{/}" class="btn-submit" style="background-color: #95a5a6; text-decoration: none;">Tornar</a>
+    </div>
+</body>
+</html>

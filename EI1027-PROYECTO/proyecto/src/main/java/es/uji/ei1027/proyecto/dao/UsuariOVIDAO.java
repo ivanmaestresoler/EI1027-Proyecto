@@ -114,4 +114,13 @@ public class UsuariOVIDAO {
             return null;
         }
     }
+    public List<UsuariOVI> getUsuarisPendents() {
+        String sql = "SELECT * FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari WHERE o.estat_usuari = 'Pendent'::enum_estat_usuari";
+        return jdbcTemplate.query(sql, new UsuariOVIMapper());
+    }
+
+    public void actualitzarEstat(int idUsuario, String nouEstat) {
+        String sql = "UPDATE UsuariOVI SET estat_usuari = ?::enum_estat_usuari WHERE id_usuari = ?";
+        jdbcTemplate.update(sql, nouEstat, idUsuario);
+    }
 }

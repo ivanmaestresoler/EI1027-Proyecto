@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class AssistentPersonalDao {
@@ -29,7 +30,6 @@ public class AssistentPersonalDao {
     private static final class AssistentPersonalRowMapper implements RowMapper<AssistentPersonal> {
         public AssistentPersonal mapRow(ResultSet rs, int rowNum) throws SQLException {
             AssistentPersonal assistent = new AssistentPersonal();
-            
             assistent.setIdUsuario(rs.getInt("id_usuario"));
             assistent.setNom(rs.getString("nom"));
             assistent.setCognom1(rs.getString("cognom1"));
@@ -38,20 +38,16 @@ public class AssistentPersonalDao {
             assistent.setEmail(rs.getString("email"));
             assistent.setContrasenya(rs.getString("contrasenya"));
             assistent.setGenere(rs.getString("genere"));
-            
             if (rs.getDate("data_naixement") != null) {
                 assistent.setDataNaixement(rs.getDate("data_naixement").toLocalDate());
             }
-            
             assistent.setTipusUsuari(rs.getString("tipus_usuari"));
             assistent.setTelefon(rs.getString("telefon"));
             assistent.setNombrePueblo(rs.getString("nombre_pueblo"));
             assistent.setDireccio(rs.getString("direccio"));
-
             assistent.setFormacioAcademica(rs.getString("formacio_academica"));
             assistent.setTipus(rs.getString("tipus"));
             assistent.setEstatAcceptat(rs.getString("estat_acceptat"));
-
             return assistent;
         }
     }
@@ -78,35 +74,26 @@ public class AssistentPersonalDao {
             return ps;
         }, keyHolder);
 
-        if (keyHolder.getKey() != null) {
-            int idGenerado = keyHolder.getKey().intValue();
+        Map<String, Object> keys = keyHolder.getKeys();
+        if (keys != null && keys.containsKey("id_usuario")) {
+            int idGenerado = (int) keys.get("id_usuario");
             assistent.setIdUsuario(idGenerado);
-            
             String sqlAssistent = "INSERT INTO AssistentPersonal (id_assistent, formacio_academica, tipus, estat_acceptat) " +
-                                  "VALUES (?, ?, ?::enum_tipus_assistent, ?::enum_estat_assistent)";
-            
+                                  "VALUES (?, ?::enum_formacio, ?::enum_tipus_assistent, ?::enum_estat_assistent)";
             jdbcTemplate.update(sqlAssistent, idGenerado, assistent.getFormacioAcademica(), assistent.getTipus(), assistent.getEstatAcceptat());
         }
     }
 
     public void updateAssistentPersonal(AssistentPersonal assistent) {
         String sqlUsuario = "UPDATE Usuario SET nom=?, cognom1=?, cognom2=?, dni=?, email=?, contrasenya=?, genere=?::enum_genere, data_naixement=?, telefon=?, nombre_pueblo=?, direccio=? WHERE id_usuario=?";
-        
-        jdbcTemplate.update(sqlUsuario,
-                assistent.getNom(), assistent.getCognom1(), assistent.getCognom2(), assistent.getDni(),
-                assistent.getEmail(), assistent.getContrasenya(), assistent.getGenere(),
-                assistent.getDataNaixement(), assistent.getTelefon(), assistent.getNombrePueblo(),
-                assistent.getDireccio(), assistent.getIdUsuario());
+        jdbcTemplate.update(sqlUsuario, assistent.getNom(), assistent.getCognom1(), assistent.getCognom2(), assistent.getDni(), assistent.getEmail(), assistent.getContrasenya(), assistent.getGenere(), assistent.getDataNaixement(), assistent.getTelefon(), assistent.getNombrePueblo(), assistent.getDireccio(), assistent.getIdUsuario());
 
-        String sqlAssistent = "UPDATE AssistentPersonal SET formacio_academica=?, tipus=?::enum_tipus_assistent, estat_acceptat=?::enum_estat_assistent WHERE id_assistent=?";
-        
-        jdbcTemplate.update(sqlAssistent,
-                assistent.getFormacioAcademica(), assistent.getTipus(), assistent.getEstatAcceptat(), assistent.getIdUsuario());
+        String sqlAssistent = "UPDATE AssistentPersonal SET formacio_academica=?::enum_formacio, tipus=?::enum_tipus_assistent, estat_acceptat=?::enum_estat_assistent WHERE id_assistent=?";
+        jdbcTemplate.update(sqlAssistent, assistent.getFormacioAcademica(), assistent.getTipus(), assistent.getEstatAcceptat(), assistent.getIdUsuario());
     }
 
     public void deleteAssistentPersonal(int idUsuario) {
-        String sql = "DELETE FROM Usuario WHERE id_usuario=?";
-        jdbcTemplate.update(sql, idUsuario);
+        jdbcTemplate.update("DELETE FROM Usuario WHERE id_usuario=?", idUsuario);
     }
 
     public AssistentPersonal getAssistentPersonal(int idUsuario) {
@@ -119,8 +106,7 @@ public class AssistentPersonalDao {
     }
 
     public List<AssistentPersonal> getAssistentsPersonals() {
-        String sql = "SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent";
-        return jdbcTemplate.query(sql, new AssistentPersonalRowMapper());
+        return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent", new AssistentPersonalRowMapper());
     }
 
     public void approveAssistent(int idAssistent) {
@@ -132,7 +118,6 @@ public class AssistentPersonalDao {
     }
 
     public List<AssistentPersonal> getCandidats() {
-        String sql = "SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Candidat'";
-        return jdbcTemplate.query(sql, new AssistentPersonalRowMapper());
+        return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Candidat'::enum_estat_assistent", new AssistentPersonalRowMapper());
     }
 }

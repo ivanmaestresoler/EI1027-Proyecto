@@ -28,12 +28,6 @@ public class AssistentPersonalController {
         return "assistentPersonal/list";
     }
 
-    @RequestMapping("/solicituds")
-    public String listSolicituds(Model model) {
-        model.addAttribute("candidats", assistentPersonalDao.getCandidats());
-        return "assistentPersonal/solicituds";
-    }
-
     @RequestMapping(value="/add")
     public String addAssistent(Model model) {
         model.addAttribute("assistent", new AssistentPersonal());
@@ -44,9 +38,15 @@ public class AssistentPersonalController {
     public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
         AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
         assistentValidator.validate(assistent, bindingResult);
-        if (bindingResult.hasErrors()) return "assistentPersonal/add";
+        
+        if (bindingResult.hasErrors()) {
+            return "assistentPersonal/add";
+        }
+        
+        assistent.setEstatAcceptat("Candidat");
         assistentPersonalDao.addAssistentPersonal(assistent);
-        return "redirect:/assistentPersonal/list";
+        
+        return "redirect:/registre-completat";
     }
 
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
@@ -59,7 +59,11 @@ public class AssistentPersonalController {
     public String processUpdateSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
         AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
         assistentValidator.validate(assistent, bindingResult);
-        if (bindingResult.hasErrors()) return "assistentPersonal/update";
+        
+        if (bindingResult.hasErrors()) {
+            return "assistentPersonal/update";
+        }
+        
         assistentPersonalDao.updateAssistentPersonal(assistent);
         return "redirect:/assistentPersonal/list";
     }
@@ -68,17 +72,5 @@ public class AssistentPersonalController {
     public String processDelete(@PathVariable int id) {
         assistentPersonalDao.deleteAssistentPersonal(id);
         return "redirect:/assistentPersonal/list";
-    }
-
-    @RequestMapping("/approve/{id}")
-    public String approve(@PathVariable int id) {
-        assistentPersonalDao.approveAssistent(id);
-        return "redirect:/assistentPersonal/solicituds";
-    }
-
-    @RequestMapping("/reject/{id}")
-    public String reject(@PathVariable int id) {
-        assistentPersonalDao.rejectAssistent(id);
-        return "redirect:/assistentPersonal/solicituds";
     }
 }

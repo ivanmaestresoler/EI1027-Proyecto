@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registre Completat</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="form-container" style="text-align: center; margin: 50px auto; max-width: 600px;">
+        <h1 style="border-bottom: none; color: #2ecc71;">✅ Sol·licitud enviada</h1>
+        <p style="font-size: 16px; margin-top: 20px;">
+            Gràcies per registrar-te. La teua sol·licitud s'ha guardat amb l'estat <strong>Pendent</strong>.
+        </p>
+        <p style="font-size: 16px; margin-bottom: 30px;">
+            Un administrador revisarà el teu perfil. Podràs entrar quan la sol·licitud siga acceptada.
+        </p>
+        <a th:href="@{/}" class="btn-submit" style="text-decoration: none;">Tornar a l'Inici</a>
+    </div>
+</body>
+</html>

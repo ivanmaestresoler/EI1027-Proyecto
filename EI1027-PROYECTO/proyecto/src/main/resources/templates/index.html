@@ -14,6 +14,7 @@
     <div class="user-zone">
         <div th:if="${session.usuario == null}">
             <a th:href="@{/login}" class="btn-login">Iniciar Sesió</a>
+            <a th:href="@{/registre}" class="btn-login" style="margin-left: 10px; background-color: #2ecc71;">Registrar-se</a>
         </div>
         <div th:if="${session.usuario != null}">
             <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span> (<span th:text="${session.usuario.tipusUsuari}"></span>)</span>
@@ -53,14 +54,14 @@
             </ul>
         </div>
 
-        <div class="admin-section" th:if="${session.usuario != null and session.usuario.tipusUsuari == 'admin'}">
+        <div class="admin-section" th:if="${session.usuario != null and session.usuario.tipusUsuari == 'admin'}" style="grid-column: 1 / -1; background-color: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; margin-top: 20px;">
             <h3>Zona d'Administració</h3>
-            <p>Gestió avançada del sistema:</p>
-            <a th:href="@{/assistentPersonal/solicituds}" class="btn-admin">
-                Gestionar Sol·licituds d'Assistents
-            </a>
+            <p>Gestió avançada del sistema de sol·licituds de registre:</p>
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <a th:href="@{/admin/solicituds-ovi}" class="btn-submit" style="text-decoration: none; background-color: #34495e;">Sol·licituds Usuaris OVI</a>
+                <a th:href="@{/admin/solicituds-assistent}" class="btn-submit" style="text-decoration: none; background-color: #2c3e50;">Sol·licituds Assistents</a>
+            </div>
         </div>
-
     </div>
 </main>
 

@@ -67,8 +67,10 @@ public class UsuariOVIController {
             return "usuari/add";
         }
 
+        usuariOVI.setEstatUsuari("Pendent");
         usuariOVIDAO.addUsuariOVI(usuariOVI);
-        return "redirect:list";
+        
+        return "redirect:/registre-completat";
     }
 
     @GetMapping("/update/{id}")
