@@ -43,6 +43,6 @@ public class AssistentPersonal extends Usuario {
 
     @Override
     public String toString() {
-        return "AssistentPersonal{idUsuario=" + getIdUsuario() + ", nom='" + getNom() + "'}";
+        return "AssistentPersonal{idUsuario=" + getIdUsuario() + ", nom='" + getNom() + "', dni='" + getDni() + "'}";
     }
 }

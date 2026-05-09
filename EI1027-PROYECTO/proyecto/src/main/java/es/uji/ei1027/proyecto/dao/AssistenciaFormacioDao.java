@@ -28,10 +28,6 @@ public class AssistenciaFormacioDao {
             assistencia.setIdAssistencia(rs.getInt("id_assistencia"));
             assistencia.setIdActivitat(rs.getInt("id_activitat"));
             
-            if (rs.getObject("id_usuari") != null) {
-                assistencia.setIdUsuari(rs.getInt("id_usuari"));
-            }
-            
             if (rs.getObject("id_assistent") != null) {
                 assistencia.setIdAssistent(rs.getInt("id_assistent"));
             }
@@ -58,16 +54,16 @@ public class AssistenciaFormacioDao {
 
     public void addAssistencia(AssistenciaFormacio assistencia) {
         jdbcTemplate.update(
-                "INSERT INTO AssistenciaFormacio (id_activitat, id_usuari, id_assistent, inscripcio_previa, ha_assistit, certificat_emes) VALUES (?, ?, ?, ?, ?, ?)",
-                assistencia.getIdActivitat(), assistencia.getIdUsuari(), assistencia.getIdAssistent(),
+                "INSERT INTO AssistenciaFormacio (id_activitat, id_assistent, inscripcio_previa, ha_assistit, certificat_emes) VALUES (?, ?, ?, ?, ?)",
+                assistencia.getIdActivitat(), assistencia.getIdAssistent(),
                 assistencia.getInscripcioPrevia(), assistencia.getHaAssistit(), assistencia.getCertificatEmes()
         );
     }
 
     public void updateAssistencia(AssistenciaFormacio assistencia) {
         jdbcTemplate.update(
-                "UPDATE AssistenciaFormacio SET id_activitat=?, id_usuari=?, id_assistent=?, inscripcio_previa=?, ha_assistit=?, certificat_emes=? WHERE id_assistencia=?",
-                assistencia.getIdActivitat(), assistencia.getIdUsuari(), assistencia.getIdAssistent(),
+                "UPDATE AssistenciaFormacio SET id_activitat=?, id_assistent=?, inscripcio_previa=?, ha_assistit=?, certificat_emes=? WHERE id_assistencia=?",
+                assistencia.getIdActivitat(), assistencia.getIdAssistent(),
                 assistencia.getInscripcioPrevia(), assistencia.getHaAssistit(), assistencia.getCertificatEmes(),
                 assistencia.getIdAssistencia()
         );

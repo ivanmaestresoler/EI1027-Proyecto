@@ -21,8 +21,6 @@ public class Usuario {
     public Usuario() {
     }
 
-    // --- GETTERS Y SETTERS ---
-
     public int getIdUsuario() { return idUsuario; }
     public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
 

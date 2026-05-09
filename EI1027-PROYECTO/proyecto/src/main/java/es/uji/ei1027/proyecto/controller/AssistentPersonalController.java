@@ -28,6 +28,12 @@ public class AssistentPersonalController {
         return "assistentPersonal/list";
     }
 
+    @RequestMapping("/solicituds")
+    public String listSolicituds(Model model) {
+        model.addAttribute("candidats", assistentPersonalDao.getCandidats());
+        return "assistentPersonal/solicituds";
+    }
+
     @RequestMapping(value="/add")
     public String addAssistent(Model model) {
         model.addAttribute("assistent", new AssistentPersonal());
@@ -36,49 +42,43 @@ public class AssistentPersonalController {
 
     @RequestMapping(value="/add", method=RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
-        // 1. Cridem al validador personalitzat
         AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
         assistentValidator.validate(assistent, bindingResult);
-
-        // 2. Comprovem que el DNI no existisca ja a la base de dades
-        if (assistent.getDni() != null && !assistent.getDni().trim().isEmpty()) {
-            if (assistentPersonalDao.getAssistentPersonal(assistent.getDni()) != null) {
-                bindingResult.rejectValue("dni", "repetit", "Aquest DNI ja està registrat al sistema");
-            }
-        }
-
-        // 3. Si hi ha errors, tornem al formulari
-        if (bindingResult.hasErrors()) {
-            return "assistentPersonal/add";
-        }
-
+        if (bindingResult.hasErrors()) return "assistentPersonal/add";
         assistentPersonalDao.addAssistentPersonal(assistent);
         return "redirect:/assistentPersonal/list";
     }
 
-    @RequestMapping(value="/update/{dni}", method = RequestMethod.GET)
-    public String editAssistent(Model model, @PathVariable String dni) {
-        model.addAttribute("assistent", assistentPersonalDao.getAssistentPersonal(dni));
+    @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
+    public String editAssistent(Model model, @PathVariable int id) {
+        model.addAttribute("assistent", assistentPersonalDao.getAssistentPersonal(id));
         return "assistentPersonal/update";
     }
 
     @RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
-        // En l'update validem les dades igualment
         AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
         assistentValidator.validate(assistent, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "assistentPersonal/update";
-        }
-
+        if (bindingResult.hasErrors()) return "assistentPersonal/update";
         assistentPersonalDao.updateAssistentPersonal(assistent);
         return "redirect:/assistentPersonal/list";
     }
 
-    @RequestMapping(value="/delete/{dni}")
-    public String processDelete(@PathVariable String dni) {
-        assistentPersonalDao.deleteAssistentPersonal(dni);
+    @RequestMapping(value="/delete/{id}")
+    public String processDelete(@PathVariable int id) {
+        assistentPersonalDao.deleteAssistentPersonal(id);
         return "redirect:/assistentPersonal/list";
+    }
+
+    @RequestMapping("/approve/{id}")
+    public String approve(@PathVariable int id) {
+        assistentPersonalDao.approveAssistent(id);
+        return "redirect:/assistentPersonal/solicituds";
+    }
+
+    @RequestMapping("/reject/{id}")
+    public String reject(@PathVariable int id) {
+        assistentPersonalDao.rejectAssistent(id);
+        return "redirect:/assistentPersonal/solicituds";
     }
 }

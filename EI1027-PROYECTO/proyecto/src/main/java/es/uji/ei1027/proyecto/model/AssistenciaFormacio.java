@@ -4,7 +4,6 @@ public class AssistenciaFormacio {
 
     private Integer idAssistencia;
     private Integer idActivitat;
-    private Integer idUsuari;
     private Integer idAssistent;
     private Boolean inscripcioPrevia;
     private Boolean haAssistit;
@@ -18,9 +17,6 @@ public class AssistenciaFormacio {
 
     public Integer getIdActivitat() { return idActivitat; }
     public void setIdActivitat(Integer idActivitat) { this.idActivitat = idActivitat; }
-
-    public Integer getIdUsuari() { return idUsuari; }
-    public void setIdUsuari(Integer idUsuari) { this.idUsuari = idUsuari; }
 
     public Integer getIdAssistent() { return idAssistent; }
     public void setIdAssistent(Integer idAssistent) { this.idAssistent = idAssistent; }

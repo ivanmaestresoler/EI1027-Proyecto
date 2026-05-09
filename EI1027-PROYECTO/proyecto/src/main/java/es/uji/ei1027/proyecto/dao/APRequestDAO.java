@@ -28,12 +28,18 @@ public class APRequestDAO {
             request.setIdRequest(rs.getInt("id_request"));
             request.setIdUsuari(rs.getInt("id_usuari"));
 
+            if (rs.getObject("id_idioma") != null) {
+                request.setIdIdioma(rs.getInt("id_idioma"));
+            }
+
             if (rs.getDate("data_solicitud") != null) {
                 request.setDataSollicitud(rs.getDate("data_solicitud").toLocalDate());
             }
 
             request.setExperienciaPrevia(rs.getString("experiencia_previa"));
             request.setFormacioAcademica(rs.getString("formacio_academica"));
+            request.setGenereAssistent(rs.getString("genere_assistent"));
+            request.setLocalitat(rs.getString("localitat"));
             request.setEstatRequest(rs.getString("estat_request"));
             request.setTipusAssistencia(rs.getString("tipus_assistencia"));
 
@@ -42,15 +48,19 @@ public class APRequestDAO {
     }
 
     public void addAPRequest(APRequest request) {
-        String sql = "INSERT INTO aprequest (id_usuari, data_solicitud, experiencia_previa, formacio_academica, estat_request, tipus_assistencia) " +
-                "VALUES (?, ?, ?, ?::enum_estat_request, ?::enum_tipus_assistent)";
-        jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getEstatRequest(), request.getTipusAssistencia());
+        String sql = "INSERT INTO aprequest (id_usuari, id_idioma, data_solicitud, experiencia_previa, formacio_academica, genere_assistent, localitat, estat_request, tipus_assistencia) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?::enum_estat_request, ?::enum_tipus_assistent)";
+        jdbcTemplate.update(sql, request.getIdUsuari(), request.getIdIdioma(), request.getDataSollicitud(), 
+                request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getGenereAssistent(), 
+                request.getLocalitat(), request.getEstatRequest(), request.getTipusAssistencia());
     }
 
     public void updateAPRequest(APRequest request) {
-        String sql = "UPDATE aprequest SET id_usuari=?, data_solicitud=?, experiencia_previa=?, formacio_academica=?, estat_request=?::enum_estat_request, tipus_assistencia=?::enum_tipus_assistent " +
+        String sql = "UPDATE aprequest SET id_usuari=?, id_idioma=?, data_solicitud=?, experiencia_previa=?, formacio_academica=?, genere_assistent=?, localitat=?, estat_request=?::enum_estat_request, tipus_assistencia=?::enum_tipus_assistent " +
                 "WHERE id_request=?";
-        jdbcTemplate.update(sql, request.getIdUsuari(), request.getDataSollicitud(), request.getExperienciaPrevia(),request.getFormacioAcademica(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
+        jdbcTemplate.update(sql, request.getIdUsuari(), request.getIdIdioma(), request.getDataSollicitud(), 
+                request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getGenereAssistent(), 
+                request.getLocalitat(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
     }
 
     public void deleteAPRequest(Integer idRequest) {

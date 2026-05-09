@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestió de Sol·licituds</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Sol·licituds de Registre Pendents</h1>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Nom Complet</th>
+            <th>DNI</th>
+            <th>Formació</th>
+            <th>Accions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="candidat : ${candidats}">
+            <td th:text="${candidat.nom + ' ' + candidat.cognom1}"></td>
+            <td th:text="${candidat.dni}"></td>
+            <td th:text="${candidat.formacioAcademica}"></td>
+            <td>
+                <a th:href="@{/assistentPersonal/approve/{id}(id=${candidat.idUsuario})}">✅ Aprovar</a> | 
+                <a th:href="@{/assistentPersonal/reject/{id}(id=${candidat.idUsuario})}" 
+                   style="color:red">❌ Rebutjar</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/assistentPersonal/list">🔙 Tornar a la llista</a>
+</body>
+</html>
