@@ -18,107 +18,45 @@ public class Usuario {
     private String nombrePueblo;
     private String direccio;
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario() {
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
+    public int getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
 
-    public String getNom() {
-        return nom;
-    }
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+    public String getCognom1() { return cognom1; }
+    public void setCognom1(String cognom1) { this.cognom1 = cognom1; }
 
-    public String getCognom1() {
-        return cognom1;
-    }
+    public String getCognom2() { return cognom2; }
+    public void setCognom2(String cognom2) { this.cognom2 = cognom2; }
 
-    public void setCognom1(String cognom1) {
-        this.cognom1 = cognom1;
-    }
+    public String getDni() { return dni; }
+    public void setDni(String dni) { this.dni = dni; }
 
-    public String getCognom2() {
-        return cognom2;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setCognom2(String cognom2) {
-        this.cognom2 = cognom2;
-    }
+    public String getContrasenya() { return contrasenya; }
+    public void setContrasenya(String contrasenya) { this.contrasenya = contrasenya; }
 
-    public String getDni() {
-        return dni;
-    }
+    public String getGenere() { return genere; }
+    public void setGenere(String genere) { this.genere = genere; }
 
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
+    public LocalDate getDataNaixement() { return dataNaixement; }
+    public void setDataNaixement(LocalDate dataNaixement) { this.dataNaixement = dataNaixement; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getTipusUsuari() { return tipusUsuari; }
+    public void setTipusUsuari(String tipusUsuari) { this.tipusUsuari = tipusUsuari; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getTelefon() { return telefon; }
+    public void setTelefon(String telefon) { this.telefon = telefon; }
 
-    public String getContrasenya() {
-        return contrasenya;
-    }
+    public String getNombrePueblo() { return nombrePueblo; }
+    public void setNombrePueblo(String nombrePueblo) { this.nombrePueblo = nombrePueblo; }
 
-    public void setContrasenya(String contrasenya) {
-        this.contrasenya = contrasenya;
-    }
-
-    public String getGenere() {
-        return genere;
-    }
-
-    public void setGenere(String genere) {
-        this.genere = genere;
-    }
-
-    public LocalDate getDataNaixement() {
-        return dataNaixement;
-    }
-
-    public void setDataNaixement(LocalDate dataNaixement) {
-        this.dataNaixement = dataNaixement;
-    }
-
-    public String getTipusUsuari() {
-        return tipusUsuari;
-    }
-
-    public void setTipusUsuari(String tipusUsuari) {
-        this.tipusUsuari = tipusUsuari;
-    }
-
-    public String getTelefon() {
-        return telefon;
-    }
-
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
-    }
-
-    public String getNombrePueblo() {
-        return nombrePueblo;
-    }
-
-    public void setNombrePueblo(String nombrePueblo) {
-        this.nombrePueblo = nombrePueblo;
-    }
-
-    public String getDireccio() {
-        return direccio;
-    }
-
-    public void setDireccio(String direccio) {
-        this.direccio = direccio;
-    }
+    public String getDireccio() { return direccio; }
+    public void setDireccio(String direccio) { this.direccio = direccio; }
 }
