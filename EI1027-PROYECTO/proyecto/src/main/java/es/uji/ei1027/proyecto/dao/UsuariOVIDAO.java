@@ -37,12 +37,7 @@ public class UsuariOVIDAO {
             usuari.setEmail(rs.getString("email"));
             usuari.setContrasenya(rs.getString("contrasenya"));
             usuari.setGenere(rs.getString("genere"));
-            
-            if (rs.getDate("data_naixement") != null) {
-                usuari.setDataNaixement(rs.getDate("data_naixement").toLocalDate());
-            }
-            
-            usuari.setTipusUsuari(rs.getString("tipus_usuari"));
+            usuari.setDataNaixement(rs.getDate("data_naixement") != null ? rs.getDate("data_naixement").toLocalDate() : null);
             usuari.setTelefon(rs.getString("telefon"));
             usuari.setNombrePueblo(rs.getString("nombre_pueblo"));
             usuari.setDireccio(rs.getString("direccio"));
@@ -50,17 +45,20 @@ public class UsuariOVIDAO {
             usuari.setTipusAssistencia(rs.getString("tipus_assistencia"));
             usuari.setConsentimentLOPD(rs.getBoolean("consentiment_lopd"));
             usuari.setEstatUsuari(rs.getString("estat_usuari"));
-
             return usuari;
         }
     }
 
+    public List<UsuariOVI> getUsuarisOVI() {
+        String sql = "SELECT * FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari";
+        return jdbcTemplate.query(sql, new UsuariOVIMapper());
+    }
+
     public void addUsuariOVI(UsuariOVI usuari) {
-        String sqlUsuario = "INSERT INTO Usuario (nom, cognom1, cognom2, dni, email, contrasenya, genere, data_naixement, tipus_usuari, telefon, nombre_pueblo, direccio) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?::enum_genere, ?, 'OVI'::enum_tipus_usuari, ?, ?, ?)";
+        String sqlUsuario = "INSERT INTO Usuario (tipus_usuari, nom, cognom1, cognom2, dni, email, contrasenya, genere, data_naixement, telefon, nombre_pueblo, direccio) VALUES ('UsuariOVI', ?, ?, ?, ?, ?, ?, ?::enum_genere, ?, ?, ?, ?)";
         
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        
+
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, usuari.getNom());
@@ -77,16 +75,13 @@ public class UsuariOVIDAO {
             return ps;
         }, keyHolder);
 
-        if (keyHolder.getKey() != null) {
-            int idGenerado = keyHolder.getKey().intValue();
-            usuari.setIdUsuario(idGenerado);
-            
-            String sqlUsuariOVI = "INSERT INTO UsuariOVI (id_usuari, pla_vida, tipus_assistencia, consentiment_lopd, estat_usuari) " +
-                                  "VALUES (?, ?, ?::enum_tipus_assistent, ?, ?::enum_estat_usuari)";
-            
-            jdbcTemplate.update(sqlUsuariOVI, idGenerado, usuari.getPlaVida(), usuari.getTipusAssistencia(), 
-                                usuari.getConsentimentLOPD(), usuari.getEstatUsuari());
-        }
+        int idUsuario = (int) keyHolder.getKeys().get("id_usuario");
+
+        String sqlUsuariOVI = "INSERT INTO UsuariOVI (id_usuari, pla_vida, tipus_assistencia, consentiment_lopd, estat_usuari) VALUES (?, ?, ?::enum_tipus_assistencia, ?, ?::enum_estat_usuari)";
+        jdbcTemplate.update(sqlUsuariOVI,
+                idUsuario, usuari.getPlaVida(),
+                usuari.getTipusAssistencia(), usuari.getConsentimentLOPD(),
+                usuari.getEstatUsuari());
     }
 
     public void updateUsuariOVI(UsuariOVI usuari) {
@@ -98,7 +93,7 @@ public class UsuariOVIDAO {
                 usuari.getDataNaixement(), usuari.getTelefon(), usuari.getNombrePueblo(),
                 usuari.getDireccio(), usuari.getIdUsuario());
 
-        String sqlUsuariOVI = "UPDATE UsuariOVI SET pla_vida=?, tipus_assistencia=?::enum_tipus_assistent, consentiment_lopd=?, estat_usuari=?::enum_estat_usuari WHERE id_usuari=?";
+        String sqlUsuariOVI = "UPDATE UsuariOVI SET pla_vida=?, tipus_assistencia=?::enum_tipus_assistencia, consentiment_lopd=?, estat_usuari=?::enum_estat_usuari WHERE id_usuari=?";
         
         jdbcTemplate.update(sqlUsuariOVI,
                 usuari.getPlaVida(), usuari.getTipusAssistencia(),
@@ -118,10 +113,5 @@ public class UsuariOVIDAO {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-    }
-
-    public List<UsuariOVI> getUsuarisOVI() {
-        String sql = "SELECT * FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari";
-        return jdbcTemplate.query(sql, new UsuariOVIMapper());
     }
 }

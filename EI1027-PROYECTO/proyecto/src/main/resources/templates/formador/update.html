@@ -6,11 +6,21 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <h1>Edita el Formador</h1>
-    
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+    <div class="user-zone">
+        <div th:if="${session.usuario != null}">
+            <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
+            <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
     <div class="form-container">
+        <h1>Edita el Formador</h1>
+        
         <form th:action="@{/formador/update}" th:object="${formador}" method="post">
-            
             <input type="hidden" th:field="*{idFormador}" />
             
             <div class="form-group">
@@ -44,9 +54,10 @@
             </div>
             
             <button type="submit" class="btn-submit">Actualitzar Formador</button>
+            <br><br>
+            <a th:href="@{/formador/list}">🔙 Cancel·lar i tornar a la llista</a>
         </form>
     </div>
-    
-    <a href="/formador/list">🔙 Cancel·lar i tornar a la llista</a>
+</main>
 </body>
 </html>

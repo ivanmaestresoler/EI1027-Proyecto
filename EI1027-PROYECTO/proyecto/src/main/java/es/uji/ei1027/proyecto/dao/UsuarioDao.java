@@ -42,6 +42,7 @@ public class UsuarioDao {
             usuario.setTelefon(rs.getString("telefon"));
             usuario.setNombrePueblo(rs.getString("nombre_pueblo"));
             usuario.setDireccio(rs.getString("direccio"));
+            
             return usuario;
         }
     }
@@ -70,12 +71,12 @@ public class UsuarioDao {
     }
 
     public void updateUsuario(Usuario usuario) {
-        String sql = "UPDATE Usuario SET nom=?, cognom1=?, cognom2=?, dni=?, email=?, contrasenya=?, genere=?::enum_genere, data_naixement=?, telefon=?, nombre_pueblo=?, direccio=? WHERE id_usuario=?";
+        String sql = "UPDATE Usuario SET nom=?, cognom1=?, cognom2=?, dni=?, email=?, contrasenya=?, genere=?::enum_genere, data_naixement=?, tipus_usuari=?::enum_tipus_usuari, telefon=?, nombre_pueblo=?, direccio=? WHERE id_usuario=?";
         jdbcTemplate.update(sql,
                 usuario.getNom(), usuario.getCognom1(), usuario.getCognom2(), usuario.getDni(),
                 usuario.getEmail(), usuario.getContrasenya(), usuario.getGenere(),
-                usuario.getDataNaixement(), usuario.getTelefon(), usuario.getNombrePueblo(),
-                usuario.getDireccio(), usuario.getIdUsuario());
+                usuario.getDataNaixement(), usuario.getTipusUsuari(), usuario.getTelefon(), 
+                usuario.getNombrePueblo(), usuario.getDireccio(), usuario.getIdUsuario());
     }
 
     public void deleteUsuario(int idUsuario) {

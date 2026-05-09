@@ -18,45 +18,107 @@ public class Usuario {
     private String nombrePueblo;
     private String direccio;
 
-    public Usuario() {
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public int getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
+    public String getNom() {
+        return nom;
+    }
 
-    public String getCognom1() { return cognom1; }
-    public void setCognom1(String cognom1) { this.cognom1 = cognom1; }
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-    public String getCognom2() { return cognom2; }
-    public void setCognom2(String cognom2) { this.cognom2 = cognom2; }
+    public String getCognom1() {
+        return cognom1;
+    }
 
-    public String getDni() { return dni; }
-    public void setDni(String dni) { this.dni = dni; }
+    public void setCognom1(String cognom1) {
+        this.cognom1 = cognom1;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getCognom2() {
+        return cognom2;
+    }
 
-    public String getContrasenya() { return contrasenya; }
-    public void setContrasenya(String contrasenya) { this.contrasenya = contrasenya; }
+    public void setCognom2(String cognom2) {
+        this.cognom2 = cognom2;
+    }
 
-    public String getGenere() { return genere; }
-    public void setGenere(String genere) { this.genere = genere; }
+    public String getDni() {
+        return dni;
+    }
 
-    public LocalDate getDataNaixement() { return dataNaixement; }
-    public void setDataNaixement(LocalDate dataNaixement) { this.dataNaixement = dataNaixement; }
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
-    public String getTipusUsuari() { return tipusUsuari; }
-    public void setTipusUsuari(String tipusUsuari) { this.tipusUsuari = tipusUsuari; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getTelefon() { return telefon; }
-    public void setTelefon(String telefon) { this.telefon = telefon; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getNombrePueblo() { return nombrePueblo; }
-    public void setNombrePueblo(String nombrePueblo) { this.nombrePueblo = nombrePueblo; }
+    public String getContrasenya() {
+        return contrasenya;
+    }
 
-    public String getDireccio() { return direccio; }
-    public void setDireccio(String direccio) { this.direccio = direccio; }
+    public void setContrasenya(String contrasenya) {
+        this.contrasenya = contrasenya;
+    }
+
+    public String getGenere() {
+        return genere;
+    }
+
+    public void setGenere(String genere) {
+        this.genere = genere;
+    }
+
+    public LocalDate getDataNaixement() {
+        return dataNaixement;
+    }
+
+    public void setDataNaixement(LocalDate dataNaixement) {
+        this.dataNaixement = dataNaixement;
+    }
+
+    public String getTipusUsuari() {
+        return tipusUsuari;
+    }
+
+    public void setTipusUsuari(String tipusUsuari) {
+        this.tipusUsuari = tipusUsuari;
+    }
+
+    public String getTelefon() {
+        return telefon;
+    }
+
+    public void setTelefon(String telefon) {
+        this.telefon = telefon;
+    }
+
+    public String getNombrePueblo() {
+        return nombrePueblo;
+    }
+
+    public void setNombrePueblo(String nombrePueblo) {
+        this.nombrePueblo = nombrePueblo;
+    }
+
+    public String getDireccio() {
+        return direccio;
+    }
+
+    public void setDireccio(String direccio) {
+        this.direccio = direccio;
+    }
 }

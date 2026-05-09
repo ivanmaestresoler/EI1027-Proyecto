@@ -1,90 +1,107 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Crear nou usuari OVI</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-    <style>
-        .error { color: #dc3545; font-size: 90%; }
-    </style>
+    <title>Nou Usuari OVI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<main class="container py-4">
-    <h1 class="mb-4">Nou usuari OVI</h1>
-
-    <form th:action="@{/usuari/add}" th:object="${usuari}" method="post">
-
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="dni" class="form-label">DNI</label>
-                <input id="dni" type="text" th:field="*{dni}" class="form-control" placeholder="Ex: 12345678A" />
-                <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class="error"></div>
+<main class="main-content">
+    <div class="form-container">
+        <h1>Nou Usuari OVI</h1>
+        <form th:action="@{/usuari/add}" th:object="${usuariOVI}" method="post">
+            
+            <div class="form-group">
+                <label>DNI/NIE:</label>
+                <input type="text" th:field="*{dni}" />
+                <span th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class="error-message"></span>
             </div>
 
-            <div class="col-md-4">
-                <label for="nom" class="form-label">Nom</label>
-                <input id="nom" type="text" th:field="*{nom}" class="form-control" />
-                <div th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error"></div>
+            <div class="form-group">
+                <label>Nom:</label>
+                <input type="text" th:field="*{nom}" />
+                <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error-message"></span>
             </div>
 
-            <div class="col-md-4">
-                <label for="cognom1" class="form-label">Primer Cognom</label>
-                <input id="cognom1" type="text" th:field="*{cognom1}" class="form-control" />
-                <div th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error"></div>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="cognom2" class="form-label">Segon Cognom</label>
-                <input id="cognom2" type="text" th:field="*{cognom2}" class="form-control" />
-                <div th:if="${#fields.hasErrors('cognom2')}" th:errors="*{cognom2}" class="error"></div>
+            <div class="form-group">
+                <label>Primer Cognom:</label>
+                <input type="text" th:field="*{cognom1}" />
+                <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message"></span>
             </div>
 
-            <div class="col-md-4">
-                <label for="telefon" class="form-label">Telèfon</label>
-                <input id="telefon" type="text" th:field="*{telefon}" class="form-control" />
-                <div th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}" class="error"></div>
+            <div class="form-group">
+                <label>Segon Cognom:</label>
+                <input type="text" th:field="*{cognom2}" />
             </div>
 
-            <div class="col-md-4">
-                <label for="email" class="form-label">Email</label>
-                <input id="email" type="email" th:field="*{email}" class="form-control" />
-                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="direccio" class="form-label">Direcció</label>
-                <input id="direccio" type="text" th:field="*{direccio}" class="form-control" />
-                <div th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="error"></div>
+            <div class="form-group">
+                <label>Data Naixement:</label>
+                <input type="date" th:field="*{dataNaixement}" />
+                <span th:if="${#fields.hasErrors('dataNaixement')}" th:errors="*{dataNaixement}" class="error-message"></span>
             </div>
 
-            <div class="col-md-6">
-                <label for="contrasenyaInicial" class="form-label">Contrasenya</label>
-                <input id="contrasenyaInicial" type="password" th:field="*{contrasenyaInicial}" class="form-control" />
-                <div th:if="${#fields.hasErrors('contrasenyaInicial')}" th:errors="*{contrasenyaInicial}" class="error"></div>
+            <div class="form-group">
+                <label>Gènere:</label>
+                <select th:field="*{genere}">
+                    <option value="">Selecciona...</option>
+                    <option th:each="g : ${generos}" th:value="${g}" th:text="${g}"></option>
+                </select>
+                <span th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}" class="error-message"></span>
             </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-12">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="consentimentLOPD" th:field="*{consentimentLOPD}" />
-                    <label class="form-check-label" for="consentimentLOPD">
-                        Acceptar consentiment LOPD
-                    </label>
-                </div>
-                <div th:if="${#fields.hasErrors('consentimentLOPD')}" th:errors="*{consentimentLOPD}" class="error"></div>
+            <div class="form-group">
+                <label>Telèfon:</label>
+                <input type="text" th:field="*{telefon}" />
+                <span th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}" class="error-message"></span>
             </div>
-        </div>
 
-        <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Afegeix usuari</button>
-            <a th:href="@{/usuari/list}" class="btn btn-secondary ms-2">Cancel·lar</a>
-        </div>
-    </form>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" th:field="*{email}" />
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Contrasenya:</label>
+                <input type="password" th:field="*{contrasenya}" />
+                <span th:if="${#fields.hasErrors('contrasenya')}" th:errors="*{contrasenya}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Direcció:</label>
+                <input type="text" th:field="*{direccio}" />
+                <span th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Poble:</label>
+                <input type="text" th:field="*{nombrePueblo}" />
+                <span th:if="${#fields.hasErrors('nombrePueblo')}" th:errors="*{nombrePueblo}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Tipus Assistència:</label>
+                <select th:field="*{tipusAssistencia}">
+                    <option value="">-- Selecciona una opció (Opcional) --</option>
+                    <option th:each="t : ${tiposAsistencia}" 
+                            th:value="${t}" 
+                            th:text="${t}">
+                    </option>
+                </select>
+                <span th:if="${#fields.hasErrors('tipusAssistencia')}" th:errors="*{tipusAssistencia}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" th:field="*{consentimentLOPD}" /> Acceptar LOPD
+                </label>
+                <span th:if="${#fields.hasErrors('consentimentLOPD')}" th:errors="*{consentimentLOPD}" class="error-message"></span>
+            </div>
+
+            <button type="submit" class="btn-submit">Guardar Usuari OVI</button>
+            <a th:href="@{/usuari/list}">Cancel·lar</a>
+        </form>
+    </div>
 </main>
 </body>
 </html>

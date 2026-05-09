@@ -30,8 +30,15 @@ public class UsuariOVIController {
 
     private void cargaAtributosFormulario(Model model) {
         List<String> generos = Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho");
-        List<String> tiposAsistencia = Arrays.asList("PAP", "PATI", "Ambdós");
-        List<String> estados = Arrays.asList("Pendent", "Actiu", "Inactiu");
+        List<String> tiposAsistencia = Arrays.asList(
+            "Higiene personal", 
+            "Mobilitat", 
+            "Suport emocional", 
+            "Acompanyament mèdic", 
+            "Tasques de la llar", 
+            "Altres"
+        );
+        List<String> estados = Arrays.asList("Pendent", "Acceptat", "Rebutjat");
         
         model.addAttribute("generos", generos);
         model.addAttribute("tiposAsistencia", tiposAsistencia);
@@ -39,7 +46,7 @@ public class UsuariOVIController {
     }
 
     @GetMapping("/list")
-    public String listUsuarios(Model model) {
+    public String listUsuaris(Model model) {
         model.addAttribute("usuaris", usuariOVIDAO.getUsuarisOVI());
         return "usuari/list";
     }

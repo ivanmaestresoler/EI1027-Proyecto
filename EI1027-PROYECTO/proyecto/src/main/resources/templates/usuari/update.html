@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Actualitzar Usuari OVI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="main-content">
+    <div class="form-container">
+        <h1>Actualitzar Usuari OVI</h1>
+        <form th:action="@{/usuari/update}" th:object="${usuariOVI}" method="post">
+            
+            <input type="hidden" th:field="*{idUsuario}" />
+
+            <div class="form-group">
+                <label>DNI/NIE:</label>
+                <input type="text" th:field="*{dni}" />
+                <span th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Nom:</label>
+                <input type="text" th:field="*{nom}" />
+                <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Primer Cognom:</label>
+                <input type="text" th:field="*{cognom1}" />
+                <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Segon Cognom:</label>
+                <input type="text" th:field="*{cognom2}" />
+            </div>
+
+            <div class="form-group">
+                <label>Telèfon:</label>
+                <input type="text" th:field="*{telefon}" />
+                <span th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" th:field="*{email}" />
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Direcció:</label>
+                <input type="text" th:field="*{direccio}" />
+                <span th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Tipus Assistència:</label>
+                <select th:field="*{tipusAssistencia}">
+                    <option th:each="t : ${tiposAssistencia}" th:value="${t}" th:text="${t}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Actualitzar Dades</button>
+            <a th:href="@{/usuari/list}">Tornar enrere</a>
+        </form>
+    </div>
+</main>
+</body>
+</html>

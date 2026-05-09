@@ -1,44 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Llista d'usuaris</title>
+    <title>Llista d'Usuaris OVI</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="container">
-    <h1>Llista d'Usuaris OVI</h1>
-    <div class="mb-3 text-right">
-        <a th:href="@{/usuari/add}" class="btn btn-success">➕ Afegir Nou Usuari</a>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+    <div class="user-zone">
+        <div th:if="${session.usuario != null}">
+            <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
+            <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+        </div>
     </div>
-    <table class="table table-striped">
+</header>
+
+<main class="main-content">
+    <h1>Llista d'Usuaris OVI</h1>
+    
+    <div class="btn-container">
+        <a th:href="@{/usuari/add}" class="btn-admin" style="background-color: #27ae60;">➕ Afegir Nou Usuari OVI</a>
+    </div>
+
+    <table class="data-table">
         <thead>
         <tr>
             <th>DNI</th>
-            <th>Nom</th>
-            <th>Primer Cognom</th>
-            <th>Segon Cognom</th>
+            <th>Nom i Cognoms</th>
             <th>Telèfon</th>
             <th>Email</th>
-            <th>Direcció</th>
-            <th>Estat</th>
+            <th>Tipus Assistència</th>
+            <th>Accions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="usuari : ${usuaris}">
-            <td th:text="${usuari.dni}"></td>
-            <td th:text="${usuari.nom}"></td>
-            <td th:text="${usuari.cognom1}"></td>
-            <td th:text="${usuari.cognom2}"></td>
-            <td th:text="${usuari.telefon}"></td>
-            <td th:text="${usuari.email}"></td>
-            <td th:text="${usuari.direccio}"></td>
-            <td th:text="${usuari.acceptatPerTecnic}"></td>
+        <tr th:each="uOvi : ${usuaris}">
+            <td th:text="${uOvi.dni}"></td>
+            <td th:text="${uOvi.nom + ' ' + uOvi.cognom1 + ' ' + (uOvi.cognom2 != null ? uOvi.cognom2 : '')}"></td>
+            <td th:text="${uOvi.telefon}"></td>
+            <td th:text="${uOvi.email}"></td>
+            <td th:text="${uOvi.tipusAssistencia}"></td>
+            <td>
+                <a th:href="@{/usuari/update/{id}(id=${uOvi.idUsuario})}">Editar</a> |
+                <a th:href="@{/usuari/delete/{id}(id=${uOvi.idUsuario})}" style="color: #e74c3c;" onclick="return confirm('Segur que vols esborrar aquest usuari OVI?');">Esborrar</a>
+            </td>
         </tr>
         </tbody>
     </table>
-</div>
-<br>
-    <a href="/">Tornar a l'inici</a>
+    <br>
+    <a th:href="@{/}">Tornar a l'inici</a>
+</main>
 </body>
 </html>

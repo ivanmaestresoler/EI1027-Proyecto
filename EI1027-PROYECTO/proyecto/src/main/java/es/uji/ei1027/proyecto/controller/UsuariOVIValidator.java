@@ -63,7 +63,7 @@ public class UsuariOVIValidator implements Validator {
         } else if (usuari.getContrasenya().length() < 6) {
             errors.rejectValue("contrasenya", "curta", "La contrasenya ha de tindre almenys 6 caràcters");
         }
-
+        
         if (usuari.getTipusAssistencia() == null || usuari.getTipusAssistencia().trim().isEmpty()) {
             errors.rejectValue("tipusAssistencia", "obligatori", "Cal seleccionar el tipus d'assistència necessària");
         }
