@@ -69,7 +69,12 @@ public class APRequestController {
     }
 
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, Model model) {
+    public String processAddSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, Model model, jakarta.servlet.http.HttpSession session) {
+        es.uji.ei1027.proyecto.model.Usuario usuario = (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
+        if (usuario != null) {
+            aprequest.setIdUsuari(usuario.getIdUsuario());
+        }
+
         apRequestValidator.validate(aprequest, bindingResult);
 
         if (bindingResult.hasErrors()) {

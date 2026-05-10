@@ -24,43 +24,34 @@ public class APRequestDAO {
     private static final class APRequestRowMapper implements RowMapper<APRequest> {
         public APRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
             APRequest request = new APRequest();
-
             request.setIdRequest(rs.getInt("id_request"));
             request.setIdUsuari(rs.getInt("id_usuari"));
-
             if (rs.getObject("id_idioma") != null) {
                 request.setIdIdioma(rs.getInt("id_idioma"));
             }
-
             if (rs.getDate("data_solicitud") != null) {
                 request.setDataSollicitud(rs.getDate("data_solicitud").toLocalDate());
             }
-
             request.setExperienciaPrevia(rs.getString("experiencia_previa"));
             request.setFormacioAcademica(rs.getString("formacio_academica"));
             request.setGenereAssistent(rs.getString("genere_assistent"));
             request.setLocalitat(rs.getString("localitat"));
             request.setEstatRequest(rs.getString("estat_request"));
             request.setTipusAssistencia(rs.getString("tipus_assistencia"));
-
             return request;
         }
     }
 
     public void addAPRequest(APRequest request) {
-        String sql = "INSERT INTO aprequest (id_usuari, id_idioma, data_solicitud, experiencia_previa, formacio_academica, genere_assistent, localitat, estat_request, tipus_assistencia) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?::enum_estat_request, ?::enum_tipus_assistent)";
-        jdbcTemplate.update(sql, request.getIdUsuari(), request.getIdIdioma(), request.getDataSollicitud(), 
-                request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getGenereAssistent(), 
-                request.getLocalitat(), request.getEstatRequest(), request.getTipusAssistencia());
+        // Añadido el casting ?::enum_genere
+        String sql = "INSERT INTO aprequest (id_usuari, id_idioma, data_solicitud, experiencia_previa, formacio_academica, genere_assistent, localitat, estat_request, tipus_assistencia) VALUES (?, ?, ?, ?, ?, ?::enum_genere, ?, ?::enum_estat_request, ?::enum_tipus_assistencia)";
+        jdbcTemplate.update(sql, request.getIdUsuari(), request.getIdIdioma(), request.getDataSollicitud(), request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getGenereAssistent(), request.getLocalitat(), request.getEstatRequest(), request.getTipusAssistencia());
     }
 
     public void updateAPRequest(APRequest request) {
-        String sql = "UPDATE aprequest SET id_usuari=?, id_idioma=?, data_solicitud=?, experiencia_previa=?, formacio_academica=?, genere_assistent=?, localitat=?, estat_request=?::enum_estat_request, tipus_assistencia=?::enum_tipus_assistent " +
-                "WHERE id_request=?";
-        jdbcTemplate.update(sql, request.getIdUsuari(), request.getIdIdioma(), request.getDataSollicitud(), 
-                request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getGenereAssistent(), 
-                request.getLocalitat(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
+        // Añadido el casting ?::enum_genere
+        String sql = "UPDATE aprequest SET id_usuari=?, id_idioma=?, data_solicitud=?, experiencia_previa=?, formacio_academica=?, genere_assistent=?::enum_genere, localitat=?, estat_request=?::enum_estat_request, tipus_assistencia=?::enum_tipus_assistencia WHERE id_request=?";
+        jdbcTemplate.update(sql, request.getIdUsuari(), request.getIdIdioma(), request.getDataSollicitud(), request.getExperienciaPrevia(), request.getFormacioAcademica(), request.getGenereAssistent(), request.getLocalitat(), request.getEstatRequest(), request.getTipusAssistencia(), request.getIdRequest());
     }
 
     public void deleteAPRequest(Integer idRequest) {
@@ -82,14 +73,16 @@ public class APRequestDAO {
         return jdbcTemplate.query(sql, new APRequestRowMapper());
     }
 
-    public List<APRequest> getAPRequestsPerUsuari(Integer idUsuari) { 
+    public List<APRequest> getAPRequestsPerUsuari(Integer idUsuari) {
         String sql = "SELECT * FROM aprequest WHERE id_usuari=?";
         return jdbcTemplate.query(sql, new APRequestRowMapper(), idUsuari);
     }
+
     public List<APRequest> getAPRequestsEnRevisio() {
         String sql = "SELECT * FROM aprequest WHERE estat_request='En revisió'::enum_estat_request";
         return jdbcTemplate.query(sql, new APRequestRowMapper());
     }
+
     public void aprovarRequest(Integer idRequest) {
         String sql = "UPDATE aprequest SET estat_request='Aprovada'::enum_estat_request WHERE id_request=?";
         jdbcTemplate.update(sql, idRequest);

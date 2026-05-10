@@ -1,109 +1,88 @@
 <!DOCTYPE html>
-<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registre Assistent Personal</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Nou Assistent Personal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
-<header class="main-header">
-    <div class="logo"><strong>Gestió OVI</strong></div>
-</header>
-<main class="main-content">
-    <div class="form-container">
-        <h1>Registre d'Assistent Personal</h1>
-
-        <form action="#" th:action="@{/assistentPersonal/add}" th:object="${assistent}" method="post">
-
-            <h2>Dades Personals</h2>
-            <table class="form-table">
-                <tr>
-                    <td><label for="nom">Nom:</label></td>
-                    <td><input type="text" id="nom" th:field="*{nom}" required/></td>
-                </tr>
-                <tr>
-                    <td><label for="cognom1">Primer Cognom:</label></td>
-                    <td><input type="text" id="cognom1" th:field="*{cognom1}" required/></td>
-                </tr>
-                <tr>
-                    <td><label for="cognom2">Segon Cognom:</label></td>
-                    <td><input type="text" id="cognom2" th:field="*{cognom2}" /></td>
-                </tr>
-                <tr>
-                    <td><label for="dni">DNI:</label></td>
-                    <td><input type="text" id="dni" th:field="*{dni}" required/></td>
-                </tr>
-                <tr>
-                    <td><label for="genere">Gènere:</label></td>
-                    <td>
-                        <select id="genere" th:field="*{genere}">
-                            <option value="Masculí">Masculí</option>
-                            <option value="Femení">Femení</option>
-                            <option value="Prefereixc no dir-ho">Prefereixc no dir-ho</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label for="dataNaixement">Data Naixement:</label></td>
-                    <td><input type="date" id="dataNaixement" th:field="*{dataNaixement}" required/></td>
-                </tr>
-            </table>
-
-            <h2>Dades de Contacte</h2>
-            <table class="form-table">
-                <tr>
-                    <td><label for="email">Email:</label></td>
-                    <td><input type="email" id="email" th:field="*{email}" required/></td>
-                </tr>
-                <tr>
-                    <td><label for="contrasenya">Contrasenya:</label></td>
-                    <td><input type="password" id="contrasenya" th:field="*{contrasenya}" required/></td>
-                </tr>
-                <tr>
-                    <td><label for="telefon">Telèfon:</label></td>
-                    <td><input type="text" id="telefon" th:field="*{telefon}" required/></td>
-                </tr>
-                <tr>
-                    <td><label for="nombrePueblo">Poble:</label></td>
-                    <td><input type="text" id="nombrePueblo" th:field="*{nombrePueblo}" required/></td>
-                </tr>
-                <tr>
-                    <td><label for="direccio">Direcció:</label></td>
-                    <td><input type="text" id="direccio" th:field="*{direccio}" required/></td>
-                </tr>
-            </table>
-
-            <h2>Dades Professionals</h2>
-            <table class="form-table">
-                <tr>
-                    <td><label for="formacioAcademica">Formació Acadèmica:</label></td>
-                    <td>
-                        <select id="formacioAcademica" th:field="*{formacioAcademica}">
-                            <option value="ESO">ESO</option>
-                            <option value="BATXILLERAT">Batxillerat</option>
-                            <option value="FPGM">FP Grau Mitjà</option>
-                            <option value="FPGS">FP Grau Superior</option>
-                            <option value="GRAU UNIVERSITARI">Grau Universitari</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label for="tipus">Tipus d'Assistent:</label></td>
-                    <td>
-                        <select id="tipus" th:field="*{tipus}">
-                            <option value="PAP">PAP (Assistent Personal)</option>
-                            <option value="PATI">PATI (Assistent Tecnològic)</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-
-            <div style="margin-top: 20px;">
-                <input type="submit" value="Enviar Sol·licitud" class="btn-submit" />
-                <a th:href="@{/registre}" class="btn-submit" style="background-color: #6c757d; text-decoration: none; margin-left: 10px;">Cancel·lar</a>
+<div class="container mt-5">
+    <h2>Registrar Nou Assistent Personal</h2>
+    <form th:action="@{/assistentPersonal/add}" th:object="${assistent}" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Dades Personals</h4>
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" class="form-control" th:field="*{nom}" />
+                </div>
+                <div class="form-group">
+                    <label>Primer Cognom</label>
+                    <input type="text" class="form-control" th:field="*{cognom1}" />
+                </div>
+                <div class="form-group">
+                    <label>Segon Cognom</label>
+                    <input type="text" class="form-control" th:field="*{cognom2}" />
+                </div>
+                <div class="form-group">
+                    <label>DNI</label>
+                    <input type="text" class="form-control" th:field="*{dni}" />
+                </div>
+                <div class="form-group">
+                    <label>Data de Naixement</label>
+                    <input type="date" class="form-control" th:field="*{dataNaixement}" required />
+                </div>
+                <div class="form-group">
+                    <label>Gènere</label>
+                    <select class="form-control" th:field="*{genere}">
+                        <option th:each="g : ${generos}" th:value="${g}" th:text="${g}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Poble</label>
+                    <select class="form-control" th:field="*{nombrePueblo}">
+                        <option value="">Selecciona un poble...</option>
+                        <option th:each="p : ${pueblos}" th:value="${p.nombre}" th:text="${p.nombre}"></option>
+                    </select>
+                </div>
             </div>
-        </form>
-    </div>
-</main>
+            <div class="col-md-6">
+                <h4>Dades Professionals</h4>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" th:field="*{email}" />
+                </div>
+                <div class="form-group">
+                    <label>Contrasenya</label>
+                    <input type="password" class="form-control" th:field="*{contrasenya}" />
+                </div>
+                <div class="form-group">
+                    <label>Formació Acadèmica</label>
+                    <select class="form-control" th:field="*{formacioAcademica}">
+                        <option th:each="f : ${formaciones}" th:value="${f}" th:text="${f}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tipus d'Assistent</label>
+                    <select class="form-control" th:field="*{tipus}">
+                        <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Direcció</label>
+                    <input type="text" class="form-control" th:field="*{direccio}" />
+                </div>
+                <div class="form-group">
+                    <label>Telèfon</label>
+                    <input type="text" class="form-control" th:field="*{telefon}" />
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Registrar</button>
+            <a th:href="@{/assistentPersonal/list}" class="btn btn-secondary">Cancel·lar</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>
