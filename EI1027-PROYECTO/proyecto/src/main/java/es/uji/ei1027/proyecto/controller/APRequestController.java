@@ -2,6 +2,7 @@ package es.uji.ei1027.proyecto.controller;
 
 import es.uji.ei1027.proyecto.dao.APRequestDAO;
 import es.uji.ei1027.proyecto.dao.PuebloDAO;
+import es.uji.ei1027.proyecto.dao.IdiomaDAO;
 import es.uji.ei1027.proyecto.model.APRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,11 +23,13 @@ public class APRequestController {
     private APRequestDAO apRequestDao;
     private APRequestValidator apRequestValidator;
     private PuebloDAO puebloDao;
+    private IdiomaDAO idiomaDao;
 
     @Autowired
     public void setApRequestDao(APRequestDAO apRequestDao) {
         this.apRequestDao = apRequestDao;
     }
+
     @Autowired
     public void setApRequestValidator(APRequestValidator apRequestValidator) {
         this.apRequestValidator = apRequestValidator;
@@ -37,13 +40,19 @@ public class APRequestController {
         this.puebloDao = puebloDao;
     }
 
+    @Autowired
+    public void setIdiomaDao(IdiomaDAO idiomaDao) {
+        this.idiomaDao = idiomaDao;
+    }
+
     private void cargaAtributosFormulario(Model model) {
         List<String> tiposAssistencia = Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar");
         List<String> generos = Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho");
 
         model.addAttribute("tiposAssistencia", tiposAssistencia);
         model.addAttribute("generos", generos);
-        model.addAttribute("pueblos", puebloDao.getPueblos()); // Lista de pueblos de la BD
+        model.addAttribute("pueblos", puebloDao.getPueblos());
+        model.addAttribute("idiomas", idiomaDao.getIdiomas());
     }
 
     @RequestMapping("/list")

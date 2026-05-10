@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nova Petició d'Assistència</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Registrar Petició d'Assistència Personal</h2>
+                </div>
+                <div class="card-body">
+                    <form action="#" th:action="@{/aprequest/add}" th:object="${aprequest}" method="post">
+
+                        <div class="form-group">
+                            <label for="idIdioma">Idioma Preferit:</label>
+                            <select th:field="*{idIdioma}" class="form-control" id="idIdioma">
+                                <option value="">Selecciona un idioma...</option>
+                                <option th:each="i : ${idiomas}" th:value="${i.idIdioma}" th:text="${i.nombre}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dataSollicitud">Data de la Sol·licitud:</label>
+                            <input type="date" th:field="*{dataSollicitud}" class="form-control" id="dataSollicitud" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tipusAssistencia">Tipus d'Assistència Requerida:</label>
+                            <select th:field="*{tipusAssistencia}" class="form-control" id="tipusAssistencia">
+                                <option value="">Selecciona un tipus...</option>
+                                <option th:each="tipo : ${tiposAssistencia}" th:value="${tipo}" th:text="${tipo}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="localitat">Localitat on es requereix el servei:</label>
+                            <select th:field="*{localitat}" class="form-control" id="localitat">
+                                <option value="">Selecciona una localitat...</option>
+                                <option th:each="p : ${pueblos}" th:value="${p.nombre}" th:text="${p.nombre}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="genereAssistent">Preferència de Gènere de l'Assistent:</label>
+                            <select th:field="*{genereAssistent}" class="form-control" id="genereAssistent">
+                                <option th:each="g : ${generos}" th:value="${g}" th:text="${g}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formacioAcademica">Formació Acadèmica específica requerida:</label>
+                            <input type="text" th:field="*{formacioAcademica}" class="form-control" id="formacioAcademica" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experienciaPrevia">Descripció de l'Experiència Prèvia necessària:</label>
+                            <textarea th:field="*{experienciaPrevia}" class="form-control" id="experienciaPrevia" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-success">Enviar Petició</button>
+                            <a href="/aprequest/list" class="btn btn-secondary">Cancel·lar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -32,12 +32,13 @@ public class PuebloDAO {
     }
 
     public List<Pueblo> getPueblos() {
-        return jdbcTemplate.query("SELECT * FROM Pueblo", new PuebloRowMapper());
+        // Añadida la 's' a Pueblos
+        return jdbcTemplate.query("SELECT * FROM Pueblos", new PuebloRowMapper());
     }
 
     public Pueblo getPueblo(String nombre) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * FROM Pueblo WHERE nombre = ?",
+            return jdbcTemplate.queryForObject("SELECT * FROM Pueblos WHERE nombre = ?",
                     new PuebloRowMapper(), nombre);
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -46,19 +47,19 @@ public class PuebloDAO {
 
     public void addPueblo(Pueblo pueblo) {
         jdbcTemplate.update(
-                "INSERT INTO Pueblo (nombre, codpos) VALUES (?, ?)",
+                "INSERT INTO Pueblos (nombre, codpos) VALUES (?, ?)",
                 pueblo.getNombre(), pueblo.getCodpos()
         );
     }
 
     public void updatePueblo(Pueblo pueblo) {
         jdbcTemplate.update(
-                "UPDATE Pueblo SET codpos=? WHERE nombre=?",
+                "UPDATE Pueblos SET codpos=? WHERE nombre=?",
                 pueblo.getCodpos(), pueblo.getNombre()
         );
     }
 
     public void deletePueblo(String nombre) {
-        jdbcTemplate.update("DELETE FROM Pueblo WHERE nombre = ?", nombre);
+        jdbcTemplate.update("DELETE FROM Pueblos WHERE nombre = ?", nombre);
     }
 }

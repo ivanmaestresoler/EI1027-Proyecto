@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Gestió de Peticions Pendents</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+  <h1>Peticions d'Assistència en Revisió</h1>
+  <p class="text-muted">Aquestes peticions necessiten que es genere una proposta de candidats per a ser aprovades.</p>
+
+  <table class="table table-hover">
+    <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>Usuari</th>
+      <th>Data</th>
+      <th>Tipus</th>
+      <th>Localitat</th>
+      <th>Accions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="req : ${requests}">
+      <td th:text="${req.idRequest}"></td>
+      <td th:text="${req.idUsuari}"></td>
+      <td th:text="${req.dataSollicitud}"></td>
+      <td th:text="${req.tipusAssistencia}"></td>
+      <td th:text="${req.localitat}"></td>
+      <td>
+        <a th:href="@{/admin/generar-proposta/{id}(id=${req.idRequest})}"
+           class="btn btn-primary btn-sm">Generar Proposta</a>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(requests)}">
+      <td colspan="6" class="text-center">No hi ha peticiones pendents de revisió.</td>
+    </tr>
+    </tbody>
+  </table>
+  <br>
+  <a href="/admin/solicituds-ovi" class="btn btn-secondary">Tornar al Menú Admin</a>
+</div>
+</body>
+</html>
