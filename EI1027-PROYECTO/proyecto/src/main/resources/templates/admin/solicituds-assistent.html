@@ -6,44 +6,51 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+</header>
+<main class="main-content">
     <h1>Candidats a Assistent Personal</h1>
-    
+
     <div th:if="${#lists.isEmpty(assistentsPendents)}" class="form-container" style="text-align: center;">
         <p>No hi ha cap sol·licitud pendent de revisió en aquest moment.</p>
     </div>
 
     <table class="data-table" th:unless="${#lists.isEmpty(assistentsPendents)}">
         <thead>
-            <tr>
-                <th>DNI</th>
-                <th>Nom i Cognoms</th>
-                <th>Email</th>
-                <th>Accions</th>
-            </tr>
+        <tr>
+            <th>DNI</th>
+            <th>Nom i Cognoms</th>
+            <th>Email</th>
+            <th>Accions</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="a : ${assistentsPendents}">
-                <td th:text="${a.dni}"></td>
-                <td th:text="${a.nom + ' ' + a.cognom1}"></td>
-                <td th:text="${a.email}"></td>
-                <td>
-                    <a th:href="@{/admin/acceptar-assistent/{id}(id=${a.idUsuario})}" class="btn-submit" style="padding: 5px 10px; background-color: #2ecc71; text-decoration: none;">✅ Acceptar</a>
-                    <a th:href="@{/admin/rebutjar-assistent/{id}(id=${a.idUsuario})}" class="btn-submit" style="padding: 5px 10px; background-color: #e74c3c; text-decoration: none;" onclick="return confirm('Segur que vols rebutjar aquest candidat?')">❌ Rebutjar</a>
-                </td>
-            </tr>
+        <tr th:each="a : ${assistentsPendents}">
+            <td th:text="${a.dni}"></td>
+            <td th:text="${a.nom + ' ' + a.cognom1}"></td>
+            <td th:text="${a.email}"></td>
+            <td>
+                <a th:href="@{/admin/acceptar-assistent/{id}(id=${a.idUsuario})}"
+                   style="display:inline-block; background-color:#1a7a3c; color:#ffffff; padding:6px 12px; border-radius:4px; text-decoration:none; font-weight:bold;">Acceptar</a>
+                <a th:href="@{/admin/rebutjar-assistent/{id}(id=${a.idUsuario})}"
+                   style="display:inline-block; background-color:#7b241c; color:#ffffff; padding:6px 12px; border-radius:4px; text-decoration:none; font-weight:bold;"
+                   onclick="return confirm('Segur que vols rebutjar aquest candidat?')">Rebutjar</a>
+            </td>
+        </tr>
         </tbody>
     </table>
 
     <nav aria-label="Navegació de pàgines" style="margin-top: 20px; text-align: center;" th:unless="${#lists.isEmpty(assistentsPendents)}">
         <ul style="list-style: none; padding: 0; display: inline-flex; gap: 15px; align-items: center; justify-content: center;">
             <li>
-                <a th:if="${currentPage > 1}" 
-                   th:href="@{/admin/solicituds-assistent(page=${currentPage - 1})}" 
+                <a th:if="${currentPage > 1}"
+                   th:href="@{/admin/solicituds-assistent(page=${currentPage - 1})}"
                    aria-label="Anar a la pàgina anterior"
                    class="btn-submit">Anterior</a>
-                <span th:unless="${currentPage > 1}" 
-                      aria-disabled="true" 
-                      style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #ccc; border-radius: 5px; color: #666;">
+                <span th:unless="${currentPage > 1}"
+                      aria-disabled="true"
+                      style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #6c757d; border-radius: 5px; color: #ffffff;">
                       Anterior
                 </span>
             </li>
@@ -53,21 +60,22 @@
                 </span>
             </li>
             <li>
-                <a th:if="${currentPage < totalPages}" 
-                   th:href="@{/admin/solicituds-assistent(page=${currentPage + 1})}" 
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{/admin/solicituds-assistent(page=${currentPage + 1})}"
                    aria-label="Anar a la pàgina següent"
                    class="btn-submit">Següent</a>
-                <span th:unless="${currentPage < totalPages}" 
-                      aria-disabled="true" 
-                      style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #ccc; border-radius: 5px; color: #666;">
+                <span th:unless="${currentPage < totalPages}"
+                      aria-disabled="true"
+                      style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #6c757d; border-radius: 5px; color: #ffffff;">
                       Següent
                 </span>
             </li>
         </ul>
     </nav>
-    
+
     <div style="margin-top: 20px; text-align: center;">
         <a th:href="@{/}" class="btn-submit" style="background-color: #34495e; text-decoration: none;">Tornar a l'Inici</a>
     </div>
+</main>
 </body>
 </html>
