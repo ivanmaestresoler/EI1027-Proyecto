@@ -86,4 +86,12 @@ public class APRequestDAO {
         String sql = "SELECT * FROM aprequest WHERE id_usuari=?";
         return jdbcTemplate.query(sql, new APRequestRowMapper(), idUsuari);
     }
+    public List<APRequest> getAPRequestsEnRevisio() {
+        String sql = "SELECT * FROM aprequest WHERE estat_request='En revisió'::enum_estat_request";
+        return jdbcTemplate.query(sql, new APRequestRowMapper());
+    }
+    public void aprovarRequest(Integer idRequest) {
+        String sql = "UPDATE aprequest SET estat_request='Aprovada'::enum_estat_request WHERE id_request=?";
+        jdbcTemplate.update(sql, idRequest);
+    }
 }

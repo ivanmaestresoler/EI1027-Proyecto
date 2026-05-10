@@ -53,11 +53,8 @@ public class AssistentPersonalDao {
     }
 
     public void addAssistentPersonal(AssistentPersonal assistent) {
-        String sqlUsuario = "INSERT INTO Usuario (nom, cognom1, cognom2, dni, email, contrasenya, genere, data_naixement, tipus_usuari, telefon, nombre_pueblo, direccio) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?::enum_genere, ?, 'AssistentPersonal'::enum_tipus_usuari, ?, ?, ?)";
-        
+        String sqlUsuario = "INSERT INTO Usuario (nom, cognom1, cognom2, dni, email, contrasenya, genere, data_naixement, tipus_usuari, telefon, nombre_pueblo, direccio) VALUES (?, ?, ?, ?, ?, ?, ?::enum_genere, ?, 'AssistentPersonal'::enum_tipus_usuari, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, assistent.getNom());
@@ -78,8 +75,7 @@ public class AssistentPersonalDao {
         if (keys != null && keys.containsKey("id_usuario")) {
             int idGenerado = (int) keys.get("id_usuario");
             assistent.setIdUsuario(idGenerado);
-            String sqlAssistent = "INSERT INTO AssistentPersonal (id_assistent, formacio_academica, tipus, estat_acceptat) " +
-                                  "VALUES (?, ?::enum_formacio, ?::enum_tipus_assistent, ?::enum_estat_assistent)";
+            String sqlAssistent = "INSERT INTO AssistentPersonal (id_assistent, formacio_academica, tipus, estat_acceptat) VALUES (?, ?::enum_formacio, ?::enum_tipus_assistent, ?::enum_estat_assistent)";
             jdbcTemplate.update(sqlAssistent, idGenerado, assistent.getFormacioAcademica(), assistent.getTipus(), assistent.getEstatAcceptat());
         }
     }
@@ -119,5 +115,9 @@ public class AssistentPersonalDao {
 
     public List<AssistentPersonal> getCandidats() {
         return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Candidat'::enum_estat_assistent", new AssistentPersonalRowMapper());
+    }
+
+    public List<AssistentPersonal> getAssistentsAcceptats() {
+        return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Acceptat'::enum_estat_assistent", new AssistentPersonalRowMapper());
     }
 }

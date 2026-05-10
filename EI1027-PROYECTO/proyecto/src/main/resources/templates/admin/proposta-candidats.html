@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Generar Proposta de Candidats</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+  <h2>Detalls de la Petició (ID: <span th:text="${aprequest.idRequest}"></span>)</h2>
+  <div class="card mb-4">
+    <div class="card-body">
+      <p><strong>Localitat requerida:</strong> <span th:text="${aprequest.localitat}"></span></p>
+      <p><strong>Tipus d'assistència:</strong> <span th:text="${aprequest.tipusAssistencia}"></span></p>
+      <p><strong>Preferència de gènere:</strong> <span th:text="${aprequest.genereAssistent}"></span></p>
+    </div>
+  </div>
+
+  <h3>Candidats Adients (Match)</h3>
+  <p>El sistema ha filtrat els següents assistents personals tenint en compte les preferències de la petició:</p>
+
+  <table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+      <th>Nom i Cognoms</th>
+      <th>Poble</th>
+      <th>Gènere</th>
+      <th>Tipus</th>
+      <th>Accions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="candidat : ${candidatsAdients}">
+      <td th:text="${candidat.nom + ' ' + candidat.cognom1}"></td>
+      <td th:text="${candidat.nombrePueblo}"></td>
+      <td th:text="${candidat.genere}"></td>
+      <td th:text="${candidat.tipus}"></td>
+      <td>
+        <a class="btn btn-success btn-sm" th:href="@{/admin/aprovar-petici/{id}(id=${aprequest.idRequest})}">Proposar i Aprovar</a>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(candidatsAdients)}">
+      <td colspan="5" class="text-center text-danger">No s'han trobat candidats que complisquen exactament aquests requisits.</td>
+    </tr>
+    </tbody>
+  </table>
+  <a href="/admin/peticions-pendents" class="btn btn-secondary">Tornar arrere</a>
+</div>
+</body>
+</html>

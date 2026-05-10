@@ -15,7 +15,8 @@
             <th>ID Usuari</th>
             <th>Data Sol·licitud</th>
             <th>Tipus Assistència</th>
-            <th>Preferències</th>
+            <th>Localitat</th>
+            <th>Pref. Gènere</th>
             <th>Estat</th>
         </tr>
         </thead>
@@ -25,13 +26,14 @@
             <td th:text="${req.idUsuari}"></td>
             <td th:text="${req.dataSollicitud}"></td>
             <td th:text="${req.tipusAssistencia}"></td>
-            <td th:text="${req.preferencies}"></td>
+            <td th:text="${req.localitat}"></td>
+            <td th:text="${req.genereAssistent}"></td>
             <td th:text="${req.estatRequest}"></td>
         </tr>
         </tbody>
     </table>
 </div>
 <br>
-    <a href="/">Tornar a l'inici</a>
+<a href="/">Tornar a l'inici</a>
 </body>
 </html>
