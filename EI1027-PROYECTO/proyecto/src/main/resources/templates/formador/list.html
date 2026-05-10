@@ -41,7 +41,7 @@
                 <td th:text="${formador.especialitat}"></td>
                 <td>
                     <a th:href="@{/formador/update/{id}(id=${formador.idFormador})}">✏️ Editar</a> | 
-                    <a th:href="@{/formador/delete/{id}(id=${formador.idFormador})}" style="color: #e74c3c;" onclick="return confirm('Estàs segur que vols esborrar aquest formador?')">🗑️ Esborrar</a>
+                    <a th:href="@{/formador/delete/{id}(id=${formador.idFormador})}" onclick="return confirm('Estàs segur que vols esborrar aquest formador?')">🗑️ Esborrar</a>
                 </td>
             </tr>
         </tbody>

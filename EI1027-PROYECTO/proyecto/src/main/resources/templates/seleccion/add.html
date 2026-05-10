@@ -2,16 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Afegir Selecció</title>
+    <title>Afegir Selecció - Projecte OVI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Afegir Nova Selecció</h1>
-<form th:action="@{/seleccion/add}" th:object="${seleccion}" method="post">
-    <label>ID Request:</label> <input type="number" th:field="*{idRequest}" required /><br/>
-    <label>ID Assistent:</label> <input type="number" th:field="*{idAssistent}" required /><br/>
-    <label>Data Proposta:</label> <input type="datetime-local" th:field="*{dataProposta}" required /><br/><br/>
-    <button type="submit">Guardar</button>
-</form>
-<br><a th:href="@{/seleccion/list}">Tornar</a>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+    <div class="user-zone">
+        <div th:if="${session.usuario == null}">
+            <a th:href="@{/login}" class="btn-login">Iniciar Sesió</a>
+        </div>
+        <div th:if="${session.usuario != null}">
+            <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
+            <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+        </div>
+    </div>
+</header>
+<main class="main-content">
+    <h1>Afegir Nova Selecció</h1>
+    <form th:action="@{/seleccion/add}" th:object="${seleccion}" method="post">
+        <div class="form-group">
+            <label>ID Request:</label>
+            <input type="number" th:field="*{idRequest}" required />
+        </div>
+        <div class="form-group">
+            <label>ID Assistent:</label>
+            <input type="number" th:field="*{idAssistent}" required />
+        </div>
+        <div class="form-group">
+            <label>Data Proposta:</label>
+            <input type="datetime-local" th:field="*{dataProposta}" required />
+        </div>
+        <button type="submit" class="btn-submit">Guardar</button>
+    </form>
+    <br><a th:href="@{/seleccion/list}" class="btn-login">Tornar</a>
+</main>
 </body>
 </html>

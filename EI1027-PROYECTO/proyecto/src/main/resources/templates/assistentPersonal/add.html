@@ -6,32 +6,37 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+</header>
+<main class="main-content">
     <div class="form-container">
         <h1>Registre d'Assistent Personal</h1>
 
         <form action="#" th:action="@{/assistentPersonal/add}" th:object="${assistent}" method="post">
-            <h3>Dades Personals</h3>
+
+            <h2>Dades Personals</h2>
             <table class="form-table">
                 <tr>
-                    <td><label>Nom:</label></td>
-                    <td><input type="text" th:field="*{nom}" required/></td>
+                    <td><label for="nom">Nom:</label></td>
+                    <td><input type="text" id="nom" th:field="*{nom}" required/></td>
                 </tr>
                 <tr>
-                    <td><label>Primer Cognom:</label></td>
-                    <td><input type="text" th:field="*{cognom1}" required/></td>
+                    <td><label for="cognom1">Primer Cognom:</label></td>
+                    <td><input type="text" id="cognom1" th:field="*{cognom1}" required/></td>
                 </tr>
                 <tr>
-                    <td><label>Segon Cognom:</label></td>
-                    <td><input type="text" th:field="*{cognom2}" /></td>
+                    <td><label for="cognom2">Segon Cognom:</label></td>
+                    <td><input type="text" id="cognom2" th:field="*{cognom2}" /></td>
                 </tr>
                 <tr>
-                    <td><label>DNI:</label></td>
-                    <td><input type="text" th:field="*{dni}" required/></td>
+                    <td><label for="dni">DNI:</label></td>
+                    <td><input type="text" id="dni" th:field="*{dni}" required/></td>
                 </tr>
                 <tr>
-                    <td><label>Gènere:</label></td>
+                    <td><label for="genere">Gènere:</label></td>
                     <td>
-                        <select th:field="*{genere}">
+                        <select id="genere" th:field="*{genere}">
                             <option value="Masculí">Masculí</option>
                             <option value="Femení">Femení</option>
                             <option value="Prefereixc no dir-ho">Prefereixc no dir-ho</option>
@@ -39,41 +44,41 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Data Naixement:</label></td>
-                    <td><input type="date" th:field="*{dataNaixement}" required/></td>
+                    <td><label for="dataNaixement">Data Naixement:</label></td>
+                    <td><input type="date" id="dataNaixement" th:field="*{dataNaixement}" required/></td>
                 </tr>
             </table>
 
-            <h3>Dades de Contacte</h3>
+            <h2>Dades de Contacte</h2>
             <table class="form-table">
                 <tr>
-                    <td><label>Email:</label></td>
-                    <td><input type="email" th:field="*{email}" required/></td>
+                    <td><label for="email">Email:</label></td>
+                    <td><input type="email" id="email" th:field="*{email}" required/></td>
                 </tr>
                 <tr>
-                    <td><label>Contrasenya:</label></td>
-                    <td><input type="password" th:field="*{contrasenya}" required/></td>
+                    <td><label for="contrasenya">Contrasenya:</label></td>
+                    <td><input type="password" id="contrasenya" th:field="*{contrasenya}" required/></td>
                 </tr>
                 <tr>
-                    <td><label>Telèfon:</label></td>
-                    <td><input type="text" th:field="*{telefon}" required/></td>
+                    <td><label for="telefon">Telèfon:</label></td>
+                    <td><input type="text" id="telefon" th:field="*{telefon}" required/></td>
                 </tr>
                 <tr>
-                    <td><label>Poble:</label></td>
-                    <td><input type="text" th:field="*{nombrePueblo}" required/></td>
+                    <td><label for="nombrePueblo">Poble:</label></td>
+                    <td><input type="text" id="nombrePueblo" th:field="*{nombrePueblo}" required/></td>
                 </tr>
                 <tr>
-                    <td><label>Direcció:</label></td>
-                    <td><input type="text" th:field="*{direccio}" required/></td>
+                    <td><label for="direccio">Direcció:</label></td>
+                    <td><input type="text" id="direccio" th:field="*{direccio}" required/></td>
                 </tr>
             </table>
 
-            <h3>Dades Professionals</h3>
+            <h2>Dades Professionals</h2>
             <table class="form-table">
                 <tr>
-                    <td><label>Formació Acadèmica:</label></td>
+                    <td><label for="formacioAcademica">Formació Acadèmica:</label></td>
                     <td>
-                        <select th:field="*{formacioAcademica}">
+                        <select id="formacioAcademica" th:field="*{formacioAcademica}">
                             <option value="ESO">ESO</option>
                             <option value="BATXILLERAT">Batxillerat</option>
                             <option value="FPGM">FP Grau Mitjà</option>
@@ -83,9 +88,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Tipus d'Assistent:</label></td>
+                    <td><label for="tipus">Tipus d'Assistent:</label></td>
                     <td>
-                        <select th:field="*{tipus}">
+                        <select id="tipus" th:field="*{tipus}">
                             <option value="PAP">PAP (Assistent Personal)</option>
                             <option value="PATI">PATI (Assistent Tecnològic)</option>
                         </select>
@@ -95,9 +100,10 @@
 
             <div style="margin-top: 20px;">
                 <input type="submit" value="Enviar Sol·licitud" class="btn-submit" />
-                <a th:href="@{/registre}" class="btn-submit" style="background-color: #95a5a6; text-decoration: none; margin-left: 10px;">Cancel·lar</a>
+                <a th:href="@{/registre}" class="btn-submit" style="background-color: #6c757d; text-decoration: none; margin-left: 10px;">Cancel·lar</a>
             </div>
         </form>
     </div>
+</main>
 </body>
 </html>

@@ -2,18 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Afegir Contracte</title>
+    <title>Afegir Contracte - Projecte OVI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Afegir Nou Contracte</h1>
-<form th:action="@{/registreContracte/add}" th:object="${registreContracte}" method="post">
-    <label>ID Request:</label> <input type="number" th:field="*{idRequest}" required /><br/>
-    <label>ID Assistent:</label> <input type="number" th:field="*{idAssistent}" required /><br/>
-    <label>Data Inici:</label> <input type="date" th:field="*{dataInici}" required /><br/>
-    <label>Data Fi:</label> <input type="date" th:field="*{dataFi}" /><br/>
-    <label>Ruta PDF:</label> <input type="text" th:field="*{rutaPdf}" /><br/><br/>
-    <button type="submit">Guardar</button>
-</form>
-<br><a th:href="@{/registreContracte/list}">Tornar</a>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+    <div class="user-zone">
+        <div th:if="${session.usuario == null}">
+            <a th:href="@{/login}" class="btn-login">Iniciar Sesió</a>
+        </div>
+        <div th:if="${session.usuario != null}">
+            <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
+            <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+        </div>
+    </div>
+</header>
+<main class="main-content">
+    <h1>Afegir Nou Contracte</h1>
+    <form th:action="@{/registreContracte/add}" th:object="${registreContracte}" method="post">
+        <div class="form-group">
+            <label>ID Request:</label>
+            <input type="number" th:field="*{idRequest}" required />
+        </div>
+        <div class="form-group">
+            <label>ID Assistent:</label>
+            <input type="number" th:field="*{idAssistent}" required />
+        </div>
+        <div class="form-group">
+            <label>Data Inici:</label>
+            <input type="date" th:field="*{dataInici}" required />
+        </div>
+        <div class="form-group">
+            <label>Data Fi:</label>
+            <input type="date" th:field="*{dataFi}" />
+        </div>
+        <div class="form-group">
+            <label>Ruta PDF:</label>
+            <input type="text" th:field="*{rutaPdf}" />
+        </div>
+        <button type="submit" class="btn-submit">Guardar</button>
+    </form>
+    <br><a th:href="@{/registreContracte/list}" class="btn-login">Tornar</a>
+</main>
 </body>
 </html>
