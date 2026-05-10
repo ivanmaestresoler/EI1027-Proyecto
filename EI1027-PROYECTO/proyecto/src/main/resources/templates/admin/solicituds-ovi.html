@@ -35,9 +35,41 @@
             </tr>
         </tbody>
     </table>
+
+    <nav aria-label="Navegació de pàgines" style="margin-top: 20px; text-align: center;" th:unless="${#lists.isEmpty(usuarisPendents)}">
+        <ul style="list-style: none; padding: 0; display: inline-flex; gap: 15px; align-items: center; justify-content: center;">
+            <li>
+                <a th:if="${currentPage > 1}" 
+                   th:href="@{/admin/solicituds-ovi(page=${currentPage - 1})}" 
+                   aria-label="Anar a la pàgina anterior"
+                   class="btn-submit">Anterior</a>
+                <span th:unless="${currentPage > 1}" 
+                      aria-disabled="true" 
+                      style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #ccc; border-radius: 5px; color: #666;">
+                      Anterior
+                </span>
+            </li>
+            <li>
+                <span aria-current="page" style="font-weight: bold;">
+                    Pàgina <span th:text="${currentPage}"></span> de <span th:text="${totalPages}"></span>
+                </span>
+            </li>
+            <li>
+                <a th:if="${currentPage < totalPages}" 
+                   th:href="@{/admin/solicituds-ovi(page=${currentPage + 1})}" 
+                   aria-label="Anar a la pàgina següent"
+                   class="btn-submit">Següent</a>
+                <span th:unless="${currentPage < totalPages}" 
+                      aria-disabled="true" 
+                      style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #ccc; border-radius: 5px; color: #666;">
+                      Següent
+                </span>
+            </li>
+        </ul>
+    </nav>
     
-    <div style="margin-top: 20px;">
-        <a th:href="@{/}" class="btn-submit" style="background-color: #95a5a6; text-decoration: none;">Tornar</a>
+    <div style="margin-top: 20px; text-align: center;">
+        <a th:href="@{/}" class="btn-submit" style="background-color: #34495e; text-decoration: none;">Tornar a l'Inici</a>
     </div>
 </body>
 </html>

@@ -46,8 +46,17 @@ public class UsuariOVIController {
     }
 
     @GetMapping("/list")
-    public String listUsuaris(Model model) {
-        model.addAttribute("usuaris", usuariOVIDAO.getUsuarisOVI());
+    public String listUsuaris(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageSize = 5; 
+        int offset = (page - 1) * pageSize;
+
+        int totalRecords = usuariOVIDAO.getTotalUsuarisOVI();
+        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+
+        model.addAttribute("usuaris", usuariOVIDAO.getUsuarisOVIPaginats(pageSize, offset));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "usuari/list";
     }
 
