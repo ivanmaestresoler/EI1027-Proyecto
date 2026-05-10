@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/assistentPersonal")
@@ -23,8 +24,17 @@ public class AssistentPersonalController {
     }
 
     @RequestMapping("/list")
-    public String listAssistents(Model model) {
-        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonals());
+    public String listAssistents(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageSize = 5; 
+        int offset = (page - 1) * pageSize;
+
+        int totalRecords = assistentPersonalDao.getTotalAssistentsPersonals();
+        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+
+        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonalsPaginats(pageSize, offset));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "assistentPersonal/list";
     }
 

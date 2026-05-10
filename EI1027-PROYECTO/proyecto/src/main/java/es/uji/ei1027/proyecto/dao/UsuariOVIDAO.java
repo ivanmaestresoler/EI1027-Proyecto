@@ -54,11 +54,20 @@ public class UsuariOVIDAO {
         return jdbcTemplate.query(sql, new UsuariOVIMapper());
     }
 
+    public int getTotalUsuarisOVI() {
+        String sql = "SELECT COUNT(*) FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+        return count != null ? count : 0;
+    }
+
+    public List<UsuariOVI> getUsuarisOVIPaginats(int limit, int offset) {
+        String sql = "SELECT * FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, new UsuariOVIMapper(), limit, offset);
+    }
+
     public void addUsuariOVI(UsuariOVI usuari) {
         String sqlUsuario = "INSERT INTO Usuario (tipus_usuari, nom, cognom1, cognom2, dni, email, contrasenya, genere, data_naixement, telefon, nombre_pueblo, direccio) VALUES ('UsuariOVI', ?, ?, ?, ?, ?, ?, ?::enum_genere, ?, ?, ?, ?)";
-        
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, usuari.getNom());
@@ -74,36 +83,20 @@ public class UsuariOVIDAO {
             ps.setString(11, usuari.getDireccio());
             return ps;
         }, keyHolder);
-
         int idUsuario = (int) keyHolder.getKeys().get("id_usuario");
-
         String sqlUsuariOVI = "INSERT INTO UsuariOVI (id_usuari, pla_vida, tipus_assistencia, consentiment_lopd, estat_usuari) VALUES (?, ?, ?::enum_tipus_assistencia, ?, ?::enum_estat_usuari)";
-        jdbcTemplate.update(sqlUsuariOVI,
-                idUsuario, usuari.getPlaVida(),
-                usuari.getTipusAssistencia(), usuari.getConsentimentLOPD(),
-                usuari.getEstatUsuari());
+        jdbcTemplate.update(sqlUsuariOVI, idUsuario, usuari.getPlaVida(), usuari.getTipusAssistencia(), usuari.getConsentimentLOPD(), usuari.getEstatUsuari());
     }
 
     public void updateUsuariOVI(UsuariOVI usuari) {
         String sqlUsuario = "UPDATE Usuario SET nom=?, cognom1=?, cognom2=?, dni=?, email=?, contrasenya=?, genere=?::enum_genere, data_naixement=?, telefon=?, nombre_pueblo=?, direccio=? WHERE id_usuario=?";
-        
-        jdbcTemplate.update(sqlUsuario,
-                usuari.getNom(), usuari.getCognom1(), usuari.getCognom2(), usuari.getDni(),
-                usuari.getEmail(), usuari.getContrasenya(), usuari.getGenere(),
-                usuari.getDataNaixement(), usuari.getTelefon(), usuari.getNombrePueblo(),
-                usuari.getDireccio(), usuari.getIdUsuario());
-
+        jdbcTemplate.update(sqlUsuario, usuari.getNom(), usuari.getCognom1(), usuari.getCognom2(), usuari.getDni(), usuari.getEmail(), usuari.getContrasenya(), usuari.getGenere(), usuari.getDataNaixement(), usuari.getTelefon(), usuari.getNombrePueblo(), usuari.getDireccio(), usuari.getIdUsuario());
         String sqlUsuariOVI = "UPDATE UsuariOVI SET pla_vida=?, tipus_assistencia=?::enum_tipus_assistencia, consentiment_lopd=?, estat_usuari=?::enum_estat_usuari WHERE id_usuari=?";
-        
-        jdbcTemplate.update(sqlUsuariOVI,
-                usuari.getPlaVida(), usuari.getTipusAssistencia(),
-                usuari.getConsentimentLOPD(), usuari.getEstatUsuari(),
-                usuari.getIdUsuario());
+        jdbcTemplate.update(sqlUsuariOVI, usuari.getPlaVida(), usuari.getTipusAssistencia(), usuari.getConsentimentLOPD(), usuari.getEstatUsuari(), usuari.getIdUsuario());
     }
 
     public void deleteUsuariOVI(int idUsuario) {
-        String sql = "DELETE FROM Usuario WHERE id_usuario=?";
-        jdbcTemplate.update(sql, idUsuario);
+        jdbcTemplate.update("DELETE FROM Usuario WHERE id_usuario=?", idUsuario);
     }
 
     public UsuariOVI getUsuariOVI(int idUsuario) {
@@ -114,13 +107,24 @@ public class UsuariOVIDAO {
             return null;
         }
     }
+
     public List<UsuariOVI> getUsuarisPendents() {
         String sql = "SELECT * FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari WHERE o.estat_usuari = 'Pendent'::enum_estat_usuari";
         return jdbcTemplate.query(sql, new UsuariOVIMapper());
     }
 
+    public int getTotalUsuarisPendents() {
+        String sql = "SELECT COUNT(*) FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari WHERE o.estat_usuari = 'Pendent'::enum_estat_usuari";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+        return count != null ? count : 0;
+    }
+
+    public List<UsuariOVI> getUsuarisPendentsPaginats(int limit, int offset) {
+        String sql = "SELECT * FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari WHERE o.estat_usuari = 'Pendent'::enum_estat_usuari LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, new UsuariOVIMapper(), limit, offset);
+    }
+
     public void actualitzarEstat(int idUsuario, String nouEstat) {
-        String sql = "UPDATE UsuariOVI SET estat_usuari = ?::enum_estat_usuari WHERE id_usuari = ?";
-        jdbcTemplate.update(sql, nouEstat, idUsuario);
+        jdbcTemplate.update("UPDATE UsuariOVI SET estat_usuari = ?::enum_estat_usuari WHERE id_usuari = ?", nouEstat, idUsuario);
     }
 }

@@ -20,10 +20,14 @@
     <h1>Llista d'Usuaris OVI</h1>
     
     <div class="btn-container">
-        <a th:href="@{/usuari/add}" class="btn-admin" style="background-color: #27ae60;">➕ Afegir Nou Usuari OVI</a>
+        <a th:href="@{/usuari/add}" class="btn-admin" style="background-color: #27ae60; text-decoration: none; padding: 10px 15px; border-radius: 5px; color: white; display: inline-block;">➕ Afegir Nou Usuari OVI</a>
     </div>
 
-    <table class="data-table">
+    <div th:if="${#lists.isEmpty(usuaris)}" style="text-align: center; margin-top: 20px;">
+        <p>No hi ha cap usuari OVI registrat.</p>
+    </div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(usuaris)}">
         <thead>
         <tr>
             <th>DNI</th>
@@ -43,13 +47,46 @@
             <td th:text="${uOvi.tipusAssistencia}"></td>
             <td>
                 <a th:href="@{/usuari/update/{id}(id=${uOvi.idUsuario})}">Editar</a> |
-                <a th:href="@{/usuari/delete/{id}(id=${uOvi.idUsuario})}" style="color: #e74c3c;" onclick="return confirm('Segur que vols esborrar aquest usuari OVI?');">Esborrar</a>
+                <a th:href="@{/usuari/delete/{id}(id=${uOvi.idUsuario})}" 
+                   onclick="return confirm('Segur que vols esborrar aquest usuari?')">Esborrar</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <br>
-    <a th:href="@{/}">Tornar a l'inici</a>
+
+    <nav aria-label="Navegació de pàgines" style="margin-top: 30px; text-align: center;" th:unless="${#lists.isEmpty(usuaris)}">
+        <ul style="list-style: none; padding: 0; display: inline-flex; gap: 15px; align-items: center; justify-content: center;">
+            <li>
+                <a th:if="${currentPage > 1}" 
+                   th:href="@{/usuari/list(page=${currentPage - 1})}" 
+                   class="btn-admin" style="background-color: #3498db; text-decoration: none; padding: 8px 12px; color: white; border-radius: 4px;">Anterior</a>
+                <span th:unless="${currentPage > 1}" 
+                      style="opacity: 0.5; padding: 8px 12px; background-color: #ccc; border-radius: 4px; color: #666; cursor: not-allowed;">
+                      Anterior
+                </span>
+            </li>
+            
+            <li>
+                <span style="font-weight: bold; color: #2c3e50;">
+                    Pàgina <span th:text="${currentPage}"></span> de <span th:text="${totalPages}"></span>
+                </span>
+            </li>
+
+            <li>
+                <a th:if="${currentPage < totalPages}" 
+                   th:href="@{/usuari/list(page=${currentPage + 1})}" 
+                   class="btn-admin" style="background-color: #3498db; text-decoration: none; padding: 8px 12px; color: white; border-radius: 4px;">Següent</a>
+                <span th:unless="${currentPage < totalPages}" 
+                      style="opacity: 0.5; padding: 8px 12px; background-color: #ccc; border-radius: 4px; color: #666; cursor: not-allowed;">
+                      Següent
+                </span>
+            </li>
+        </ul>
+    </nav>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="/" class="btn-logout" style="background-color: #95a5a6; text-decoration: none;">🔙 Menú principal</a>
+    </div>
 </main>
 </body>
 </html>

@@ -12,7 +12,11 @@
     <a th:href="@{/assistentPersonal/add}" class="btn-submit">➕ Afegir nou Assistent</a>
 </div>
 
-<table class="data-table">
+<div th:if="${#lists.isEmpty(assistents)}" class="form-container" style="text-align: center;">
+    <p>No hi ha cap assistent registrat.</p>
+</div>
+
+<table class="data-table" th:unless="${#lists.isEmpty(assistents)}">
     <thead>
     <tr>
         <th>Nom</th>
@@ -37,7 +41,41 @@
     </tbody>
 </table>
 
+<nav aria-label="Navegació de pàgines" style="margin-top: 20px; text-align: center;" th:unless="${#lists.isEmpty(assistents)}">
+    <ul style="list-style: none; padding: 0; display: inline-flex; gap: 15px; align-items: center; justify-content: center;">
+        <li>
+            <a th:if="${currentPage > 1}" 
+               th:href="@{/assistentPersonal/list(page=${currentPage - 1})}" 
+               aria-label="Anar a la pàgina anterior"
+               class="btn-submit">Anterior</a>
+            <span th:unless="${currentPage > 1}" 
+                  aria-disabled="true" 
+                  style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #ccc; border-radius: 5px; color: #666;">
+                  Anterior
+            </span>
+        </li>
+        <li>
+            <span aria-current="page" style="font-weight: bold;">
+                Pàgina <span th:text="${currentPage}"></span> de <span th:text="${totalPages}"></span>
+            </span>
+        </li>
+        <li>
+            <a th:if="${currentPage < totalPages}" 
+               th:href="@{/assistentPersonal/list(page=${currentPage + 1})}" 
+               aria-label="Anar a la pàgina següent"
+               class="btn-submit">Següent</a>
+            <span th:unless="${currentPage < totalPages}" 
+                  aria-disabled="true" 
+                  style="opacity: 0.5; cursor: not-allowed; padding: 10px 15px; background-color: #ccc; border-radius: 5px; color: #666;">
+                  Següent
+            </span>
+        </li>
+    </ul>
+</nav>
+
 <br>
-<a href="/">🔙 Menú principal</a>
+<div style="text-align: center; margin-top: 20px;">
+    <a href="/">🔙 Menú principal</a>
+</div>
 </body>
 </html>
