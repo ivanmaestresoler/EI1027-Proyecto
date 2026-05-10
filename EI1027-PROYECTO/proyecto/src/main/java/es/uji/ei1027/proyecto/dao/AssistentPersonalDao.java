@@ -52,21 +52,6 @@ public class AssistentPersonalDao {
         }
     }
 
-    public List<AssistentPersonal> getAssistentsPersonals() {
-        return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent", new AssistentPersonalRowMapper());
-    }
-
-    public int getTotalAssistentsPersonals() {
-        String sql = "SELECT COUNT(*) FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
-        return count != null ? count : 0;
-    }
-
-    public List<AssistentPersonal> getAssistentsPersonalsPaginats(int limit, int offset) {
-        String sql = "SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent LIMIT ? OFFSET ?";
-        return jdbcTemplate.query(sql, new AssistentPersonalRowMapper(), limit, offset);
-    }
-
     public void addAssistentPersonal(AssistentPersonal assistent) {
         String sqlUsuario = "INSERT INTO Usuario (nom, cognom1, cognom2, dni, email, contrasenya, genere, data_naixement, tipus_usuari, telefon, nombre_pueblo, direccio) VALUES (?, ?, ?, ?, ?, ?, ?::enum_genere, ?, 'AssistentPersonal'::enum_tipus_usuari, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -85,17 +70,26 @@ public class AssistentPersonalDao {
             ps.setString(11, assistent.getDireccio());
             return ps;
         }, keyHolder);
+
         Map<String, Object> keys = keyHolder.getKeys();
         if (keys != null && keys.containsKey("id_usuario")) {
             int idGenerado = (int) keys.get("id_usuario");
-            String sqlAssistent = "INSERT INTO AssistentPersonal (id_assistent, formacio_academica, tipus, estat_acceptat) VALUES (?, ?::enum_formacio, ?::enum_tipus_assistent, ?::enum_estat_assistent)";
-            jdbcTemplate.update(sqlAssistent, idGenerado, assistent.getFormacioAcademica(), assistent.getTipus(), assistent.getEstatAcceptat());
+            assistent.setIdUsuario(idGenerado);
+            String sqlAssistent = "INSERT INTO AssistentPersonal (id_assistent, formacio_academica, tipus, estat_acceptat) VALUES (?, ?::enum_formacio, ?::enum_tipus_assistent, 'Candidat'::enum_estat_assistent)";
+            jdbcTemplate.update(sqlAssistent, idGenerado, assistent.getFormacioAcademica(), assistent.getTipus());
+
+            if (assistent.getTipusAssistenciaSeleccionats() != null) {
+                for (String tipo : assistent.getTipusAssistenciaSeleccionats()) {
+                    jdbcTemplate.update("INSERT INTO AssistentTipusAssistencia (id_assistent, tipus_assistencia) VALUES (?, ?::enum_tipus_assistencia)", idGenerado, tipo);
+                }
+            }
         }
     }
 
     public void updateAssistentPersonal(AssistentPersonal assistent) {
         String sqlUsuario = "UPDATE Usuario SET nom=?, cognom1=?, cognom2=?, dni=?, email=?, contrasenya=?, genere=?::enum_genere, data_naixement=?, telefon=?, nombre_pueblo=?, direccio=? WHERE id_usuario=?";
         jdbcTemplate.update(sqlUsuario, assistent.getNom(), assistent.getCognom1(), assistent.getCognom2(), assistent.getDni(), assistent.getEmail(), assistent.getContrasenya(), assistent.getGenere(), assistent.getDataNaixement(), assistent.getTelefon(), assistent.getNombrePueblo(), assistent.getDireccio(), assistent.getIdUsuario());
+
         String sqlAssistent = "UPDATE AssistentPersonal SET formacio_academica=?::enum_formacio, tipus=?::enum_tipus_assistent, estat_acceptat=?::enum_estat_assistent WHERE id_assistent=?";
         jdbcTemplate.update(sqlAssistent, assistent.getFormacioAcademica(), assistent.getTipus(), assistent.getEstatAcceptat(), assistent.getIdUsuario());
     }
@@ -113,6 +107,10 @@ public class AssistentPersonalDao {
         }
     }
 
+    public List<AssistentPersonal> getAssistentsPersonals() {
+        return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent", new AssistentPersonalRowMapper());
+    }
+
     public void approveAssistent(int idAssistent) {
         jdbcTemplate.update("UPDATE AssistentPersonal SET estat_acceptat = 'Acceptat'::enum_estat_assistent WHERE id_assistent = ?", idAssistent);
     }
@@ -125,8 +123,12 @@ public class AssistentPersonalDao {
         return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Candidat'::enum_estat_assistent", new AssistentPersonalRowMapper());
     }
 
+    public List<AssistentPersonal> getAssistentsAcceptats() {
+        return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Acceptat'::enum_estat_assistent", new AssistentPersonalRowMapper());
+    }
+
     public int getTotalCandidats() {
-        String sql = "SELECT COUNT(*) FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Candidat'::enum_estat_assistent";
+        String sql = "SELECT COUNT(*) FROM AssistentPersonal WHERE estat_acceptat = 'Candidat'::enum_estat_assistent";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
         return count != null ? count : 0;
     }
@@ -134,9 +136,5 @@ public class AssistentPersonalDao {
     public List<AssistentPersonal> getCandidatsPaginats(int limit, int offset) {
         String sql = "SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Candidat'::enum_estat_assistent LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, new AssistentPersonalRowMapper(), limit, offset);
-    }
-
-    public List<AssistentPersonal> getAssistentsAcceptats() {
-        return jdbcTemplate.query("SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Acceptat'::enum_estat_assistent", new AssistentPersonalRowMapper());
     }
 }

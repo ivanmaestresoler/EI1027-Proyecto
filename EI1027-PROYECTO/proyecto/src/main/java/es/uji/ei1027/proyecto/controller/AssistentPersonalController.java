@@ -1,6 +1,7 @@
 package es.uji.ei1027.proyecto.controller;
 
 import es.uji.ei1027.proyecto.dao.AssistentPersonalDao;
+import es.uji.ei1027.proyecto.dao.PuebloDAO;
 import es.uji.ei1027.proyecto.model.AssistentPersonal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,77 +11,62 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/assistentPersonal")
 public class AssistentPersonalController {
 
     private AssistentPersonalDao assistentPersonalDao;
+    private AssistentPersonalValidator assistentPersonalValidator;
+    private PuebloDAO puebloDao;
 
     @Autowired
     public void setAssistentPersonalDao(AssistentPersonalDao assistentPersonalDao) {
         this.assistentPersonalDao = assistentPersonalDao;
     }
 
-    @RequestMapping("/list")
-    public String listAssistents(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        int pageSize = 5; 
-        int offset = (page - 1) * pageSize;
+    @Autowired
+    public void setAssistentPersonalValidator(AssistentPersonalValidator assistentPersonalValidator) {
+        this.assistentPersonalValidator = assistentPersonalValidator;
+    }
 
-        int totalRecords = assistentPersonalDao.getTotalAssistentsPersonals();
-        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+    @Autowired
+    public void setPuebloDao(PuebloDAO puebloDao) {
+        this.puebloDao = puebloDao;
+    }
 
-        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonalsPaginats(pageSize, offset));
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-
-        return "assistentPersonal/list";
+    private void cargaAtributos(Model model) {
+        model.addAttribute("formaciones", Arrays.asList("ESO", "BATXILLERAT", "FPGM", "FPGS", "GRAU UNIVERSITARI"));
+        model.addAttribute("tipos", Arrays.asList("PAP", "PATI"));
+        model.addAttribute("generos", Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho"));
+        model.addAttribute("pueblos", puebloDao.getPueblos());
+        model.addAttribute("tiposAssistencia", Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar", "Altres"));
     }
 
     @RequestMapping(value="/add")
     public String addAssistent(Model model) {
         model.addAttribute("assistent", new AssistentPersonal());
+        cargaAtributos(model);
         return "assistentPersonal/add";
     }
 
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
-        AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
-        assistentValidator.validate(assistent, bindingResult);
-        
+    public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult, Model model) {
+        assistentPersonalValidator.validate(assistent, bindingResult);
         if (bindingResult.hasErrors()) {
+            cargaAtributos(model);
             return "assistentPersonal/add";
         }
-        
-        assistent.setEstatAcceptat("Candidat");
         assistentPersonalDao.addAssistentPersonal(assistent);
-        
-        return "redirect:/registre-completat";
+        return "redirect:list";
     }
 
-    @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
-    public String editAssistent(Model model, @PathVariable int id) {
-        model.addAttribute("assistent", assistentPersonalDao.getAssistentPersonal(id));
-        return "assistentPersonal/update";
-    }
-
-    @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult) {
-        AssistentPersonalValidator assistentValidator = new AssistentPersonalValidator();
-        assistentValidator.validate(assistent, bindingResult);
-        
-        if (bindingResult.hasErrors()) {
-            return "assistentPersonal/update";
-        }
-        
-        assistentPersonalDao.updateAssistentPersonal(assistent);
-        return "redirect:/assistentPersonal/list";
-    }
-
-    @RequestMapping(value="/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        assistentPersonalDao.deleteAssistentPersonal(id);
-        return "redirect:/assistentPersonal/list";
+    @RequestMapping("/list")
+    public String listAssistents(Model model) {
+        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonals());
+        return "assistentPersonal/list";
     }
 }

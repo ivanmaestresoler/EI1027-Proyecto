@@ -1,9 +1,11 @@
 package es.uji.ei1027.proyecto.controller;
 
 import es.uji.ei1027.proyecto.model.AssistentPersonal;
+import org.springframework.stereotype.Component; // 1. IMPORTANTE: Añadir este import
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+@Component // 2. IMPORTANTE: Añadir esta anotación para que Spring lo detecte
 public class AssistentPersonalValidator implements Validator {
 
     @Override
