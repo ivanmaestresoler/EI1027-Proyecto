@@ -101,10 +101,18 @@ public class AdminController {
         List<AssistentPersonal> totsAssistents = assistentPersonalDao.getAssistentsAcceptats();
 
         List<AssistentPersonal> candidatsAdients = totsAssistents.stream()
-                .filter(a -> request.getLocalitat() == null || request.getLocalitat().isEmpty() || request.getLocalitat().equals(a.getNombrePueblo()))
-                .filter(a -> request.getGenereAssistent() == null || request.getGenereAssistent().equals("Prefereixc no dir-ho") || request.getGenereAssistent().equals(a.getGenere()))
-                .filter(a -> request.getTipusAssistencia() == null || request.getTipusAssistencia().isEmpty() || request.getTipusAssistencia().equals(a.getTipus()))
+                .filter(a -> {
+                    boolean locMatch = request.getLocalitat() == null || request.getLocalitat().isEmpty() || request.getLocalitat().equals(a.getNombrePueblo());
+                    boolean genMatch = request.getGenereAssistent() == null || request.getGenereAssistent().equals("Prefereixc no dir-ho") || request.getGenereAssistent().equals(a.getGenere());
+                    List<String> tipusDeLAssistent = assistentPersonalDao.getTipusAssistenciaPerAssistent(a.getIdUsuario());
+                    boolean tipusMatch = request.getTipusAssistencia() == null || request.getTipusAssistencia().isEmpty() || tipusDeLAssistent.contains(request.getTipusAssistencia());
+
+                    return locMatch && genMatch && tipusMatch;
+                })
                 .collect(Collectors.toList());
+
+        System.out.println("Candidats finals aprovats per al Match: " + candidatsAdients.size());
+        System.out.println("-------------------------------------------------\n");
 
         model.addAttribute("aprequest", request);
         model.addAttribute("candidatsAdients", candidatsAdients);

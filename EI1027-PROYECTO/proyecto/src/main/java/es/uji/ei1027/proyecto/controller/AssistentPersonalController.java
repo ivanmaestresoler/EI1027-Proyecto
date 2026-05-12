@@ -43,7 +43,14 @@ public class AssistentPersonalController {
         model.addAttribute("tipos", Arrays.asList("PAP", "PATI"));
         model.addAttribute("generos", Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho"));
         model.addAttribute("pueblos", puebloDao.getPueblos());
+        // AÑADIDO: Los tipos de asistencia para los checkboxes
         model.addAttribute("tiposAssistencia", Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar", "Altres"));
+    }
+
+    @RequestMapping("/list")
+    public String listAssistents(Model model) {
+        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonals());
+        return "assistentPersonal/list";
     }
 
     @RequestMapping(value="/add")
@@ -54,19 +61,44 @@ public class AssistentPersonalController {
     }
 
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent, BindingResult bindingResult, Model model) {
+    public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent,
+                                   BindingResult bindingResult, Model model) {
         assistentPersonalValidator.validate(assistent, bindingResult);
         if (bindingResult.hasErrors()) {
             cargaAtributos(model);
             return "assistentPersonal/add";
         }
         assistentPersonalDao.addAssistentPersonal(assistent);
-        return "redirect:list";
+        return "redirect:/assistentPersonal/list";
     }
 
-    @RequestMapping("/list")
-    public String listAssistents(Model model) {
-        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonals());
-        return "assistentPersonal/list";
+    @RequestMapping(value="/update/{idUsuario}", method = RequestMethod.GET)
+    public String editAssistent(Model model, @PathVariable int idUsuario) {
+        AssistentPersonal assistent = assistentPersonalDao.getAssistentPersonal(idUsuario);
+        if (assistent != null) {
+            // AÑADIDO: Cargar los checkboxes marcados previamente en la base de datos
+            assistent.setTipusAssistenciaSeleccionats(assistentPersonalDao.getTipusAssistenciaPerAssistent(idUsuario));
+        }
+        model.addAttribute("assistent", assistent);
+        cargaAtributos(model);
+        return "assistentPersonal/update";
+    }
+
+    @RequestMapping(value="/update", method = RequestMethod.POST)
+    public String processUpdateSubmit(@ModelAttribute("assistent") AssistentPersonal assistent,
+                                      BindingResult bindingResult, Model model) {
+        assistentPersonalValidator.validate(assistent, bindingResult);
+        if (bindingResult.hasErrors()) {
+            cargaAtributos(model);
+            return "assistentPersonal/update";
+        }
+        assistentPersonalDao.updateAssistentPersonal(assistent);
+        return "redirect:/assistentPersonal/list";
+    }
+
+    @RequestMapping(value="/delete/{idUsuario}")
+    public String processDelete(@PathVariable int idUsuario) {
+        assistentPersonalDao.deleteAssistentPersonal(idUsuario);
+        return "redirect:/assistentPersonal/list";
     }
 }

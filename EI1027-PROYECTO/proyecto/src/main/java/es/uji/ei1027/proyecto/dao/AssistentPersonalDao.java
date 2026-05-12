@@ -137,4 +137,9 @@ public class AssistentPersonalDao {
         String sql = "SELECT * FROM Usuario u JOIN AssistentPersonal a ON u.id_usuario = a.id_assistent WHERE a.estat_acceptat = 'Candidat'::enum_estat_assistent LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, new AssistentPersonalRowMapper(), limit, offset);
     }
+
+    public List<String> getTipusAssistenciaPerAssistent(int idAssistent) {
+        String sql = "SELECT tipus_assistencia::varchar FROM AssistentTipusAssistencia WHERE id_assistent=?";
+        return jdbcTemplate.queryForList(sql, String.class, idAssistent);
+    }
 }
