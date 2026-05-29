@@ -1,128 +1,108 @@
 package es.uji.ei1027.proyecto.controller;
 
+import es.uji.ei1027.proyecto.dao.APRequestDAO;
 import es.uji.ei1027.proyecto.dao.UsuariOVIDAO;
 import es.uji.ei1027.proyecto.dao.AssistentPersonalDao;
-import es.uji.ei1027.proyecto.dao.APRequestDAO;
-import es.uji.ei1027.proyecto.model.AssistentPersonal;
-import es.uji.ei1027.proyecto.model.APRequest;
+import es.uji.ei1027.proyecto.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UsuariOVIDAO usuariOVIDAO;
-    private AssistentPersonalDao assistentPersonalDao;
+    @Autowired
     private APRequestDAO apRequestDao;
 
     @Autowired
-    public void setUsuariOVIDAO(UsuariOVIDAO usuariOVIDAO) {
-        this.usuariOVIDAO = usuariOVIDAO;
-    }
+    private UsuariOVIDAO usuariOVIDAO;
 
     @Autowired
-    public void setAssistentPersonalDao(AssistentPersonalDao assistentPersonalDao) {
-        this.assistentPersonalDao = assistentPersonalDao;
-    }
+    private AssistentPersonalDao assistentPersonalDao;
 
-    @Autowired
-    public void setApRequestDao(APRequestDAO apRequestDao) {
-        this.apRequestDao = apRequestDao;
+
+    private boolean isNotAdmin(HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        return usuario == null || !usuario.getTipusUsuari().equals("admin");
     }
 
     @GetMapping("/solicituds-ovi")
-    public String llistarSolicitudsOVI(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        int pageSize = 5; 
-        int offset = (page - 1) * pageSize;
-        int totalRecords = usuariOVIDAO.getTotalUsuarisPendents();
-        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
-
-        model.addAttribute("usuarisPendents", usuariOVIDAO.getUsuarisPendentsPaginats(pageSize, offset));
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+    public String validarUsuarisOVI(Model model, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+        model.addAttribute("usuaris", usuariOVIDAO.getUsuarisPendents());
         return "admin/solicituds-ovi";
     }
 
-    @GetMapping("/acceptar-ovi/{id}")
-    public String acceptarOVI(@PathVariable int id) {
-        usuariOVIDAO.actualitzarEstat(id, "Acceptat");
-        return "redirect:/admin/solicituds-ovi";
-    }
-
-    @GetMapping("/rebutjar-ovi/{id}")
-    public String rebutjarOVI(@PathVariable int id) {
-        usuariOVIDAO.actualitzarEstat(id, "Rebutjat");
-        return "redirect:/admin/solicituds-ovi";
-    }
-
     @GetMapping("/solicituds-assistent")
-    public String llistarSolicitudsAssistent(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        int pageSize = 5; 
-        int offset = (page - 1) * pageSize;
-        int totalRecords = assistentPersonalDao.getTotalCandidats();
-        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
-
-        model.addAttribute("assistentsPendents", assistentPersonalDao.getCandidatsPaginats(pageSize, offset));
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+    public String validarAssistents(Model model, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+        model.addAttribute("assistents", assistentPersonalDao.getCandidats());
         return "admin/solicituds-assistent";
     }
-
-    @GetMapping("/acceptar-assistent/{id}")
-    public String acceptarAssistent(@PathVariable int id) {
-        assistentPersonalDao.approveAssistent(id);
-        return "redirect:/admin/solicituds-assistent";
-    }
-
-    @GetMapping("/rebutjar-assistent/{id}")
-    public String rebutjarAssistent(@PathVariable int id) {
-        assistentPersonalDao.rejectAssistent(id);
-        return "redirect:/admin/solicituds-assistent";
-    }
-
     @GetMapping("/peticions-pendents")
-    public String llistarPeticionsPendents(Model model) {
-        model.addAttribute("requests", apRequestDao.getAPRequestsEnRevisio());
-        return "admin/peticions-pendents";
-    }
+    public String peticionsPendents(Model model, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login"; // Protegemos la ruta
 
-    @GetMapping("/generar-proposta/{idRequest}")
-    public String generarPropostaMatch(Model model, @PathVariable int idRequest) {
-        APRequest request = apRequestDao.getAPRequest(idRequest);
-        List<AssistentPersonal> totsAssistents = assistentPersonalDao.getAssistentsAcceptats();
-
-        List<AssistentPersonal> candidatsAdients = totsAssistents.stream()
-                .filter(a -> {
-                    boolean locMatch = request.getLocalitat() == null || request.getLocalitat().isEmpty() || request.getLocalitat().equals(a.getNombrePueblo());
-                    boolean genMatch = request.getGenereAssistent() == null || request.getGenereAssistent().equals("Prefereixc no dir-ho") || request.getGenereAssistent().equals(a.getGenere());
-                    List<String> tipusDeLAssistent = assistentPersonalDao.getTipusAssistenciaPerAssistent(a.getIdUsuario());
-                    boolean tipusMatch = request.getTipusAssistencia() == null || request.getTipusAssistencia().isEmpty() || tipusDeLAssistent.contains(request.getTipusAssistencia());
-
-                    return locMatch && genMatch && tipusMatch;
-                })
-                .collect(Collectors.toList());
-
-        System.out.println("Candidats finals aprovats per al Match: " + candidatsAdients.size());
-        System.out.println("-------------------------------------------------\n");
-
-        model.addAttribute("aprequest", request);
-        model.addAttribute("candidatsAdients", candidatsAdients);
-
-        return "admin/proposta-candidats";
+        model.addAttribute("requests", apRequestDao.getAPRequestsFiltrades("En revisió"));
+        return "aprequest/list";
     }
 
     @GetMapping("/aprovar-petici/{idRequest}")
-    public String aprovarPetici(Model model, @PathVariable int idRequest) {
+    public String aprovarPetici(Model model, @PathVariable int idRequest, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+
         apRequestDao.aprovarRequest(idRequest);
-        return "redirect:/admin/peticions-pendents";
+        model.addAttribute("mensaje", "S'ha aprovat la petició i s'ha simulat l'enviament d'un correu amb la proposta de candidats a l'Usuari OVI.");
+        return "admin/confirmacion-aprovada";
+    }
+
+    @GetMapping("/rebutjar-petici/{idRequest}")
+    public String rebutjarPetici(Model model, @PathVariable int idRequest, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+
+        apRequestDao.rebutjarRequest(idRequest);
+        model.addAttribute("mensaje", "La petició ha sigut rebutjada. S'ha enviat un correu explicatiu a l'usuari per informar-lo.");
+        return "admin/confirmacion-aprovada";
+    }
+
+    @GetMapping("/aprovar-usuari/{idUsuario}")
+    public String aprovarUsuari(Model model, @PathVariable int idUsuario, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+
+        usuariOVIDAO.aprovarUsuari(idUsuario);
+        model.addAttribute("mensaje", "L'Usuari OVI ha sigut validat correctament. S'ha simulat l'enviament d'un correu de benvinguda indicant que ja pot fer peticions.");
+        return "admin/confirmacion-aprovada";
+    }
+
+    @GetMapping("/rebutjar-usuari/{idUsuario}")
+    public String rebutjarUsuari(Model model, @PathVariable int idUsuario, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+
+        usuariOVIDAO.rebutjarUsuari(idUsuario);
+        model.addAttribute("mensaje", "La sol·licitud de registre de l'Usuari OVI ha sigut rebutjada. S'ha enviat un correu informant-lo dels motius.");
+        return "admin/confirmacion-aprovada";
+    }
+
+    @GetMapping("/aprovar-assistent/{idUsuario}")
+    public String aprovarAssistent(Model model, @PathVariable int idUsuario, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+
+        assistentPersonalDao.aprovarAssistent(idUsuario);
+        model.addAttribute("mensaje", "L'Assistent Personal ha sigut validat i acceptat correctament. S'ha enviat un correu de benvinguda per a informar-lo.");
+        return "admin/confirmacion-aprovada";
+    }
+
+    @GetMapping("/rebutjar-assistent/{idUsuario}")
+    public String rebutjarAssistent(Model model, @PathVariable int idUsuario, HttpSession session) {
+        if (isNotAdmin(session)) return "redirect:/login";
+
+        assistentPersonalDao.rebutjarAssistent(idUsuario);
+        model.addAttribute("mensaje", "La sol·licitud de registre de l'Assistent Personal ha sigut rebutjada. S'ha enviat un correu informant-lo dels motius.");
+        return "admin/confirmacion-aprovada";
     }
 }

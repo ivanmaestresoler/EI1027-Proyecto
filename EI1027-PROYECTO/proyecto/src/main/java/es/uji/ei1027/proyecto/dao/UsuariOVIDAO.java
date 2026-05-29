@@ -127,4 +127,14 @@ public class UsuariOVIDAO {
         String sql = "SELECT * FROM Usuario u JOIN UsuariOVI o ON u.id_usuario = o.id_usuari WHERE o.estat_usuari = 'Pendent'::enum_estat_usuari LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, new UsuariOVIMapper(), limit, offset);
     }
+
+    public void aprovarUsuari(Integer idUsuari) {
+        String sql = "UPDATE usuariovi SET estat_usuari = 'Acceptat' WHERE id_usuari = ?";
+        jdbcTemplate.update(sql, idUsuari);
+    }
+
+    public void rebutjarUsuari(Integer idUsuari) {
+        String sql = "UPDATE usuariovi SET estat_usuari = 'Rebutjat' WHERE id_usuari = ?";
+        jdbcTemplate.update(sql, idUsuari);
+    }
 }

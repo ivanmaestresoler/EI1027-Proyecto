@@ -3,6 +3,7 @@ package es.uji.ei1027.proyecto.controller;
 import es.uji.ei1027.proyecto.dao.AssistentPersonalDao;
 import es.uji.ei1027.proyecto.dao.PuebloDAO;
 import es.uji.ei1027.proyecto.model.AssistentPersonal;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,6 +71,8 @@ public class AssistentPersonalController {
             cargaAtributos(model);
             return "assistentPersonal/add";
         }
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        assistent.setContrasenya(passwordEncryptor.encryptPassword(assistent.getContrasenya()));
         assistentPersonalDao.addAssistentPersonal(assistent);
         return "redirect:/assistentPersonal/list";
     }

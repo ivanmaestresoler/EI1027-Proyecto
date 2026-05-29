@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+  <title>Detall de la Petició - Projecte OVI</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <h2 class="h4 mb-0">Detalls de la Petició d'Assistència #<span th:text="${aprequest.idRequest}"></span></h2>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p><strong>Estat:</strong> <span class="badge bg-info text-dark" th:text="${aprequest.estatRequest}"></span></p>
+          <p><strong>Data Sol·licitud:</strong> <span th:text="${aprequest.dataSollicitud}"></span></p>
+          <p><strong>Localitat:</strong> <span th:text="${aprequest.localitat}"></span></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Tipus Assistència:</strong> <span th:text="${aprequest.tipusAssistencia}"></span></p>
+          <p><strong>Preferència Gènere:</strong> <span th:text="${aprequest.genereAssistent}"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="mb-3">Candidats Proposats pel Tècnic OVI</h3>
+  <div th:if="${#lists.isEmpty(candidats)}" class="alert alert-warning">
+    Encara no hi ha candidats proposats per a aquesta petició. L'administrador està treballant en això.
+  </div>
+
+  <table class="table table-striped table-hover bg-white shadow-sm rounded" th:unless="${#lists.isEmpty(candidats)}">
+    <thead class="table-dark">
+    <tr>
+      <th>ID Assistent</th>
+      <th>Data de la Proposta</th>
+      <th class="text-center">Accions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="candidat : ${candidats}">
+      <td th:text="${candidat.idAssistent}"></td>
+      <td th:text="${#temporals.format(candidat.dataProposta, 'dd/MM/yyyy HH:mm')}"></td>
+      <td class="text-center">
+        <a th:href="@{/comunicacio/add(idSeleccion=${candidat.idSeleccion})}" class="btn btn-outline-primary btn-sm me-2">
+          Contactar per Xat
+        </a>
+        <a th:href="@{/registreContracte/add(idRequest=${aprequest.idRequest}, idAssistent=${candidat.idAssistent})}" class="btn btn-success btn-sm">
+          Finalitzar Contracte
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="mt-4">
+    <a href="javascript:history.back()" class="btn btn-secondary">Tornar enrere</a>
+  </div>
+</div>
+</body>
+</html>

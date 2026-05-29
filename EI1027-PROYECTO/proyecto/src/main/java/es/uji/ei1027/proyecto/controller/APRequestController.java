@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,23 +46,58 @@ public class APRequestController {
         this.idiomaDao = idiomaDao;
     }
 
+    private void cargaAtributosFormulario(Model model) {
+        List<String> tiposAssistencia = Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar");
+        List<String> generos = Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho");
+
+        model.addAttribute("tiposAssistencia", tiposAssistencia);
+        model.addAttribute("generos", generos);
+        model.addAttribute("pueblos", puebloDao.getPueblos());
+        model.addAttribute("idiomas", idiomaDao.getIdiomas());
+    }
+
+    // LISTADO CON PAGINACIÓN Y FILTRO
     @RequestMapping("/list")
-    public String listRequests(Model model) {
-        model.addAttribute("aprequests", apRequestDao.getAPRequests());
+    public String listRequests(Model model, jakarta.servlet.http.HttpSession session,
+                               @RequestParam(value = "estado", required = false) String estado,
+                               @RequestParam(value = "page", defaultValue = "1") int page) {
+
+        es.uji.ei1027.proyecto.model.Usuario usuario = (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+
+        int pageSize = 5; // Cantidad de elementos por página
+        int offset = (page - 1) * pageSize;
+        int totalRecords = 0;
+        List<APRequest> requests;
+
+        if (usuario.getTipusUsuari().equals("UsuariOVI")) {
+            requests = apRequestDao.getAPRequestsPerUsuariFiltradesPaginadas(usuario.getIdUsuario(), estado, pageSize, offset);
+            totalRecords = apRequestDao.countAPRequestsPerUsuariFiltrades(usuario.getIdUsuario(), estado);
+        } else {
+            requests = apRequestDao.getAPRequestsFiltradesPaginadas(estado, pageSize, offset);
+            totalRecords = apRequestDao.countAPRequestsFiltrades(estado);
+        }
+
+        int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+        if (totalPages == 0) totalPages = 1;
+
+        model.addAttribute("requests", requests);
+        model.addAttribute("estadoSeleccionado", estado);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "aprequest/list";
     }
 
-    @RequestMapping(value="/add", method = RequestMethod.GET)
+    @RequestMapping(value="/add")
     public String addRequest(Model model) {
-        APRequest request = new APRequest();
-        request.setGenereAssistent("Prefereixc no dir-ho");
-        model.addAttribute("aprequest", request);
+        model.addAttribute("aprequest", new APRequest());
         cargaAtributosFormulario(model);
         return "aprequest/add";
     }
 
-    @RequestMapping(value="/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, HttpSession session, Model model) {
+    @RequestMapping(value="/add", method=RequestMethod.POST)
+    public String processAddSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, Model model, jakarta.servlet.http.HttpSession session) {
         es.uji.ei1027.proyecto.model.Usuario usuario = (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
         if (usuario != null) {
             aprequest.setIdUsuari(usuario.getIdUsuario());
@@ -74,8 +109,11 @@ public class APRequestController {
             cargaAtributosFormulario(model);
             return "aprequest/add";
         }
+
         apRequestDao.addAPRequest(aprequest);
-        return "redirect:/aprequest/list";
+
+        model.addAttribute("mensaje", "Petició creada correctament! S'ha simulat l'enviament d'un correu al Tècnic OVI perquè comence a buscar-te candidats adients.");
+        return "admin/confirmacion-aprovada";
     }
 
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
@@ -86,7 +124,7 @@ public class APRequestController {
     }
 
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, Model model) {
+    public String processUpdateSubmit(@ModelAttribute("aprequest") APRequest aprequest,BindingResult bindingResult, Model model) {
         apRequestValidator.validate(aprequest, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -103,11 +141,19 @@ public class APRequestController {
         return "redirect:/aprequest/list";
     }
 
-    private void cargaAtributosFormulario(Model model) {
-        model.addAttribute("idiomas", idiomaDao.getIdiomas());
-        model.addAttribute("pueblos", puebloDao.getPueblos());
-        model.addAttribute("tiposAssistencia", Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar", "Altres"));
-        model.addAttribute("generos", Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho"));
-        model.addAttribute("formaciones", Arrays.asList("ESO", "BATXILLERAT", "FPGM", "FPGS", "GRAU UNIVERSITARI"));
+    @RequestMapping(value="/detalle/{id}", method = RequestMethod.GET)
+    public String veureDetalle(Model model, @PathVariable int id, jakarta.servlet.http.HttpSession session) {
+        // Comprovem que hi haja sessió
+        if (session.getAttribute("usuario") == null) {
+            return "redirect:/login";
+        }
+
+        APRequest peticion = apRequestDao.getAPRequest(id);
+
+        if (peticion == null) {
+            return "redirect:/aprequest/list";
+        }
+        model.addAttribute("aprequest", peticion);
+        return "aprequest/detalle";
     }
 }
