@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,29 +39,30 @@ public class AssistentPersonalController {
         this.puebloDao = puebloDao;
     }
 
-    private void cargaAtributos(Model model) {
-        model.addAttribute("formaciones", Arrays.asList("ESO", "BATXILLERAT", "FPGM", "FPGS", "GRAU UNIVERSITARI"));
-        model.addAttribute("tipos", Arrays.asList("PAP", "PATI"));
-        model.addAttribute("generos", Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho"));
-        model.addAttribute("pueblos", puebloDao.getPueblos());
-        // AÑADIDO: Los tipos de asistencia para los checkboxes
-        model.addAttribute("tiposAssistencia", Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar", "Altres"));
-    }
-
     @RequestMapping("/list")
-    public String listAssistents(Model model) {
-        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonals());
+    public String listAssistents(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageSize = 5; 
+        int offset = (page - 1) * pageSize;
+
+        int totalRecords = assistentPersonalDao.getTotalAssistentsPersonals();
+        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+
+        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonalsPaginats(pageSize, offset));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         return "assistentPersonal/list";
     }
 
-    @RequestMapping(value="/add")
+    @RequestMapping(value="/add", method = RequestMethod.GET)
     public String addAssistent(Model model) {
-        model.addAttribute("assistent", new AssistentPersonal());
+        AssistentPersonal assistent = new AssistentPersonal();
+        assistent.setGenere("Prefereixc no dir-ho");
+        model.addAttribute("assistent", assistent);
         cargaAtributos(model);
         return "assistentPersonal/add";
     }
 
-    @RequestMapping(value="/add", method=RequestMethod.POST)
+    @RequestMapping(value="/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent,
                                    BindingResult bindingResult, Model model) {
         assistentPersonalValidator.validate(assistent, bindingResult);
@@ -76,7 +78,6 @@ public class AssistentPersonalController {
     public String editAssistent(Model model, @PathVariable int idUsuario) {
         AssistentPersonal assistent = assistentPersonalDao.getAssistentPersonal(idUsuario);
         if (assistent != null) {
-            // AÑADIDO: Cargar los checkboxes marcados previamente en la base de datos
             assistent.setTipusAssistenciaSeleccionats(assistentPersonalDao.getTipusAssistenciaPerAssistent(idUsuario));
         }
         model.addAttribute("assistent", assistent);
@@ -100,5 +101,13 @@ public class AssistentPersonalController {
     public String processDelete(@PathVariable int idUsuario) {
         assistentPersonalDao.deleteAssistentPersonal(idUsuario);
         return "redirect:/assistentPersonal/list";
+    }
+
+    private void cargaAtributos(Model model) {
+        model.addAttribute("pueblos", puebloDao.getPueblos());
+        model.addAttribute("generos", Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho"));
+        model.addAttribute("formaciones", Arrays.asList("ESO", "BATXILLERAT", "FPGM", "FPGS", "GRAU UNIVERSITARI"));
+        model.addAttribute("tipos", Arrays.asList("PAP", "PATI"));
+        model.addAttribute("tiposAssistencia", Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar", "Altres"));
     }
 }

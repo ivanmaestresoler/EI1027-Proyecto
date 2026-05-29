@@ -45,6 +45,17 @@ public class LoginController {
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public String checkLogin(@ModelAttribute("usuario") Usuario usuarioPost, HttpSession session, Model model) {
+        if (usuarioPost.getEmail() == null || usuarioPost.getEmail().trim().isEmpty() ||
+            usuarioPost.getContrasenya() == null || usuarioPost.getContrasenya().trim().isEmpty()) {
+            model.addAttribute("error", "Per favor, introduïsca l'email i la contrasenya.");
+            return "login";
+        }
+
+        if (!usuarioPost.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            model.addAttribute("error", "El format de l'email no és vàlid.");
+            return "login";
+        }
+
         Usuario usuarioBD = usuarioDao.getUsuarioByEmail(usuarioPost.getEmail());
         
         if (usuarioBD == null || !usuarioBD.getContrasenya().equals(usuarioPost.getContrasenya())) {

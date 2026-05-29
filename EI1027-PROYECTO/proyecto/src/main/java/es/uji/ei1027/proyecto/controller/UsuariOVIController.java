@@ -38,11 +38,8 @@ public class UsuariOVIController {
             "Tasques de la llar", 
             "Altres"
         );
-        List<String> estados = Arrays.asList("Pendent", "Acceptat", "Rebutjat");
-        
         model.addAttribute("generos", generos);
         model.addAttribute("tiposAsistencia", tiposAsistencia);
-        model.addAttribute("estados", estados);
     }
 
     @GetMapping("/list")
@@ -56,13 +53,14 @@ public class UsuariOVIController {
         model.addAttribute("usuaris", usuariOVIDAO.getUsuarisOVIPaginats(pageSize, offset));
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-
         return "usuari/list";
     }
 
     @GetMapping("/add")
     public String addUsuario(Model model) {
-        model.addAttribute("usuariOVI", new UsuariOVI());
+        UsuariOVI usuariOVI = new UsuariOVI();
+        usuariOVI.setGenere("Prefereixc no dir-ho");
+        model.addAttribute("usuariOVI", usuariOVI);
         cargaAtributosFormulario(model);
         return "usuari/add";
     }

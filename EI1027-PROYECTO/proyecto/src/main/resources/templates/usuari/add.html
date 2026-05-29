@@ -14,69 +14,70 @@
             <div class="form-group">
                 <label>DNI/NIE:</label>
                 <input type="text" th:field="*{dni}" />
-                <span th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>Nom:</label>
                 <input type="text" th:field="*{nom}" />
-                <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>Primer Cognom:</label>
                 <input type="text" th:field="*{cognom1}" />
-                <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>Segon Cognom:</label>
                 <input type="text" th:field="*{cognom2}" />
-            </div>
-
-            <div class="form-group">
-                <label>Data Naixement:</label>
-                <input type="date" th:field="*{dataNaixement}" />
-                <span th:if="${#fields.hasErrors('dataNaixement')}" th:errors="*{dataNaixement}" class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label>Gènere:</label>
-                <select th:field="*{genere}">
-                    <option value="">Selecciona...</option>
-                    <option th:each="g : ${generos}" th:value="${g}" th:text="${g}"></option>
-                </select>
-                <span th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}" class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label>Telèfon:</label>
-                <input type="text" th:field="*{telefon}" />
-                <span th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('cognom2')}" th:errors="*{cognom2}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>Email:</label>
                 <input type="email" th:field="*{email}" />
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>Contrasenya:</label>
                 <input type="password" th:field="*{contrasenya}" />
-                <span th:if="${#fields.hasErrors('contrasenya')}" th:errors="*{contrasenya}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('contrasenya')}" th:errors="*{contrasenya}" class=\"error-message\"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Data Naixement:</label>
+                <input type="date" th:field="*{dataNaixement}" th:max="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" />
+                <span th:if="${#fields.hasErrors('dataNaixement')}" th:errors="*{dataNaixement}" class=\"error-message\"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Gènere:</label>
+                <div th:each="g : ${generos}" style="display: inline-block; margin-right: 15px;">
+                    <input type="radio" th:field="*{genere}" th:value="${g}" th:id="${'genere_' + g}" />
+                    <label th:for="${'genere_' + g}" th:text="${g}"></label>
+                </div>
+                <span th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}" class=\"error-message\"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Telèfon:</label>
+                <input type="text" th:field="*{telefon}" />
+                <span th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>Direcció:</label>
                 <input type="text" th:field="*{direccio}" />
-                <span th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>Poble:</label>
                 <input type="text" th:field="*{nombrePueblo}" />
-                <span th:if="${#fields.hasErrors('nombrePueblo')}" th:errors="*{nombrePueblo}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('nombrePueblo')}" th:errors="*{nombrePueblo}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
@@ -88,18 +89,19 @@
                             th:text="${t}">
                     </option>
                 </select>
-                <span th:if="${#fields.hasErrors('tipusAssistencia')}" th:errors="*{tipusAssistencia}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('tipusAssistencia')}" th:errors="*{tipusAssistencia}" class=\"error-message\"></span>
             </div>
 
             <div class="form-group">
                 <label>
                     <input type="checkbox" th:field="*{consentimentLOPD}" /> Acceptar LOPD
                 </label>
-                <span th:if="${#fields.hasErrors('consentimentLOPD')}" th:errors="*{consentimentLOPD}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('consentimentLOPD')}" th:errors="*{consentimentLOPD}" class=\"error-message\"></span>
             </div>
 
             <button type="submit" class="btn-submit">Guardar Usuari OVI</button>
-            <a th:href="@{/registre}">Cancel·lar</a>
+            <button type="reset" class="btn-submit" style="background-color: #e67e22;">Reiniciar</button>
+            <a th:href="@{/registre}">Salir</a>
         </form>
     </div>
 </main>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,31 +46,23 @@ public class APRequestController {
         this.idiomaDao = idiomaDao;
     }
 
-    private void cargaAtributosFormulario(Model model) {
-        List<String> tiposAssistencia = Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar");
-        List<String> generos = Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho");
-
-        model.addAttribute("tiposAssistencia", tiposAssistencia);
-        model.addAttribute("generos", generos);
-        model.addAttribute("pueblos", puebloDao.getPueblos());
-        model.addAttribute("idiomas", idiomaDao.getIdiomas());
-    }
-
     @RequestMapping("/list")
     public String listRequests(Model model) {
-        model.addAttribute("requests", apRequestDao.getAPRequests());
+        model.addAttribute("aprequests", apRequestDao.getAPRequests());
         return "aprequest/list";
     }
 
-    @RequestMapping(value="/add")
+    @RequestMapping(value="/add", method = RequestMethod.GET)
     public String addRequest(Model model) {
-        model.addAttribute("aprequest", new APRequest());
+        APRequest request = new APRequest();
+        request.setGenereAssistent("Prefereixc no dir-ho");
+        model.addAttribute("aprequest", request);
         cargaAtributosFormulario(model);
         return "aprequest/add";
     }
 
-    @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, Model model, jakarta.servlet.http.HttpSession session) {
+    @RequestMapping(value="/add", method = RequestMethod.POST)
+    public String processAddSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, HttpSession session, Model model) {
         es.uji.ei1027.proyecto.model.Usuario usuario = (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
         if (usuario != null) {
             aprequest.setIdUsuari(usuario.getIdUsuario());
@@ -93,7 +86,7 @@ public class APRequestController {
     }
 
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("aprequest") APRequest aprequest,BindingResult bindingResult, Model model) {
+    public String processUpdateSubmit(@ModelAttribute("aprequest") APRequest aprequest, BindingResult bindingResult, Model model) {
         apRequestValidator.validate(aprequest, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -108,5 +101,13 @@ public class APRequestController {
     public String processDelete(@PathVariable int id) {
         apRequestDao.deleteAPRequest(id);
         return "redirect:/aprequest/list";
+    }
+
+    private void cargaAtributosFormulario(Model model) {
+        model.addAttribute("idiomas", idiomaDao.getIdiomas());
+        model.addAttribute("pueblos", puebloDao.getPueblos());
+        model.addAttribute("tiposAssistencia", Arrays.asList("Higiene personal", "Mobilitat", "Suport emocional", "Acompanyament mèdic", "Tasques de la llar", "Altres"));
+        model.addAttribute("generos", Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho"));
+        model.addAttribute("formaciones", Arrays.asList("ESO", "BATXILLERAT", "FPGM", "FPGS", "GRAU UNIVERSITARI"));
     }
 }
