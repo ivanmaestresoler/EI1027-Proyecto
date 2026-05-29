@@ -46,7 +46,7 @@ public class AdminController {
     }
     @GetMapping("/peticions-pendents")
     public String peticionsPendents(Model model, HttpSession session) {
-        if (isNotAdmin(session)) return "redirect:/login"; // Protegemos la ruta
+        if (isNotAdmin(session)) return "redirect:/login";
 
         model.addAttribute("requests", apRequestDao.getAPRequestsFiltrades("En revisió"));
         return "aprequest/list";

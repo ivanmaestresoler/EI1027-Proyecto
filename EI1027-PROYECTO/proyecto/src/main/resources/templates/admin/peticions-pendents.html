@@ -1,47 +1,54 @@
 <!DOCTYPE html>
-<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Gestió de Peticions Pendents</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>Peticions AP Pendents</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<header class="main-header">
-  <div class="logo"><strong>Gestió OVI</strong></div>
-</header>
-<main class="main-content">
-  <h1>Peticions d'Assistència en Revisió</h1>
-  <p>Aquestes peticions necessiten que es genere una proposta de candidats per a ser aprovades.</p>
-  <table class="data-table">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Usuari</th>
-      <th>Data</th>
-      <th>Tipus</th>
-      <th>Localitat</th>
-      <th>Accions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="req : ${requests}">
-      <td th:text="${req.idRequest}"></td>
-      <td th:text="${req.idUsuari}"></td>
-      <td th:text="${req.dataSollicitud}"></td>
-      <td th:text="${req.tipusAssistencia}"></td>
-      <td th:text="${req.localitat}"></td>
-      <td>
-        <a th:href="@{/admin/generar-proposta/{id}(id=${req.idRequest})}"
-           style="display:inline-block; background-color:#1a5276; color:#ffffff; padding:6px 12px; border-radius:4px; text-decoration:none; font-weight:bold;">Generar Proposta</a>
-      </td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(requests)}">
-      <td colspan="6" style="text-align:center;">No hi ha peticiones pendents de revisió.</td>
-    </tr>
-    </tbody>
-  </table>
-  <br>
-  <a th:href="@{/}" class="btn-submit" style="background-color:#34495e; text-decoration:none;">Tornar al Menú</a>
-</main>
+<div class="container mt-5">
+  <h2 class="mb-4">Peticions d'Assistència (En Revisió)</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle shadow-sm">
+      <thead class="table-dark">
+      <tr>
+        <th>ID Petició</th>
+        <th>ID Usuari OVI</th>
+        <th>Tipus d'Assistència</th>
+        <th>Localitat</th>
+        <th>Data Sol·licitud</th>
+        <th>Accions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="req : ${requests}">
+        <td th:text="${req.idRequest}"></td>
+        <td th:text="${req.idUsuari}"></td>
+        <td th:text="${req.tipusAssistencia}"></td>
+        <td th:text="${req.localitat}"></td>
+        <td th:text="${req.dataSollicitud}"></td>
+        <td>
+          <a th:href="@{/aprequest/detalle/{id}(id=${req.idRequest})}" class="btn btn-info btn-sm text-white">Veure Detall</a>
+
+          <a th:href="@{/admin/aprovar-petici/{id}(id=${req.idRequest})}" class="btn btn-success btn-sm">Aprovar</a>
+
+          <a th:href="@{/admin/rebutjar-petici/{id}(id=${req.idRequest})}"
+             class="btn btn-danger btn-sm"
+             onclick="return confirm('Estàs segur de rebutjar aquesta petició d\'assistència?');">
+            Rebutjar
+          </a>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(requests)}">
+        <td colspan="6" class="text-center py-4">No hi ha cap petició pendent de revisió.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <a th:href="@{/}" class="btn btn-secondary mt-3">Tornar al Tauler Admin</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
