@@ -137,14 +137,21 @@ public class UsuariOVIController {
 
     @PostMapping("/update")
     public String processUpdateSubmit(@ModelAttribute("usuariOVI") UsuariOVI usuariOVI,
-                                      BindingResult bindingResult, Model model) {
+                                      BindingResult bindingResult, Model model,
+                                      HttpSession session) {
         usuariOVIValidator.validate(usuariOVI, bindingResult);
         if (bindingResult.hasErrors()) {
             cargaAtributosFormulario(model);
             return "usuari/update";
         }
         usuariOVIDAO.updateUsuariOVI(usuariOVI);
-        return "redirect:list";
+
+        // Redirigir según rol
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario != null && usuario.getTipusUsuari().equals("UsuariOVI")) {
+            return "redirect:/";
+        }
+        return "redirect:/usuari/list";
     }
 
     @GetMapping("/delete/{id}")

@@ -101,13 +101,21 @@ public class AssistentPersonalController {
 
     @RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("assistent") AssistentPersonal assistent,
-                                      BindingResult bindingResult, Model model) {
+                                      BindingResult bindingResult, Model model,
+                                      jakarta.servlet.http.HttpSession session) {
         assistentPersonalValidator.validate(assistent, bindingResult);
         if (bindingResult.hasErrors()) {
             cargaAtributos(model);
             return "assistentPersonal/update";
         }
         assistentPersonalDao.updateAssistentPersonal(assistent);
+
+        // Redirigir según rol
+        es.uji.ei1027.proyecto.model.Usuario usuario =
+                (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
+        if (usuario != null && usuario.getTipusUsuari().equals("AssistentPersonal")) {
+            return "redirect:/";
+        }
         return "redirect:/assistentPersonal/list";
     }
 

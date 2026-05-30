@@ -60,9 +60,15 @@
         </form>
 
         <br>
-        <a th:href="@{/comunicacio/conversations}"
+        <a th:if="${session.usuario.tipusUsuari == 'AssistentPersonal'}"
+           th:href="@{/comunicacio/conversations}"
            style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold;">
             ← Tornar a les converses
+        </a>
+        <a th:unless="${session.usuario.tipusUsuari == 'AssistentPersonal'}"
+           href="javascript:history.back()"
+           style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold; cursor:pointer;">
+            ← Tornar a la sol·licitud
         </a>
     </div>
 </main>

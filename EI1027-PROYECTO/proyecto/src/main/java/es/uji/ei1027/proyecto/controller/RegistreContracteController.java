@@ -35,7 +35,6 @@ public class RegistreContracteController {
         this.validator = validator;
     }
 
-    // Listado: técnico ve todos, usuario OVI solo los suyos
     @GetMapping("/list")
     public String listContractes(Model model, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -44,6 +43,9 @@ public class RegistreContracteController {
         if (usuario.getTipusUsuari().equals("UsuariOVI")) {
             model.addAttribute("contractes",
                     registreContracteDao.getContractesByUsuari(usuario.getIdUsuario()));
+        } else if (usuario.getTipusUsuari().equals("AssistentPersonal")) {
+            model.addAttribute("contractes",
+                    registreContracteDao.getContractesByAssistent(usuario.getIdUsuario()));
         } else {
             model.addAttribute("contractes", registreContracteDao.getContractes());
         }

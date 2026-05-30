@@ -75,4 +75,8 @@ public class RegistreContracteDao {
         String sql = "SELECT * FROM registrecontracte";
         return jdbcTemplate.query(sql, new RegistreContracteRowMapper());
     }
+    public List<RegistreContracte> getContractesByAssistent(int idAssistent) {
+        String sql = "SELECT * FROM registrecontracte WHERE id_assistent=?";
+        return jdbcTemplate.query(sql, new RegistreContracteRowMapper(), idAssistent);
+    }
 }
