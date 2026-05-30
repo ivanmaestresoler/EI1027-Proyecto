@@ -36,24 +36,36 @@ public class LoginController {
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public String checkLogin(@ModelAttribute("usuario") Usuario usuarioPost, BindingResult bindingResult, HttpSession session, Model model) {
-
-        if (bindingResult.hasErrors()) {
+        
+        // 1. Validación manual del Email vacío o con formato incorrecto
+        if (usuarioPost.getEmail() == null || usuarioPost.getEmail().trim().isEmpty()) {
+            model.addAttribute("error", "Cal introduir un correu electrònic.");
             return "login";
         }
+        
+        // Expresión regular estándar para validar correos electrónicos
+        if (!usuarioPost.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            model.addAttribute("error", "El format del correu electrònic no és vàlid (ex: nom@domini.com).");
+            return "login";
+        }
+
+        // 2. Comprobación de la contraseña vacía
+        if (usuarioPost.getContrasenya() == null || usuarioPost.getContrasenya().trim().isEmpty()) {
+            model.addAttribute("error", "Cal introduir la contrasenya.");
+            return "login";
+        }
+
+        // Buscar el usuario en la base de datos
         Usuario usuarioBD = usuarioDao.getUsuarioByEmail(usuarioPost.getEmail());
+
         if (usuarioBD == null) {
-            model.addAttribute("error", "Email o contrasenya incorrectes.");
+            model.addAttribute("error", "L'usuari o la contrasenya són incorrectes.");
             return "login";
         }
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
-        try {
-            if (!passwordEncryptor.checkPassword(usuarioPost.getContrasenya(), usuarioBD.getContrasenya())) {
-                model.addAttribute("error", "Email o contrasenya incorrectes.");
-                return "login";
-            }
-        } catch (org.jasypt.exceptions.EncryptionOperationNotPossibleException e) {
-            model.addAttribute("error", "Aquest usuari antic no té la contrasenya encriptada. Esborra'l de la base de dades i torna a registrar-lo.");
+        if (!passwordEncryptor.checkPassword(usuarioPost.getContrasenya(), usuarioBD.getContrasenya())) {
+            model.addAttribute("error", "L'usuari o la contrasenya són incorrectes.");
             return "login";
         }
 
@@ -76,10 +88,8 @@ public class LoginController {
         String rol = usuarioBD.getTipusUsuari();
         if ("admin".equals(rol) || "Tecnic".equals(rol)) {
             return "index-admin";
-
         } else if ("UsuariOVI".equals(rol)) {
             return "index-ovi";
-
         } else if ("AssistentPersonal".equals(rol)) {
             return "index-assistent";
         }

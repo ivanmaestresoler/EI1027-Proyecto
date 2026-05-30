@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestParam;
+import es.uji.ei1027.proyecto.model.UsuariOVI;
+import es.uji.ei1027.proyecto.model.AssistentPersonal;
 
 @Controller
 @RequestMapping("/admin")
@@ -76,6 +78,15 @@ public class AdminController {
     public String aprovarUsuari(Model model, @PathVariable int idUsuario, HttpSession session) {
         if (isNotAdmin(session)) return "redirect:/login";
 
+        String email = "";
+        try {
+            UsuariOVI u = usuariOVIDAO.getUsuariOVI(idUsuario);
+            if (u != null) {
+                email = u.getEmail();
+            }
+        } catch (Exception e) {
+        }
+        model.addAttribute("emailUsuario", email);
         usuariOVIDAO.aprovarUsuari(idUsuario);
         model.addAttribute("mensaje", "L'Usuari OVI ha sigut validat correctament. S'ha simulat l'enviament d'un correu de benvinguda indicant que ja pot fer peticions.");
         return "admin/confirmacion-aprovada";
@@ -85,6 +96,15 @@ public class AdminController {
     public String rebutjarUsuari(Model model, @PathVariable int idUsuario, HttpSession session) {
         if (isNotAdmin(session)) return "redirect:/login";
 
+        String email = "";
+        try {
+            UsuariOVI u = usuariOVIDAO.getUsuariOVI(idUsuario);
+            if (u != null) {
+                email = u.getEmail();
+            }
+        } catch (Exception e) {
+        }
+        model.addAttribute("emailUsuario", email);
         usuariOVIDAO.rebutjarUsuari(idUsuario);
         model.addAttribute("mensaje", "La sol·licitud de registre de l'Usuari OVI ha sigut rebutjada. S'ha enviat un correu informant-lo dels motius.");
         return "admin/confirmacion-aprovada";
@@ -94,6 +114,15 @@ public class AdminController {
     public String aprovarAssistent(Model model, @PathVariable int idUsuario, HttpSession session) {
         if (isNotAdmin(session)) return "redirect:/login";
 
+        String email = "";
+        try {
+            AssistentPersonal ap = assistentPersonalDao.getAssistentPersonal(idUsuario);
+            if (ap != null) {
+                email = ap.getEmail();
+            }
+        } catch (Exception e) {
+        }
+        model.addAttribute("emailUsuario", email);
         assistentPersonalDao.aprovarAssistent(idUsuario);
         model.addAttribute("mensaje", "L'Assistent Personal ha sigut validat i acceptat correctament. S'ha enviat un correu de benvinguda per a informar-lo.");
         return "admin/confirmacion-aprovada";
@@ -103,6 +132,15 @@ public class AdminController {
     public String rebutjarAssistent(Model model, @PathVariable int idUsuario, HttpSession session) {
         if (isNotAdmin(session)) return "redirect:/login";
 
+        String email = "";
+        try {
+            AssistentPersonal ap = assistentPersonalDao.getAssistentPersonal(idUsuario);
+            if (ap != null) {
+                email = ap.getEmail();
+            }
+        } catch (Exception e) {
+        }
+        model.addAttribute("emailUsuario", email);
         assistentPersonalDao.rebutjarAssistent(idUsuario);
         model.addAttribute("mensaje", "La sol·licitud de registre de l'Assistent Personal ha sigut rebutjada. S'ha enviat un correu informant-lo dels motius.");
         return "admin/confirmacion-aprovada";

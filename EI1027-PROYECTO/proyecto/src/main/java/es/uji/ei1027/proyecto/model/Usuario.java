@@ -2,6 +2,8 @@ package es.uji.ei1027.proyecto.model;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Usuario {
 
     private int idUsuario;
@@ -12,6 +14,8 @@ public class Usuario {
     private String email;
     private String contrasenya;
     private String genere;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNaixement;
     private String tipusUsuari;
     private String telefon;

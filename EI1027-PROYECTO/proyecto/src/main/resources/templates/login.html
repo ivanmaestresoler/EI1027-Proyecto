@@ -2,7 +2,7 @@
 <html lang="ca" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar Sesió</title>
+    <title>Iniciar Sessió</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -12,17 +12,19 @@
 <main class="main-content">
     <div class="form-container">
         <h1>Identificació d'Usuari</h1>
-        <div th:if="${error}" style="color: #922b21; margin-bottom: 15px;">
+        
+        <div th:if="${error != null}" style="color: #922b21; margin-bottom: 15px; font-weight: bold;">
             <p th:text="${error}"></p>
         </div>
-        <form th:action="@{/login}" th:object="${usuario}" method="post">
+        
+        <form th:action="@{/login}" th:object="${usuario}" method="post" novalidate>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" th:field="*{email}" required autofocus />
+                <input type="text" id="email" th:field="*{email}" autofocus />
             </div>
             <div class="form-group">
                 <label for="contrasenya">Contrasenya:</label>
-                <input type="password" id="contrasenya" th:field="*{contrasenya}" required />
+                <input type="password" id="contrasenya" th:field="*{contrasenya}" />
             </div>
             <button type="submit" class="btn-submit">Entrar</button>
         </form>
@@ -31,3 +33,4 @@
     </div>
 </main>
 </body>
+</html>

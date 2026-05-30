@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,8 +74,14 @@ public class AssistentPersonalController {
         }
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         assistent.setContrasenya(passwordEncryptor.encryptPassword(assistent.getContrasenya()));
-        assistentPersonalDao.addAssistentPersonal(assistent);
-        return "redirect:/assistentPersonal/list";
+        try {
+            assistentPersonalDao.addAssistentPersonal(assistent); 
+        } catch (DuplicateKeyException e) {
+            bindingResult.rejectValue("email", "duplicat", "Aquest correu electrònic ja està registrat al sistema.");
+            cargaAtributos(model);
+            return "assistentPersonal/add";
+        }
+        return "redirect:/registre-completat";
     }
 
     @RequestMapping(value="/update/{idUsuario}", method = RequestMethod.GET)

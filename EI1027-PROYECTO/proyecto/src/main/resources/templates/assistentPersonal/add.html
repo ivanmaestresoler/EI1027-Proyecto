@@ -12,16 +12,35 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Dades Personals</h4>
-                <div class="form-group"><label>Nom</label><input type="text" class="form-control" th:field="*{nom}" /></div>
-                <div class="form-group"><label>Primer Cognom</label><input type="text" class="form-control" th:field="*{cognom1}" /></div>
-                <div class="form-group"><label>Segon Cognom</label><input type="text" class="form-control" th:field="*{cognom2}" /></div>
-                <div class="form-group"><label>DNI</label><input type="text" class="form-control" th:field="*{dni}" /></div>
-                <div class="form-group"><label>Data de Naixement</label><input type="date" class="form-control" th:field="*{dataNaixement}" required /></div>
                 <div class="form-group">
-                    <label>Gènere</label>
-                    <select class="form-control" th:field="*{genere}">
-                        <option th:each="g : ${generos}" th:value="${g}" th:text="${g}"></option>
-                    </select>
+                    <label>Nom</label>
+                    <input type="text" class="form-control" th:field="*{nom}" th:errorclass="is-invalid" />
+                    <div class="invalid-feedback" th:errors="*{nom}"></div>
+                </div>
+                <div class="form-group">
+                    <label>Primer Cognom</label>
+                    <input type="text" class="form-control" th:field="*{cognom1}" th:errorclass="is-invalid" />
+                    <div class="invalid-feedback" th:errors="*{cognom1}"></div>
+                </div>
+                <div class="form-group">
+                    <label>Segon Cognom</label>
+                    <input type="text" class="form-control" th:field="*{cognom2}" />
+                </div>
+                <div class="form-group">
+                    <label>DNI</label>
+                    <input type="text" class="form-control" th:field="*{dni}" th:errorclass="is-invalid" />
+                    <div class="invalid-feedback" th:errors="*{dni}"></div>
+                </div>
+                <div class="form-group">
+                    <label>Data de Naixement</label>
+                    <input type="date" id="dataNaixement" class="form-control" th:field="*{dataNaixement}" required />
+                </div>
+                <div class="form-group">
+                    <label class="d-block">Gènere</label>
+                    <div th:each="g : ${generos}" class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" th:field="*{genere}" th:value="${g}" th:id="${'gen_' + g}" required>
+                        <label class="form-check-label" th:for="${'gen_' + g}" th:text="${g}"></label>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Poble</label>
@@ -33,8 +52,16 @@
             </div>
             <div class="col-md-6">
                 <h4>Dades Professionals</h4>
-                <div class="form-group"><label>Email</label><input type="email" class="form-control" th:field="*{email}" /></div>
-                <div class="form-group"><label>Contrasenya</label><input type="password" class="form-control" th:field="*{contrasenya}" /></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" th:field="*{email}" th:errorclass="is-invalid" />
+                    <div class="invalid-feedback" th:errors="*{email}"></div>
+                </div>
+                <div class="form-group">
+                    <label>Contrasenya</label>
+                    <input type="password" class="form-control" th:field="*{contrasenya}" th:errorclass="is-invalid" />
+                    <div class="invalid-feedback" th:errors="*{contrasenya}"></div>
+                </div>
                 <div class="form-group">
                     <label>Formació Acadèmica</label>
                     <select class="form-control" th:field="*{formacioAcademica}">
@@ -43,9 +70,10 @@
                 </div>
                 <div class="form-group">
                     <label>Tipus d'Assistent</label>
-                    <select class="form-control" th:field="*{tipus}">
+                    <select class="form-control" th:field="*{tipus}" th:errorclass="is-invalid">
                         <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}"></option>
                     </select>
+                    <div class="invalid-feedback" th:errors="*{tipus}"></div>
                 </div>
                 <div class="form-group"><label>Direcció</label><input type="text" class="form-control" th:field="*{direccio}" /></div>
                 <div class="form-group"><label>Telèfon</label><input type="text" class="form-control" th:field="*{telefon}" /></div>
@@ -60,11 +88,20 @@
                 </div>
             </div>
         </div>
-        <div class="mt-4">
+        
+        <div class="mt-4 mb-5">
             <button type="submit" class="btn btn-primary">Registrar</button>
-            <a th:href="@{/registre}" class="btn btn-secondary">Cancel·lar</a>
+            <button type="reset" class="btn btn-warning text-white">Reiniciar</button>
+            <a th:href="@{/registre}" class="btn btn-secondary">Eixir</a>
         </div>
     </form>
 </div>
+
+<script>
+    window.onload = function() {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('dataNaixement').setAttribute('max', today);
+    };
+</script>
 </body>
 </html>

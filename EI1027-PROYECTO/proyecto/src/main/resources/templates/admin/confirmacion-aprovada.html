@@ -9,8 +9,8 @@
 <body class="bg-light">
 <div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow-sm text-center border-0">
+    <div class="col-md-8 col-sm-12">
+      <div class="card shadow-sm text-center border-0 w-100" style="width: 100% !important;">
 
         <div class="card-header bg-success text-white py-3">
           <h3 class="h5 mb-0">Operació Completada amb Èxit</h3>
@@ -26,19 +26,20 @@
 
           <h4 class="card-title text-dark mb-3">Correu Electrònic Simulat Enviat</h4>
 
-          <p class="card-text fs-5 text-muted mb-4" th:text="${mensaje}">
+          <p class="card-text fs-5 text-muted mb-4 w-100" th:text="${mensaje}">
             S'ha processat la teua acció correctament.
           </p>
 
-          <div class="alert alert-light border text-start bg-white mx-auto shadow-sm" style="max-width: 500px;">
+          <div class="alert alert-light border text-start bg-white mx-auto shadow-sm" style="max-width: 500px; width: 100%;">
             <strong>De:</strong> notificacions@sgovi.org<br>
-            <strong>A:</strong> L'usuari implicat<br>
-            <strong>Assumpte:</strong> Notificació de la plataforma SgOVI<br><br>
-            <em>Aquest és un correu automàtic simulat pel sistema per indicar que s'ha enviat la notificació corresponent a la part interessada informant de la resolució de l'administrador.</em>
+            <strong>A:</strong> <span th:text="${!#strings.isEmpty(emailUsuario) ? emailUsuario : 'usuari implicat'}">correu@domini.com</span><br>            <strong>Assumpte:</strong> Notificació de la plataforma SgOVI<br><br>
+            <p class="mb-0" style="white-space: normal; word-wrap: break-word;">
+              <em>Aquest és un correu automàtic simulat pel sistema per indicar que s'ha enviat la notificació corresponent a la part interessada informant de la resolució de l'administrador.</em>
+            </p>
           </div>
 
           <div class="mt-5">
-            <a href="javascript:history.back()" class="btn btn-secondary px-4 py-2 me-2">Tornar a la pàgina anterior</a>
+            <a th:href="@{/admin/solicituds-ovi}" class="btn btn-primary me-2">Tornar a Sol·licituds OVI</a>
             <a th:href="@{/}" class="btn btn-outline-primary px-4 py-2">Tornar al Menú Principal</a>
           </div>
         </div>
