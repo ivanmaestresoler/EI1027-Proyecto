@@ -28,7 +28,6 @@ public class AdminController {
     @Autowired
     private AssistentPersonalDao assistentPersonalDao;
 
-
     private boolean isNotAdmin(HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         return usuario == null || !usuario.getTipusUsuari().equals("admin");
@@ -47,6 +46,7 @@ public class AdminController {
         model.addAttribute("assistents", assistentPersonalDao.getCandidats());
         return "admin/solicituds-assistent";
     }
+
     @GetMapping("/peticions-pendents")
     public String peticionsPendents(Model model, HttpSession session,
                                     @RequestParam(required = false) String estat) {
@@ -59,18 +59,22 @@ public class AdminController {
     @GetMapping("/aprovar-petici/{idRequest}")
     public String aprovarPetici(Model model, @PathVariable int idRequest, HttpSession session) {
         if (isNotAdmin(session)) return "redirect:/login";
-
         apRequestDao.aprovarRequest(idRequest);
-        model.addAttribute("mensaje", "S'ha aprovat la petició i s'ha simulat l'enviament d'un correu amb la proposta de candidats a l'Usuari OVI.");
+        model.addAttribute("tipus", "acceptat");
+        model.addAttribute("destinatari", "Usuari OVI");
+        model.addAttribute("assumpte", "La teua petició d'assistència ha sigut aprovada");
+        model.addAttribute("cos", "La teua sol·licitud d'assistència personal ha sigut revisada i aprovada pel tècnic OVI. En breu rebràs una proposta de candidats adients al teu perfil.");
         return "admin/confirmacion-aprovada";
     }
 
     @GetMapping("/rebutjar-petici/{idRequest}")
     public String rebutjarPetici(Model model, @PathVariable int idRequest, HttpSession session) {
         if (isNotAdmin(session)) return "redirect:/login";
-
         apRequestDao.rebutjarRequest(idRequest);
-        model.addAttribute("mensaje", "La petició ha sigut rebutjada. S'ha enviat un correu explicatiu a l'usuari per informar-lo.");
+        model.addAttribute("tipus", "rebutjat");
+        model.addAttribute("destinatari", "Usuari OVI");
+        model.addAttribute("assumpte", "La teua petició d'assistència ha sigut rebutjada");
+        model.addAttribute("cos", "Lamentem informar-te que la teua sol·licitud d'assistència personal no ha pogut ser aprovada. Si tens dubtes, posa't en contacte amb l'OVI.");
         return "admin/confirmacion-aprovada";
     }
 
@@ -88,7 +92,10 @@ public class AdminController {
         }
         model.addAttribute("emailUsuario", email);
         usuariOVIDAO.aprovarUsuari(idUsuario);
-        model.addAttribute("mensaje", "L'Usuari OVI ha sigut validat correctament. S'ha simulat l'enviament d'un correu de benvinguda indicant que ja pot fer peticions.");
+        model.addAttribute("tipus", "acceptat");
+        model.addAttribute("destinatari", "Usuari OVI");
+        model.addAttribute("assumpte", "El teu compte ha sigut activat");
+        model.addAttribute("cos", "El teu registre com a Usuari OVI ha sigut validat correctament. Ja pots iniciar sessió a la plataforma i fer les teues sol·licituds d'assistència personal.");
         return "admin/confirmacion-aprovada";
     }
 
@@ -106,7 +113,10 @@ public class AdminController {
         }
         model.addAttribute("emailUsuario", email);
         usuariOVIDAO.rebutjarUsuari(idUsuario);
-        model.addAttribute("mensaje", "La sol·licitud de registre de l'Usuari OVI ha sigut rebutjada. S'ha enviat un correu informant-lo dels motius.");
+        model.addAttribute("tipus", "rebutjat");
+        model.addAttribute("destinatari", "Usuari OVI");
+        model.addAttribute("assumpte", "La teua sol·licitud de registre ha sigut rebutjada");
+        model.addAttribute("cos", "Lamentem informar-te que la teua sol·licitud de registre com a Usuari OVI no ha pogut ser acceptada. Si creus que és un error, posa't en contacte amb l'administració de l'OVI.");
         return "admin/confirmacion-aprovada";
     }
 
@@ -124,7 +134,10 @@ public class AdminController {
         }
         model.addAttribute("emailUsuario", email);
         assistentPersonalDao.aprovarAssistent(idUsuario);
-        model.addAttribute("mensaje", "L'Assistent Personal ha sigut validat i acceptat correctament. S'ha enviat un correu de benvinguda per a informar-lo.");
+        model.addAttribute("tipus", "acceptat");
+        model.addAttribute("destinatari", "Assistent Personal");
+        model.addAttribute("assumpte", "El teu perfil d'assistent ha sigut acceptat");
+        model.addAttribute("cos", "El teu perfil com a Assistent Personal ha sigut validat i acceptat. Ja pots iniciar sessió i apareixeràs com a candidat en les sol·licituds que s'adeqüen al teu perfil.");
         return "admin/confirmacion-aprovada";
     }
 
@@ -142,7 +155,10 @@ public class AdminController {
         }
         model.addAttribute("emailUsuario", email);
         assistentPersonalDao.rebutjarAssistent(idUsuario);
-        model.addAttribute("mensaje", "La sol·licitud de registre de l'Assistent Personal ha sigut rebutjada. S'ha enviat un correu informant-lo dels motius.");
+        model.addAttribute("tipus", "rebutjat");
+        model.addAttribute("destinatari", "Assistent Personal");
+        model.addAttribute("assumpte", "La teua sol·licitud com a assistent ha sigut rebutjada");
+        model.addAttribute("cos", "Lamentem informar-te que la teua sol·licitud per a ser Assistent Personal no ha pogut ser acceptada. Si tens dubtes, posa't en contacte amb l'OVI.");
         return "admin/confirmacion-aprovada";
     }
 }

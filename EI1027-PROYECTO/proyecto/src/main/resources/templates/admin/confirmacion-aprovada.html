@@ -12,19 +12,17 @@
     <div class="col-md-8 col-sm-12">
       <div class="card shadow-sm text-center border-0 w-100" style="width: 100% !important;">
 
-        <div class="card-header bg-success text-white py-3">
-          <h3 class="h5 mb-0">Operació Completada amb Èxit</h3>
-        </div>
+  <div class="card shadow border-0">
 
-        <div class="card-body p-5">
-          <div class="mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-envelope-check text-success" viewBox="0 0 16 16">
-              <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2zm3.434 4.136L.434 3.636a.5.5 0 0 1 .632-.771l4.908 4.015L14.933 3.3a.5.5 0 0 1 .634.772l-9.5 7.78-2.633-2.152v-.001a.5.5 0 0 1-.001-.001z"/>
-              <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686z"/>
-            </svg>
-          </div>
+    <!-- Capçalera -->
+    <div class="card-header text-white text-center py-3"
+         th:classappend="${tipus == 'acceptat'} ? 'bg-success' : 'bg-danger'">
+      <h3 class="mb-0"
+          th:text="${tipus == 'acceptat'} ? 'Operació Completada amb Èxit' : 'Sol·licitud Rebutjada'">
+      </h3>
+    </div>
 
-          <h4 class="card-title text-dark mb-3">Correu Electrònic Simulat Enviat</h4>
+    <div class="card-body text-center p-4">
 
           <p class="card-text fs-5 text-muted mb-4 w-100" th:text="${mensaje}">
             S'ha processat la teua acció correctament.
@@ -44,6 +42,26 @@
           </div>
         </div>
       </div>
+
+      <h4 class="mb-4">📧 Correu Electrònic Simulat Enviat</h4>
+
+      <!-- Caixa email -->
+      <div class="text-start p-3 rounded"
+           th:classappend="${tipus == 'acceptat'} ? 'alert-success' : 'alert-danger'"
+           style="border: 1px solid rgba(0,0,0,0.1);">
+        <p class="mb-1"><strong>De:</strong> notificacions@sgovi.org</p>
+        <p class="mb-1"><strong>A:</strong> <span th:text="${destinatari}"></span></p>
+        <p class="mb-3"><strong>Assumpte:</strong> <span th:text="${assumpte}"></span></p>
+        <hr class="my-2">
+        <p class="mb-0" th:text="${cos}"></p>
+      </div>
+
+      <!-- Botons -->
+      <div class="mt-4 d-flex justify-content-center gap-3">
+        <a href="javascript:history.back()" class="btn btn-secondary">← Tornar</a>
+        <a th:href="@{/}" class="btn btn-outline-primary">Menú Principal</a>
+      </div>
+
     </div>
   </div>
 </div>
