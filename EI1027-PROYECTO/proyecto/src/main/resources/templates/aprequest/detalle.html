@@ -15,7 +15,12 @@
     <div class="card-body">
       <div class="row mb-3">
         <div class="col-md-6">
-          <p><strong>Estat:</strong> <span class="badge bg-info text-dark" th:text="${aprequest.estatRequest}"></span></p>
+          <p><strong>Estat:</strong>
+            <span class="badge"
+                  th:classappend="${aprequest.estatRequest == 'Aprovada'} ? 'bg-success' :
+                                  (${aprequest.estatRequest == 'Rebutjada'} ? 'bg-danger' : 'bg-warning text-dark')"
+                  th:text="${aprequest.estatRequest}"></span>
+          </p>
           <p><strong>Data Sol·licitud:</strong> <span th:text="${aprequest.dataSollicitud}"></span></p>
           <p><strong>Localitat:</strong> <span th:text="${aprequest.localitat}"></span></p>
         </div>
@@ -28,27 +33,35 @@
   </div>
 
   <h3 class="mb-3">Candidats Proposats pel Tècnic OVI</h3>
+
   <div th:if="${#lists.isEmpty(candidats)}" class="alert alert-warning">
-    Encara no hi ha candidats proposats per a aquesta petició. L'administrador està treballant en això.
+    Encara no hi ha candidats proposats per a aquesta petició. El tècnic OVI està treballant en això.
   </div>
 
-  <table class="table table-striped table-hover bg-white shadow-sm rounded" th:unless="${#lists.isEmpty(candidats)}">
+  <table class="table table-striped table-hover bg-white shadow-sm rounded"
+         th:unless="${#lists.isEmpty(candidats)}">
     <thead class="table-dark">
     <tr>
-      <th>ID Assistent</th>
-      <th>Data de la Proposta</th>
+      <th>Nom i Cognoms</th>
+      <th>Email</th>
+      <th>Telèfon</th>
+      <th>Data Proposta</th>
       <th class="text-center">Accions</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="candidat : ${candidats}">
-      <td th:text="${candidat.idAssistent}"></td>
+      <td th:text="${candidat.nom}"></td>
+      <td th:text="${candidat.email}"></td>
+      <td th:text="${candidat.telefon}"></td>
       <td th:text="${#temporals.format(candidat.dataProposta, 'dd/MM/yyyy HH:mm')}"></td>
       <td class="text-center">
-        <a th:href="@{/comunicacio/add(idSeleccion=${candidat.idSeleccion})}" class="btn btn-outline-primary btn-sm me-2">
+        <a th:href="@{/comunicacio/xat/{id}(id=${candidat.idSeleccion})}"
+           class="btn btn-outline-primary btn-sm me-2">
           Contactar per Xat
         </a>
-        <a th:href="@{/registreContracte/add(idRequest=${aprequest.idRequest}, idAssistent=${candidat.idAssistent})}" class="btn btn-success btn-sm">
+        <a th:href="@{/registreContracte/add(idRequest=${aprequest.idRequest}, idAssistent=${candidat.idAssistent})}"
+           class="btn btn-success btn-sm">
           Finalitzar Contracte
         </a>
       </td>
@@ -57,7 +70,8 @@
   </table>
 
   <div class="mt-4">
-    <a href="javascript:history.back()" class="btn btn-secondary">Tornar enrere</a>
+    <a href="javascript:history.back()" class="btn btn-secondary">← Tornar</a>
+    <a th:href="@{/}" class="btn btn-outline-secondary ms-2">Inici</a>
   </div>
 </div>
 </body>

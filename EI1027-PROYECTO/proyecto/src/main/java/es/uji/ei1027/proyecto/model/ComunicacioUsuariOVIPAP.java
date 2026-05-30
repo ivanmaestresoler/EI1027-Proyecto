@@ -6,7 +6,8 @@ public class ComunicacioUsuariOVIPAP {
     private int idComunicacio;
     private int idSeleccion;
     private String missatge;
-    private String remitent;
+    private int idFrom;
+    private int idTo;
     private LocalDateTime dataEnviament;
 
     public int getIdComunicacio() { return idComunicacio; }
@@ -18,8 +19,11 @@ public class ComunicacioUsuariOVIPAP {
     public String getMissatge() { return missatge; }
     public void setMissatge(String missatge) { this.missatge = missatge; }
 
-    public String getRemitent() { return remitent; }
-    public void setRemitent(String remitent) { this.remitent = remitent; }
+    public int getIdFrom() { return idFrom; }
+    public void setIdFrom(int idFrom) { this.idFrom = idFrom; }
+
+    public int getIdTo() { return idTo; }
+    public void setIdTo(int idTo) { this.idTo = idTo; }
 
     public LocalDateTime getDataEnviament() { return dataEnviament; }
     public void setDataEnviament(LocalDateTime dataEnviament) { this.dataEnviament = dataEnviament; }

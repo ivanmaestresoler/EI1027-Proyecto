@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Converses - Projecte OVI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+    <div class="user-zone">
+        <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
+        <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+    </div>
+</header>
+<main class="main-content">
+    <h1>Les meues Converses</h1>
+
+    <div th:if="${#lists.isEmpty(conversations)}"
+         style="text-align:center; padding:30px; background:#fff3cd; border-radius:8px;">
+        <p>Encara no tens cap conversa. Els usuaris OVI et podran contactar des de les seues sol·licituds.</p>
+    </div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(conversations)}">
+        <thead>
+        <tr>
+            <th>Amb qui</th>
+            <th>Últim missatge</th>
+            <th>Data</th>
+            <th>Missatges</th>
+            <th>Acció</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="conv : ${conversations}">
+            <td><strong th:text="${conv.nomAltre}"></strong></td>
+            <td th:text="${conv.ultimMissatge}"></td>
+            <td th:text="${conv.dataUltim}"></td>
+            <td th:text="${conv.numMissatges}"></td>
+            <td>
+                <a th:href="@{/comunicacio/xat/{id}(id=${conv.idSeleccion})}"
+                   class="btn-submit" style="text-decoration:none; padding:6px 14px;">
+                    Obrir Xat
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a onclick="history.back()"
+       style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold; cursor:pointer;">
+        ← Tornar
+    </a>
+</main>
+</body>
+</html>

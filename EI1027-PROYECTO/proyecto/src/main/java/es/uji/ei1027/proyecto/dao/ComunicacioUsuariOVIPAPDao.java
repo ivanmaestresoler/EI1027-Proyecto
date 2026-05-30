@@ -27,8 +27,8 @@ public class ComunicacioUsuariOVIPAPDao {
             com.setIdComunicacio(rs.getInt("id_comunicacio"));
             com.setIdSeleccion(rs.getInt("id_seleccion"));
             com.setMissatge(rs.getString("missatge"));
-            com.setRemitent(rs.getString("remitent"));
-
+            com.setIdFrom(rs.getInt("id_from"));
+            com.setIdTo(rs.getInt("id_to"));
             if (rs.getTimestamp("data_enviament") != null) {
                 com.setDataEnviament(rs.getTimestamp("data_enviament").toLocalDateTime());
             }
@@ -37,13 +37,13 @@ public class ComunicacioUsuariOVIPAPDao {
     }
 
     public void addComunicacio(ComunicacioUsuariOVIPAP com) {
-        String sql = "INSERT INTO comunicaciousuariovipap (id_seleccion, missatge, remitent, data_enviament) VALUES (?, ?, ?::enum_remitent, ?)";
-        jdbcTemplate.update(sql, com.getIdSeleccion(), com.getMissatge(), com.getRemitent(), com.getDataEnviament());
+        String sql = "INSERT INTO comunicaciousuariovipap (id_seleccion, missatge, id_from, id_to, data_enviament) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, com.getIdSeleccion(), com.getMissatge(), com.getIdFrom(), com.getIdTo(), com.getDataEnviament());
     }
 
     public void updateComunicacio(ComunicacioUsuariOVIPAP com) {
-        String sql = "UPDATE comunicaciousuariovipap SET id_seleccion=?, missatge=?, remitent=?::enum_remitent, data_enviament=? WHERE id_comunicacio=?";
-        jdbcTemplate.update(sql, com.getIdSeleccion(), com.getMissatge(), com.getRemitent(), com.getDataEnviament(), com.getIdComunicacio());
+        String sql = "UPDATE comunicaciousuariovipap SET id_seleccion=?, missatge=?, id_from=?, id_to=?, data_enviament=? WHERE id_comunicacio=?";
+        jdbcTemplate.update(sql, com.getIdSeleccion(), com.getMissatge(), com.getIdFrom(), com.getIdTo(), com.getDataEnviament(), com.getIdComunicacio());
     }
 
     public void deleteComunicacio(Integer idComunicacio) {
@@ -63,5 +63,10 @@ public class ComunicacioUsuariOVIPAPDao {
     public List<ComunicacioUsuariOVIPAP> getComunicacions() {
         String sql = "SELECT * FROM comunicaciousuariovipap";
         return jdbcTemplate.query(sql, new ComunicacioRowMapper());
+    }
+
+    public List<ComunicacioUsuariOVIPAP> getComunicacionsBySeleccion(int idSeleccion) {
+        String sql = "SELECT * FROM comunicaciousuariovipap WHERE id_seleccion=? ORDER BY data_enviament ASC";
+        return jdbcTemplate.query(sql, new ComunicacioRowMapper(), idSeleccion);
     }
 }

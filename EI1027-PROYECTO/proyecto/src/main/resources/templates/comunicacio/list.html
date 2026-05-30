@@ -3,35 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Llista de Comunicacions</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Llista de Comunicacions</h1>
-<a th:href="@{/comunicacio/add}">+ Nova Comunicació</a>
-<br><br>
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>ID Selecció</th>
-        <th>Missatge</th>
-        <th>Remitent</th>
-        <th>Data Enviament</th>
-        <th>Accions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="com : ${comunicacions}">
-        <td th:text="${com.idComunicacio}"></td>
-        <td th:text="${com.idSeleccion}"></td>
-        <td th:text="${com.missatge}"></td>
-        <td th:text="${com.remitent}"></td>
-        <td th:text="${com.dataEnviament}"></td>
-        <td>
-            <a th:href="@{/comunicacio/update/{id}(id=${com.idComunicacio})}">Editar</a> |
-            <a th:href="@{/comunicacio/delete/{id}(id=${com.idComunicacio})}" onclick="return confirm('Esborrar?');">Esborrar</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+</header>
+<main class="main-content">
+    <h1>Llista de Comunicacions</h1>
+    <a th:href="@{/comunicacio/add}" class="btn-submit">+ Nova Comunicació</a>
+    <br><br>
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>ID Selecció</th>
+            <th>Missatge</th>
+            <th>De (id_from)</th>
+            <th>Per a (id_to)</th>
+            <th>Data Enviament</th>
+            <th>Accions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="com : ${comunicacions}">
+            <td th:text="${com.idComunicacio}"></td>
+            <td th:text="${com.idSeleccion}"></td>
+            <td th:text="${com.missatge}"></td>
+            <td th:text="${com.idFrom}"></td>
+            <td th:text="${com.idTo}"></td>
+            <td th:text="${com.dataEnviament}"></td>
+            <td>
+                <a th:href="@{/comunicacio/update/{id}(id=${com.idComunicacio})}">Editar</a> |
+                <a th:href="@{/comunicacio/delete/{id}(id=${com.idComunicacio})}"
+                   onclick="return confirm('Esborrar?');">Esborrar</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(comunicacions)}">
+            <td colspan="7" style="text-align:center;">No hi ha comunicacions.</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <a onclick="history.back()" style="cursor:pointer;">← Tornar</a>
+</main>
 </body>
 </html>

@@ -67,4 +67,8 @@ public class SeleccionDao {
         String sql = "SELECT * FROM seleccion WHERE id_request=?";
         return jdbcTemplate.query(sql, new SeleccionRowMapper(), idRequest);
     }
+    public List<Seleccion> getSeleccionsByAssistent(int idAssistent) {
+        String sql = "SELECT * FROM seleccion WHERE id_assistent=? ORDER BY data_proposta DESC";
+        return jdbcTemplate.query(sql, new SeleccionRowMapper(), idAssistent);
+    }
 }

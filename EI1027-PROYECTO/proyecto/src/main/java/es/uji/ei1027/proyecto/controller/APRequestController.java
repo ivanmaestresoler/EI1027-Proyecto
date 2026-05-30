@@ -1,10 +1,12 @@
 package es.uji.ei1027.proyecto.controller;
 
 import es.uji.ei1027.proyecto.dao.APRequestDAO;
-import es.uji.ei1027.proyecto.dao.PuebloDAO;
+import es.uji.ei1027.proyecto.dao.AssistentPersonalDao;
 import es.uji.ei1027.proyecto.dao.IdiomaDAO;
+import es.uji.ei1027.proyecto.dao.PuebloDAO;
 import es.uji.ei1027.proyecto.dao.SeleccionDao;
 import es.uji.ei1027.proyecto.model.APRequest;
+import es.uji.ei1027.proyecto.model.AssistentPersonal;
 import es.uji.ei1027.proyecto.model.Seleccion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class APRequestController {
     private PuebloDAO puebloDao;
     private IdiomaDAO idiomaDao;
     private SeleccionDao seleccionDao;
+    private AssistentPersonalDao assistentPersonalDao;
 
     @Autowired
     public void setApRequestDao(APRequestDAO apRequestDao) { this.apRequestDao = apRequestDao; }
@@ -44,6 +48,9 @@ public class APRequestController {
     @Autowired
     public void setSeleccionDao(SeleccionDao seleccionDao) { this.seleccionDao = seleccionDao; }
 
+    @Autowired
+    public void setAssistentPersonalDao(AssistentPersonalDao assistentPersonalDao) { this.assistentPersonalDao = assistentPersonalDao; }
+
     private void cargaAtributosFormulario(Model model) {
         model.addAttribute("tiposAssistencia", Arrays.asList(
                 "Higiene personal", "Mobilitat", "Suport emocional",
@@ -57,7 +64,6 @@ public class APRequestController {
     public String listRequests(Model model, jakarta.servlet.http.HttpSession session,
                                @RequestParam(value = "estado", required = false) String estado,
                                @RequestParam(value = "page", defaultValue = "1") int page) {
-
         es.uji.ei1027.proyecto.model.Usuario usuario =
                 (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
@@ -100,9 +106,8 @@ public class APRequestController {
                                    jakarta.servlet.http.HttpSession session) {
         es.uji.ei1027.proyecto.model.Usuario usuario =
                 (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
-        if (usuario != null) {
-            aprequest.setIdUsuari(usuario.getIdUsuario());
-        }
+        if (usuario != null) aprequest.setIdUsuari(usuario.getIdUsuario());
+
         apRequestValidator.validate(aprequest, bindingResult);
         if (bindingResult.hasErrors()) {
             cargaAtributosFormulario(model);
@@ -142,7 +147,7 @@ public class APRequestController {
         return "redirect:/aprequest/list";
     }
 
-    // DETALLE — carga los candidatos de Seleccion
+    // DETALLE — carrega nom i cognoms del assistent i idSeleccion per al xat
     @RequestMapping(value="/detalle/{id}", method = RequestMethod.GET)
     public String veureDetalle(Model model, @PathVariable int id,
                                jakarta.servlet.http.HttpSession session) {
@@ -151,7 +156,27 @@ public class APRequestController {
         APRequest peticion = apRequestDao.getAPRequest(id);
         if (peticion == null) return "redirect:/aprequest/list";
 
-        List<Seleccion> candidats = seleccionDao.getSeleccionsByRequest(id);
+        List<Seleccion> seleccions = seleccionDao.getSeleccionsByRequest(id);
+
+        // Crear llista de candidats amb nom i idSeleccion
+        List<java.util.Map<String, Object>> candidats = new ArrayList<>();
+        for (Seleccion s : seleccions) {
+            AssistentPersonal a = assistentPersonalDao.getAssistentPersonal(s.getIdAssistent());
+            java.util.Map<String, Object> candidat = new java.util.HashMap<>();
+            candidat.put("idSeleccion", s.getIdSeleccion());
+            candidat.put("idAssistent", s.getIdAssistent());
+            candidat.put("dataProposta", s.getDataProposta());
+            if (a != null) {
+                candidat.put("nom", a.getNom() + " " + a.getCognom1());
+                candidat.put("email", a.getEmail());
+                candidat.put("telefon", a.getTelefon());
+            } else {
+                candidat.put("nom", "Assistent #" + s.getIdAssistent());
+                candidat.put("email", "-");
+                candidat.put("telefon", "-");
+            }
+            candidats.add(candidat);
+        }
 
         model.addAttribute("aprequest", peticion);
         model.addAttribute("candidats", candidats);

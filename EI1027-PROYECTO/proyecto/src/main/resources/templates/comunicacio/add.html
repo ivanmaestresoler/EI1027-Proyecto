@@ -2,22 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Afegir Comunicació</title>
+    <title>Enviar Missatge</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Afegir Comunicació</h1>
-<form th:action="@{/comunicacio/add}" th:object="${comunicacio}" method="post">
-    <label>ID Selecció:</label> <input type="number" th:field="*{idSeleccion}" required /><br/>
-    <label>Missatge:</label> <textarea th:field="*{missatge}" required></textarea><br/>
-    <label>Remitent:</label>
-    <select th:field="*{remitent}" required>
-        <option value="Tecnic">Tècnic</option>
-        <option value="Usuari">Usuari</option>
-        <option value="Assistent">Assistent</option>
-    </select><br/>
-    <label>Data Enviament:</label> <input type="datetime-local" th:field="*{dataEnviament}" required /><br/><br/>
-    <button type="submit">Guardar</button>
-</form>
-<br><a th:href="@{/comunicacio/list}">Tornar</a>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+</header>
+<main class="main-content">
+    <h1>Enviar Missatge al Candidat</h1>
+
+    <form th:action="@{/comunicacio/add}" th:object="${comunicacio}" method="post">
+
+        <!-- Camps ocults — s'omplin automàticament -->
+        <input type="hidden" th:field="*{idSeleccion}" />
+        <input type="hidden" th:field="*{idFrom}" />
+        <input type="hidden" th:field="*{idTo}" />
+        <input type="hidden" name="dataEnviament" th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm:ss')}" />
+        <div class="form-group">
+            <label>Missatge:</label>
+            <textarea th:field="*{missatge}" required
+                      style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; min-height:120px;"
+                      placeholder="Escriu el teu missatge aquí..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Enviar Missatge</button>
+    </form>
+
+    <br>
+    <a onclick="history.back()"
+       style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; cursor:pointer; font-weight:bold; text-decoration:none;">
+        ← Tornar
+    </a>
+</main>
 </body>
 </html>

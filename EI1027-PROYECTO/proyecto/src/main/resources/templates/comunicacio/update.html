@@ -3,22 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Comunicació</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Editar Comunicació</h1>
-<form th:action="@{/comunicacio/update}" th:object="${comunicacio}" method="post">
-    <input type="hidden" th:field="*{idComunicacio}" />
-    <label>ID Selecció:</label> <input type="number" th:field="*{idSeleccion}" required /><br/>
-    <label>Missatge:</label> <textarea th:field="*{missatge}" required></textarea><br/>
-    <label>Remitent:</label>
-    <select th:field="*{remitent}" required>
-        <option value="Tecnic">Tècnic</option>
-        <option value="Usuari">Usuari</option>
-        <option value="Assistent">Assistent</option>
-    </select><br/>
-    <label>Data Enviament:</label> <input type="datetime-local" th:field="*{dataEnviament}" required /><br/><br/>
-    <button type="submit">Actualitzar</button>
-</form>
-<br><a th:href="@{/comunicacio/list}">Tornar</a>
+<header class="main-header">
+    <div class="logo"><strong>Gestió OVI</strong></div>
+</header>
+<main class="main-content">
+    <h1>Editar Missatge</h1>
+    <form th:action="@{/comunicacio/update}" th:object="${comunicacio}" method="post">
+        <input type="hidden" th:field="*{idComunicacio}" />
+        <div class="form-group">
+            <label>ID Selecció:</label>
+            <input type="number" th:field="*{idSeleccion}" required />
+        </div>
+        <div class="form-group">
+            <label>Missatge:</label>
+            <textarea th:field="*{missatge}" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; min-height:100px;"></textarea>
+        </div>
+        <div class="form-group">
+            <label>ID Remitent (id_from):</label>
+            <input type="number" th:field="*{idFrom}" required />
+        </div>
+        <div class="form-group">
+            <label>ID Destinatari (id_to):</label>
+            <input type="number" th:field="*{idTo}" required />
+        </div>
+        <div class="form-group">
+            <label>Data Enviament:</label>
+            <input type="datetime-local" th:field="*{dataEnviament}" required />
+        </div>
+        <button type="submit" class="btn-submit">Actualitzar</button>
+    </form>
+    <br>
+    <a th:href="@{/comunicacio/list}">← Tornar</a>
+</main>
 </body>
 </html>
