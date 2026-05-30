@@ -33,38 +33,43 @@ public class UsuarioDao {
             usuario.setEmail(rs.getString("email"));
             usuario.setContrasenya(rs.getString("contrasenya"));
             usuario.setGenere(rs.getString("genere"));
-            
             if (rs.getDate("data_naixement") != null) {
                 usuario.setDataNaixement(rs.getDate("data_naixement").toLocalDate());
             }
-            
             usuario.setTipusUsuari(rs.getString("tipus_usuari"));
             usuario.setTelefon(rs.getString("telefon"));
             usuario.setNombrePueblo(rs.getString("nombre_pueblo"));
             usuario.setDireccio(rs.getString("direccio"));
-            
             return usuario;
         }
     }
 
     public List<Usuario> getUsuarios() {
-        String sql = "SELECT * FROM Usuario";
-        return jdbcTemplate.query(sql, new UsuarioRowMapper());
+        return jdbcTemplate.query("SELECT * FROM Usuario", new UsuarioRowMapper());
     }
 
     public Usuario getUsuario(int idUsuario) {
-        String sql = "SELECT * FROM Usuario WHERE id_usuario=?";
         try {
-            return jdbcTemplate.queryForObject(sql, new UsuarioRowMapper(), idUsuario);
+            return jdbcTemplate.queryForObject("SELECT * FROM Usuario WHERE id_usuario=?",
+                    new UsuarioRowMapper(), idUsuario);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
     public Usuario getUsuarioByEmail(String email) {
-        String sql = "SELECT * FROM Usuario WHERE email=?";
         try {
-            return jdbcTemplate.queryForObject(sql, new UsuarioRowMapper(), email);
+            return jdbcTemplate.queryForObject("SELECT * FROM Usuario WHERE email=?",
+                    new UsuarioRowMapper(), email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public Usuario getUsuarioByDni(String dni) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM Usuario WHERE dni=?",
+                    new UsuarioRowMapper(), dni);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -75,12 +80,11 @@ public class UsuarioDao {
         jdbcTemplate.update(sql,
                 usuario.getNom(), usuario.getCognom1(), usuario.getCognom2(), usuario.getDni(),
                 usuario.getEmail(), usuario.getContrasenya(), usuario.getGenere(),
-                usuario.getDataNaixement(), usuario.getTipusUsuari(), usuario.getTelefon(), 
+                usuario.getDataNaixement(), usuario.getTipusUsuari(), usuario.getTelefon(),
                 usuario.getNombrePueblo(), usuario.getDireccio(), usuario.getIdUsuario());
     }
 
     public void deleteUsuario(int idUsuario) {
-        String sql = "DELETE FROM Usuario WHERE id_usuario=?";
-        jdbcTemplate.update(sql, idUsuario);
+        jdbcTemplate.update("DELETE FROM Usuario WHERE id_usuario=?", idUsuario);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin")
@@ -45,11 +46,12 @@ public class AdminController {
         return "admin/solicituds-assistent";
     }
     @GetMapping("/peticions-pendents")
-    public String peticionsPendents(Model model, HttpSession session) {
+    public String peticionsPendents(Model model, HttpSession session,
+                                    @RequestParam(required = false) String estat) {
         if (isNotAdmin(session)) return "redirect:/login";
-
-        model.addAttribute("requests", apRequestDao.getAPRequestsFiltrades("En revisió"));
-        return "aprequest/list";
+        model.addAttribute("requests", apRequestDao.getAPRequestsFiltrades(estat));
+        model.addAttribute("estatActual", estat);
+        return "admin/peticions-pendents";
     }
 
     @GetMapping("/aprovar-petici/{idRequest}")

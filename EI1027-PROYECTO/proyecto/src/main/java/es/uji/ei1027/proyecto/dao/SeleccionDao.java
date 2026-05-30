@@ -63,4 +63,8 @@ public class SeleccionDao {
         String sql = "SELECT * FROM seleccion";
         return jdbcTemplate.query(sql, new SeleccionRowMapper());
     }
+    public List<Seleccion> getSeleccionsByRequest(int idRequest) {
+        String sql = "SELECT * FROM seleccion WHERE id_request=?";
+        return jdbcTemplate.query(sql, new SeleccionRowMapper(), idRequest);
+    }
 }

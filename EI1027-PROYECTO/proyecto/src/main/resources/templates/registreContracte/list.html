@@ -19,19 +19,26 @@
   </div>
 </header>
 <main class="main-content">
-  <h1>Llista de Contractes</h1>
-  <a th:href="@{/registreContracte/add}" class="btn-login">+ Nou Contracte</a>
-  <br><br>
-  <table class="data-table">
+
+  <!-- Título dinámico según rol -->
+  <h1 th:if="${session.usuario.tipusUsuari == 'UsuariOVI'}">Els meus Contractes</h1>
+  <h1 th:unless="${session.usuario.tipusUsuari == 'UsuariOVI'}">Llista de Contractes</h1>
+
+  <div th:if="${#lists.isEmpty(contractes)}" style="text-align:center; margin-top:20px;">
+    <p>No hi ha cap contracte per a mostrar.</p>
+  </div>
+
+  <table class="data-table" th:unless="${#lists.isEmpty(contractes)}">
     <thead>
     <tr>
       <th>ID Contracte</th>
-      <th>Request</th>
+      <th>Sol·licitud</th>
       <th>Assistent</th>
       <th>Data Inici</th>
       <th>Data Fi</th>
-      <th>Ruta PDF</th>
-      <th>Accions</th>
+      <th>PDF</th>
+      <!-- Accions solo para técnico -->
+      <th th:unless="${session.usuario.tipusUsuari == 'UsuariOVI'}">Accions</th>
     </tr>
     </thead>
     <tbody>
@@ -40,16 +47,28 @@
       <td th:text="${contracte.idRequest}"></td>
       <td th:text="${contracte.idAssistent}"></td>
       <td th:text="${contracte.dataInici}"></td>
-      <td th:text="${contracte.dataFi}"></td>
-      <td th:text="${contracte.rutaPdf}"></td>
-      <td>
+      <td th:text="${contracte.dataFi != null ? contracte.dataFi : 'En vigor'}"></td>
+      <td th:text="${contracte.rutaPdf != null ? contracte.rutaPdf : '-'}"></td>
+      <!-- Editar/Esborrar solo para técnico -->
+      <td th:unless="${session.usuario.tipusUsuari == 'UsuariOVI'}">
         <a th:href="@{/registreContracte/update/{id}(id=${contracte.idContracte})}">Editar</a> |
         <a th:href="@{/registreContracte/delete/{id}(id=${contracte.idContracte})}"
-           onclick="return confirm('Esborrar?');">Esborrar</a>
+           onclick="return confirm('Segur que vols esborrar aquest contracte?');">Esborrar</a>
       </td>
     </tr>
     </tbody>
   </table>
+
+  <br>
+  <a onclick="history.back()"
+     style="display:inline-block; background-color:#34495e; color:#ffffff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold; cursor:pointer; margin-right:8px;">
+    ← Tornar
+  </a>
+  <a th:href="@{/}"
+     style="display:inline-block; background-color:#1a5276; color:#ffffff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold;">
+    Inici
+  </a>
+
 </main>
 </body>
 </html>

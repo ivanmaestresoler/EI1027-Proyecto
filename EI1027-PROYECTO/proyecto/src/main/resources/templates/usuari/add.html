@@ -75,8 +75,15 @@
 
             <div class="form-group">
                 <label>Poble:</label>
-                <input type="text" th:field="*{nombrePueblo}" />
-                <span th:if="${#fields.hasErrors('nombrePueblo')}" th:errors="*{nombrePueblo}" class="error-message"></span>
+                <select th:field="*{nombrePueblo}">
+                    <option value="">Selecciona un poble...</option>
+                    <option th:each="p : ${pueblos}"
+                            th:value="${p.nombre}"
+                            th:text="${p.nombre}"></option>
+                </select>
+                <span th:if="${#fields.hasErrors('nombrePueblo')}"
+                      th:errors="*{nombrePueblo}"
+                      class="error-message"></span>
             </div>
 
             <div class="form-group">

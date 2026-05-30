@@ -64,6 +64,12 @@ public class RegistreContracteDao {
             return null;
         }
     }
+    public List<RegistreContracte> getContractesByUsuari(int idUsuari) {
+        String sql = "SELECT rc.* FROM registrecontracte rc " +
+                "JOIN aprequest ar ON rc.id_request = ar.id_request " +
+                "WHERE ar.id_usuari = ?";
+        return jdbcTemplate.query(sql, new RegistreContracteRowMapper(), idUsuari);
+    }
 
     public List<RegistreContracte> getContractes() {
         String sql = "SELECT * FROM registrecontracte";
