@@ -69,11 +69,23 @@ public class FormadorDao {
     }
     
     public Formador getFormadorByEmail(String email) {
-    try {
-        return jdbcTemplate.queryForObject("SELECT * FROM Formador WHERE email_contacte = ?",
-                new FormadorRowMapper(), email);
-    } catch (EmptyResultDataAccessException e) {
-        return null;
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM Formador WHERE email_contacte = ?",
+                    new FormadorRowMapper(), email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
-}
+    public int getTotalFormadors() {
+        try {
+            return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Formador", Integer.class);
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
+    }
+
+    public List<Formador> getFormadorsPaginats(int limit, int offset) {
+        return jdbcTemplate.query("SELECT * FROM Formador LIMIT ? OFFSET ?",
+                new FormadorRowMapper(), limit, offset);
+    }
 }

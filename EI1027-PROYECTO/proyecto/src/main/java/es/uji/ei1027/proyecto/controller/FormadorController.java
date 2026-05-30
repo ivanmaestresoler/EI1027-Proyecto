@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/formador")
@@ -23,8 +20,17 @@ public class FormadorController {
     }
 
     @RequestMapping("/list")
-    public String listFormadors(Model model) {
-        model.addAttribute("formadors", formadorDao.getFormadors());
+    public String listFormadors(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageSize = 5; // Cambia este número para mostrar más o menos registros por página
+        int offset = (page - 1) * pageSize;
+
+        int totalRecords = formadorDao.getTotalFormadors();
+        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+
+        model.addAttribute("formadors", formadorDao.getFormadorsPaginats(pageSize, offset));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "formador/list";
     }
 

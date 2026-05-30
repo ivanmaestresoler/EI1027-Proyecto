@@ -71,4 +71,17 @@ public class SeleccionDao {
         String sql = "SELECT * FROM seleccion WHERE id_assistent=? ORDER BY data_proposta DESC";
         return jdbcTemplate.query(sql, new SeleccionRowMapper(), idAssistent);
     }
+
+    public int getTotalSeleccions() {
+        try {
+            return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM seleccion", Integer.class);
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
+    }
+
+    public List<Seleccion> getSeleccionsPaginades(int limit, int offset) {
+        return jdbcTemplate.query("SELECT * FROM seleccion LIMIT ? OFFSET ?",
+                new SeleccionRowMapper(), limit, offset);
+    }
 }

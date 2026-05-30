@@ -168,9 +168,18 @@ public class ComunicacioController {
         return "redirect:/comunicacio/xat/" + comunicacio.getIdSeleccion();
     }
 
-    @GetMapping("/list")
-    public String listComunicacions(Model model) {
-        model.addAttribute("comunicacions", comunicacioDao.getComunicacions());
+    @RequestMapping("/list")
+    public String listComunicacions(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageSize = 5;
+        int offset = (page - 1) * pageSize;
+
+        int totalRecords = comunicacioDao.getTotalComunicacions();
+        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+
+        model.addAttribute("comunicacions", comunicacioDao.getComunicacionsPaginades(pageSize, offset));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "comunicacio/list";
     }
 

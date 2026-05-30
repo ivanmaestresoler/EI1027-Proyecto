@@ -69,4 +69,17 @@ public class ComunicacioUsuariOVIPAPDao {
         String sql = "SELECT * FROM comunicaciousuariovipap WHERE id_seleccion=? ORDER BY data_enviament ASC";
         return jdbcTemplate.query(sql, new ComunicacioRowMapper(), idSeleccion);
     }
+
+    public int getTotalComunicacions() {
+        try {
+            return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM comunicaciousuariovipap", Integer.class);
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
+    }
+
+    public List<ComunicacioUsuariOVIPAP> getComunicacionsPaginades(int limit, int offset) {
+        return jdbcTemplate.query("SELECT * FROM comunicaciousuariovipap LIMIT ? OFFSET ?",
+                new ComunicacioRowMapper(), limit, offset);
+    }
 }

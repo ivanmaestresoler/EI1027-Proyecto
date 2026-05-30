@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Llista de Seleccions - Projecte OVI</title>
+  <!-- Afegit Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -20,8 +22,10 @@
 </header>
 <main class="main-content">
   <h1>Llista de Seleccions</h1>
+
   <a th:href="@{/seleccion/add}" class="btn-login">+ Nova Selecció</a>
   <br><br>
+
   <table class="data-table">
     <thead>
     <tr>
@@ -46,6 +50,27 @@
     </tr>
     </tbody>
   </table>
+
+  <!-- Paginació -->
+  <nav aria-label="Navegació de pàgines" class="mt-4" th:if="${totalPages > 1}">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${currentPage <= 1} ? 'disabled'">
+        <a class="page-link px-3 py-2 fw-medium"
+           th:href="@{/seleccion/list(page=${currentPage - 1})}"
+           tabindex="-1">Anterior</a>
+      </li>
+      <li class="page-item disabled">
+              <span class="page-link px-4 py-2">
+                  Pàgina <strong class="text-dark" th:text="${currentPage}"></strong> de <strong class="text-dark" th:text="${totalPages}"></strong>
+              </span>
+      </li>
+      <li class="page-item" th:classappend="${currentPage >= totalPages} ? 'disabled'">
+        <a class="page-link px-3 py-2 fw-medium"
+           th:href="@{/seleccion/list(page=${currentPage + 1})}">Següent</a>
+      </li>
+    </ul>
+  </nav>
+
 </main>
 </body>
 </html>

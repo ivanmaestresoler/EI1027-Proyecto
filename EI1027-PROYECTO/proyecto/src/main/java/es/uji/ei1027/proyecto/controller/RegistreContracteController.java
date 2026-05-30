@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/registreContracte")
 public class RegistreContracteController {
@@ -36,19 +38,35 @@ public class RegistreContracteController {
     }
 
     @GetMapping("/list")
-    public String listContractes(Model model, HttpSession session) {
+    public String listContractes(Model model, HttpSession session, @RequestParam(value = "page", defaultValue = "1") int page) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) return "redirect:/login";
-
-        if (usuario.getTipusUsuari().equals("UsuariOVI")) {
-            model.addAttribute("contractes",
-                    registreContracteDao.getContractesByUsuari(usuario.getIdUsuario()));
-        } else if (usuario.getTipusUsuari().equals("AssistentPersonal")) {
-            model.addAttribute("contractes",
-                    registreContracteDao.getContractesByAssistent(usuario.getIdUsuario()));
-        } else {
-            model.addAttribute("contractes", registreContracteDao.getContractes());
+        if (usuario == null) {
+            return "redirect:/login";
         }
+
+        int pageSize = 5;
+        int offset = (page - 1) * pageSize;
+        List<RegistreContracte> contractes;
+        int totalRecords = 0;
+
+        // Filtramos la paginación según el rol
+        if (usuario.getTipusUsuari().equals("UsuariOVI")) {
+            contractes = registreContracteDao.getContractesByUsuariPaginats(usuario.getIdUsuario(), pageSize, offset);
+            totalRecords = registreContracteDao.getTotalContractesByUsuari(usuario.getIdUsuario());
+        } else if (usuario.getTipusUsuari().equals("AssistentPersonal")) {
+            contractes = registreContracteDao.getContractesByAssistentPaginats(usuario.getIdUsuario(), pageSize, offset);
+            totalRecords = registreContracteDao.getTotalContractesByAssistent(usuario.getIdUsuario());
+        } else {
+            contractes = registreContracteDao.getContractesPaginats(pageSize, offset);
+            totalRecords = registreContracteDao.getTotalContractes();
+        }
+
+        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+
+        model.addAttribute("contractes", contractes);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "registreContracte/list";
     }
 

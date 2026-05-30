@@ -79,4 +79,30 @@ public class RegistreContracteDao {
         String sql = "SELECT * FROM registrecontracte WHERE id_assistent=?";
         return jdbcTemplate.query(sql, new RegistreContracteRowMapper(), idAssistent);
     }
+    // Para Admins (Todos los contratos)
+    public int getTotalContractes() {
+        try { return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM registrecontracte", Integer.class); }
+        catch (EmptyResultDataAccessException e) { return 0; }
+    }
+    public List<RegistreContracte> getContractesPaginats(int limit, int offset) {
+        return jdbcTemplate.query("SELECT * FROM registrecontracte LIMIT ? OFFSET ?", new RegistreContracteRowMapper(), limit, offset);
+    }
+
+    // Para Usuarios OVI
+    public int getTotalContractesByUsuari(int idUsuari) {
+        try { return jdbcTemplate.queryForObject("SELECT COUNT(rc.*) FROM registrecontracte rc JOIN aprequest ar ON rc.id_request = ar.id_request WHERE ar.id_usuari = ?", Integer.class, idUsuari); }
+        catch (EmptyResultDataAccessException e) { return 0; }
+    }
+    public List<RegistreContracte> getContractesByUsuariPaginats(int idUsuari, int limit, int offset) {
+        return jdbcTemplate.query("SELECT rc.* FROM registrecontracte rc JOIN aprequest ar ON rc.id_request = ar.id_request WHERE ar.id_usuari = ? LIMIT ? OFFSET ?", new RegistreContracteRowMapper(), idUsuari, limit, offset);
+    }
+
+    // Para Asistentes
+    public int getTotalContractesByAssistent(int idAssistent) {
+        try { return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM registrecontracte WHERE id_assistent=?", Integer.class, idAssistent); }
+        catch (EmptyResultDataAccessException e) { return 0; }
+    }
+    public List<RegistreContracte> getContractesByAssistentPaginats(int idAssistent, int limit, int offset) {
+        return jdbcTemplate.query("SELECT * FROM registrecontracte WHERE id_assistent=? LIMIT ? OFFSET ?", new RegistreContracteRowMapper(), idAssistent, limit, offset);
+    }
 }

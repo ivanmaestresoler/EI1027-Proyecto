@@ -19,8 +19,17 @@ public class SeleccionController {
     }
 
     @GetMapping("/list")
-    public String listSeleccions(Model model) {
-        model.addAttribute("seleccions", seleccionDao.getSeleccions());
+    public String listSeleccions(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageSize = 5;
+        int offset = (page - 1) * pageSize;
+
+        int totalRecords = seleccionDao.getTotalSeleccions();
+        int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
+
+        model.addAttribute("seleccions", seleccionDao.getSeleccionsPaginades(pageSize, offset));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "seleccion/list";
     }
 
@@ -53,4 +62,5 @@ public class SeleccionController {
         seleccionDao.deleteSeleccion(id);
         return "redirect:../list";
     }
+
 }
