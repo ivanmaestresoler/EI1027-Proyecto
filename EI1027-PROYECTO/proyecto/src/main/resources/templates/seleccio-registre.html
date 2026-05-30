@@ -3,30 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Selecciona Perfil - Projecte OVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-    <div class="form-container" style="text-align: center; margin-top: 50px;">
-        <h1>Com vols registrar-te?</h1>
-        <p style="margin-bottom: 30px;">Tria el tipus de compte que vols crear a la plataforma:</p>
+<body class="bg-light">
 
-        <div style="display: flex; justify-content: center; gap: 20px;">
-            <div class="card" style="width: 250px; padding: 20px;">
-                <h3>Usuari OVI</h3>
-                <p>Persona amb diversitat funcional que sol·licita assistència.</p>
-                <a th:href="@{/usuari/add}" class="btn-submit" style="display: block; text-decoration: none; margin-top: 15px;">Soc Usuari OVI</a>
-            </div>
+<main class="portal-wrapper">
+  <div class="portal-card text-center">
+    
+    <h1 class="portal-logo fs-2 mb-3">Crear un compte nou</h1>
+    <p class="text-muted mx-auto mb-5" style="max-width: 600px;">
+      Tria el tipus de perfil que millor s'adapte a les teues necessitats per a començar el procés de registre de forma gratuïta.
+    </p>
 
-            <div class="card" style="width: 250px; padding: 20px;">
-                <h3>Assistent Personal</h3>
-                <p>Professional que ofereix serveis de suport i acompanyament.</p>
-                <a th:href="@{/assistentPersonal/add}" class="btn-submit" style="display: block; text-decoration: none; margin-top: 15px; ">Soc Assistent</a>
-            </div>
+    <div class="row g-4 text-start justify-content-center mb-4">
+      
+      <div class="col-md-5">
+        <div class="portal-option-box d-flex flex-column h-100 justify-content-between">
+          <div>
+            <h3 class="fs-5 fw-bold text-dark mb-2">Soc Usuari OVI</h3>
+            <p class="text-muted small mb-4">Persona amb diversitat funcional que vol sol·licitar assistència personal per a gestionar la seua autonomia.</p>
+          </div>
+          <a th:href="@{/usuari/add}" class="btn-portal-primary text-center">Registrar-me com a Usuari</a>
         </div>
-
-        <div style="margin-top: 30px;">
-            <a th:href="@{/}" >Tornar a l'inici</a>
+      </div>
+      
+      <div class="col-md-5">
+        <div class="portal-option-box d-flex flex-column h-100 justify-content-between">
+          <div>
+            <h3 class="fs-5 fw-bold text-dark mb-2">Soc Assistent Personal</h3>
+            <p class="text-muted small mb-4">Professional que ofereix serveis de suport, acompanyament i vol formar part de la borsa de treball de l'OVI.</p>
+          </div>
+          <a th:href="@{/assistentPersonal/add}" class="btn-portal-secondary text-center">Registrar-me com a Assistent</a>
         </div>
+      </div>
+      
     </div>
+
+    <div class="mt-4 pt-4 border-top">
+        <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">← Tornar a la pàgina principal</a>
+    </div>
+
+  </div>
+</main>
+
 </body>
 </html>

@@ -13,6 +13,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 3px solid #2980b9;
 }
 .logo {
     font-size: 1.5rem;
@@ -61,7 +62,7 @@ a:hover {
     gap: 20px;
     margin-top: 20px;
 }
-.card {
+.grid-container .card {
     background: white;
     border-radius: 8px;
     padding: 20px;
@@ -178,4 +179,229 @@ a:hover {
     display: block;
     margin-top: 5px;
     font-weight: 500;
+}
+h2.mb-4.border-bottom {
+    color: #2c3e50 !important;
+    border-bottom: 2px solid #2980b9 !important;
+    font-weight: 600;
+}
+.card.shadow-sm {
+    border: 1px solid #e2e8f0 !important;
+    background-color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card.shadow-sm:hover {
+    transform: translateY(-4px);
+    border-color: #2980b9 !important;
+    box-shadow: 0 8px 15px rgba(44, 62, 80, 0.08) !important;
+}
+.card-title-custom {
+    color: #2c3e50 !important;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+.card-body ul li a.menu-link {
+    color: #2980b9 !important;
+    font-weight: 500;
+    display: inline-block;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.card-body ul li a.menu-link:hover {
+    color: #1a5276 !important;
+    transform: translateX(4px);
+}
+.btn {
+    transition: all 0.2s ease-in-out !important;
+}
+.btn-logout-header {
+    color: #ffffff !important;
+    text-decoration: none;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.12);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.2s ease;
+}
+.btn-logout-header:hover {
+    background-color: #ffffff;
+    color: #2c3e50 !important;
+    border-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.revision-container {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.01);
+}
+.revision-header-title {
+    color: #2c3e50;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+.revision-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+}
+.revision-item-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #2980b9;
+    padding: 14px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2c3e50 !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+}
+.revision-item-card:hover {
+    transform: translateY(-3px);
+    background-color: #ffffff;
+    border-color: #2980b9;
+    box-shadow: 0 6px 12px rgba(41, 128, 185, 0.12);
+}
+.portal-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 40px 20px;
+}
+.portal-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(44, 62, 80, 0.06);
+    border: 1px solid #e2e8f0;
+    padding: 4rem 3.5rem;
+    width: 100%;
+    max-width: 1050px;
+}
+.portal-logo {
+    color: #2c3e50;
+    font-weight: 800;
+    font-size: 2.8rem;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.5px;
+}
+.portal-subtitle {
+    color: #2980b9;
+    font-weight: 600;
+    font-size: 1.35rem;
+    margin-bottom: 2rem;
+}
+.portal-option-box {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.25s ease;
+}
+.portal-option-box:hover {
+    border-color: #2980b9;
+    box-shadow: 0 8px 20px rgba(44, 62, 80, 0.05);
+    transform: translateY(-3px);
+}
+.btn-portal-primary {
+    background-color: #2980b9;
+    color: #ffffff !important;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: block;
+}
+.btn-portal-primary:hover {
+    background-color: #1a5276;
+}
+.btn-portal-secondary {
+    background-color: transparent;
+    color: #2980b9 !important;
+    font-weight: 600;
+    padding: 11px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 2px solid #2980b9;
+    transition: all 0.2s ease;
+    display: block;
+}
+.btn-portal-secondary:hover {
+    background-color: #f1f5f9;
+    color: #1a5276 !important;
+    border-color: #1a5276;
+}
+.portal-login-banner {
+    background-color: #f1f5f9;
+    border-radius: 8px;
+    padding: 12px 20px;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+    border: 1px solid #e2e8f0;
+}
+.login-link {
+    color: #2980b9;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    margin-left: 5px;
+}
+.login-link:hover {
+    color: #1a5276;
+    text-decoration: underline;
+}
+.portal-instruction-text {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+    font-weight: 500;
+}
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+.login-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(44, 62, 80, 0.08);
+    border: 1px solid #e2e8f0;
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 450px;
+}
+.custom-input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    background-color: #fcfcfc;
+}
+.custom-input:focus {
+    border-color: #2980b9;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.15);
+    outline: none;
+}
+.hover-blue {
+    transition: color 0.2s ease;
+}
+.hover-blue:hover {
+    color: #2980b9 !important;
 }

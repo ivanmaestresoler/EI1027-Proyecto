@@ -7,22 +7,53 @@
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="bg-light">
-<header class="main-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-  <div class="logo fw-bold fs-4">Gestió OVI</div>
-  <div>
-    <a th:href="@{/login}" class="btn btn-outline-light me-2">Iniciar Sessió</a>
-    <a th:href="@{/registre}" class="btn btn-success">Registrar-se</a>
-  </div>
-</header>
-<main class="container mt-5 text-center">
-  <div class="p-5 bg-white shadow-sm rounded">
-    <h1 class="display-5 text-primary mb-4">Benvingut a l'Oficina per la Vida Independent</h1>
-    <p class="lead text-muted mb-5">La nostra missió és impulsar la vida autònoma i autogestionada mitjançant l'assistència personal.</p>
-    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-      <a th:href="@{/registre}" class="btn btn-primary btn-lg px-4 gap-3">Vull sol·licitar Assistència</a>
-      <a th:href="@{/registre}" class="btn btn-outline-secondary btn-lg px-4">Vull ser Assistent Personal</a>
+
+<main class="portal-wrapper">
+  <div class="portal-card text-center">
+    
+    <h1 class="portal-logo">Gestió OVI</h1>
+    <h2 class="portal-subtitle">Oficina per la Vida Independent</h2>
+    
+    <p class="text-muted mx-auto mb-4" style="max-width: 750px;">
+      La nostra missió és impulsar la vida autònoma i autogestionada mitjançant l'assistència personal.
+    </p>
+
+    <div class="portal-login-banner">
+      <p class="mb-0 text-muted small fw-medium">
+        Ja tens un compte d'accés? <a th:href="@{/login}" class="login-link">Inicia sessió ací</a>
+      </p>
     </div>
+
+    <p class="portal-instruction-text mx-auto" style="max-width: 650px;">
+      Si encara no tens un compte, pots registrar-te triant una de les dues opcions següents segons el teu perfil:
+    </p>
+    
+    <div class="row g-4 text-start justify-content-center">
+      
+      <div class="col-md-5">
+        <div class="portal-option-box d-flex flex-column h-100 justify-content-between">
+          <div>
+            <h3 class="fs-5 fw-bold text-dark mb-2">Necessite Assistència Diària</h3>
+            <p class="text-muted small mb-4">Si necessites el suport d'un professional per a la teua autonomia, vols contractar el teu propi assistent o requereixes ajuda per a dur una vida independent.</p>
+          </div>
+          <a th:href="@{/usuari/add}" class="btn-portal-primary text-center">Vull sol·licitar Assistència</a>
+        </div>
+      </div>
+      
+      <div class="col-md-5">
+        <div class="portal-option-box d-flex flex-column h-100 justify-content-between">
+          <div>
+            <h3 class="fs-5 fw-bold text-dark mb-2">Vull ser Assistent</h3>
+            <p class="text-muted small mb-4">Si vols oferir els teus serveis professionals com a Assistent Personal i formar part de la borsa oficial de treball.</p>
+          </div>
+          <a th:href="@{/assistentPersonal/add}" class="btn-portal-secondary text-center">Vull ser Assistent Personal</a>
+        </div>
+      </div>
+      
+    </div>
+
   </div>
 </main>
+
 </body>
 </html>

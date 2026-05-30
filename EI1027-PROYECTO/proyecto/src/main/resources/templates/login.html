@@ -2,35 +2,47 @@
 <html lang="ca" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar Sessió</title>
+    <title>Iniciar Sessió - Projecte OVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<header class="main-header">
-    <div class="logo"><strong>Gestió OVI</strong></div>
-</header>
-<main class="main-content">
-    <div class="form-container">
-        <h1>Identificació d'Usuari</h1>
+<body class="bg-light">
+
+<main class="login-wrapper">
+    <div class="login-card">
         
-        <div th:if="${error != null}" style="color: #922b21; margin-bottom: 15px; font-weight: bold;">
-            <p th:text="${error}"></p>
+        <div class="text-center mb-4">
+            <h1 class="portal-logo fs-2">Gestió OVI</h1>
+            <p class="text-muted">Inicia sessió al teu compte</p>
+        </div>
+        
+        <div th:if="${error != null}" class="alert alert-danger shadow-sm text-center py-2 mb-4" role="alert">
+            <p class="mb-0 fw-medium" th:text="${error}"></p>
         </div>
         
         <form th:action="@{/login}" th:object="${usuario}" method="post" novalidate>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="text" id="email" th:field="*{email}" autofocus />
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold text-dark mb-1">Correu electrònic</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control custom-input" placeholder="El teu email" autofocus />
             </div>
-            <div class="form-group">
-                <label for="contrasenya">Contrasenya:</label>
-                <input type="password" id="contrasenya" th:field="*{contrasenya}" />
+            
+            <div class="mb-4">
+                <label for="contrasenya" class="form-label fw-bold text-dark mb-1">Contrasenya</label>
+                <input type="password" id="contrasenya" th:field="*{contrasenya}" class="form-control custom-input" placeholder="••••••••" />
             </div>
-            <button type="submit" class="btn-submit">Entrar</button>
+            
+            <button type="submit" class="btn-portal-primary w-100 border-0 fs-6 py-2 mb-3">Entrar a l'espai de treball</button>
         </form>
-        <br>
-        <a th:href="@{/}">Tornar a l'inici</a>
+        
+        <div class="text-center mt-4 pt-3 border-top">
+            <p class="text-muted small mb-2">
+                Encara no tens compte? <a th:href="@{/registre}" class="login-link">Registra't ací</a>
+            </p>
+            <a th:href="@{/}" class="text-decoration-none small text-secondary hover-blue">← Tornar a l'inici</a>
+        </div>
+        
     </div>
 </main>
+
 </body>
 </html>
