@@ -93,6 +93,39 @@ public class APRequestController {
         return "aprequest/list";
     }
 
+    @RequestMapping("/sense-proposta")
+    public String listSenseProposta(Model model, jakarta.servlet.http.HttpSession session,
+                                    @RequestParam(value = "page", defaultValue = "1") int page) {
+        
+        // Verificamos sesión
+        es.uji.ei1027.proyecto.model.Usuario usuario =
+                (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+
+        // Configuramos la paginación (5 elementos por página, igual que el resto)
+        int pageSize = 5;
+        int offset = (page - 1) * pageSize;
+        
+        // FORZAMOS EL FILTRO: Solo queremos las que están "En revisió"
+        String estadoFijo = "En revisió";
+
+        // Obtenemos solo los registros necesarios de la BD
+        List<APRequest> requests = apRequestDao.getAPRequestsFiltradesPaginadas(estadoFijo, pageSize, offset);
+        int totalRecords = apRequestDao.countAPRequestsFiltrades(estadoFijo);
+
+        // Calculamos el total de páginas
+        int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+        if (totalPages == 0) totalPages = 1;
+
+        // Pasamos los datos a la vista
+        model.addAttribute("requests", requests);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        
+        
+        return "admin/peticions-pendents"; 
+    }
+
     @RequestMapping(value="/add")
     public String addRequest(Model model) {
         model.addAttribute("aprequest", new APRequest());
