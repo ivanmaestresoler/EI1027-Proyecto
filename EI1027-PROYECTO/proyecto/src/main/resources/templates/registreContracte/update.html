@@ -22,29 +22,48 @@
     <h1>Editar Contracte</h1>
     <form th:action="@{/registreContracte/update}" th:object="${registreContracte}" method="post">
         <input type="hidden" th:field="*{idContracte}" />
+
         <div class="form-group">
             <label>ID Request:</label>
             <input type="number" th:field="*{idRequest}" required />
+            <span th:if="${#fields.hasErrors('idRequest')}"
+                  th:errors="*{idRequest}"
+                  style="color:red; font-size:0.9em;"></span>
         </div>
+
         <div class="form-group">
             <label>ID Assistent:</label>
             <input type="number" th:field="*{idAssistent}" required />
+            <span th:if="${#fields.hasErrors('idAssistent')}"
+                  th:errors="*{idAssistent}"
+                  style="color:red; font-size:0.9em;"></span>
         </div>
+
         <div class="form-group">
             <label>Data Inici:</label>
             <input type="date" th:field="*{dataInici}" required />
+            <span th:if="${#fields.hasErrors('dataInici')}"
+                  th:errors="*{dataInici}"
+                  style="color:red; font-size:0.9em;"></span>
         </div>
+
         <div class="form-group">
             <label>Data Fi:</label>
             <input type="date" th:field="*{dataFi}" />
+            <span th:if="${#fields.hasErrors('dataFi')}"
+                  th:errors="*{dataFi}"
+                  style="color:red; font-size:0.9em;"></span>
         </div>
+
         <div class="form-group">
             <label>Ruta PDF:</label>
             <input type="text" th:field="*{rutaPdf}" />
         </div>
+
         <button type="submit" class="btn-submit">Actualitzar</button>
     </form>
-    <br><a th:href="@{/registreContracte/list}" class="btn-login">Tornar</a>
+    <br>
+    <a th:href="@{/registreContracte/list}" class="btn-login">Tornar</a>
 </main>
 </body>
 </html>

@@ -43,13 +43,17 @@ public class AssistentPersonalController {
 
     @RequestMapping("/list")
     public String listAssistents(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        int pageSize = 5; 
+        int pageSize = 5;
         int offset = (page - 1) * pageSize;
-
         int totalRecords = assistentPersonalDao.getTotalAssistentsPersonals();
         int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
 
-        model.addAttribute("assistents", assistentPersonalDao.getAssistentsPersonalsPaginats(pageSize, offset));
+        List<AssistentPersonal> assistents = assistentPersonalDao.getAssistentsPersonalsPaginats(pageSize, offset);
+        for (AssistentPersonal a : assistents) {
+            a.setTipusAssistenciaSeleccionats(
+                    assistentPersonalDao.getTipusAssistenciaPerAssistent(a.getIdUsuario()));
+        }
+        model.addAttribute("assistents", assistents);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         return "assistentPersonal/list";

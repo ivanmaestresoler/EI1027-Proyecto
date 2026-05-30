@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -17,6 +18,7 @@ public class RegistreContracteController {
 
     private RegistreContracteDao registreContracteDao;
     private APRequestDAO apRequestDao;
+    private RegistreContracteValidator validator;
 
     @Autowired
     public void setRegistreContracteDao(RegistreContracteDao registreContracteDao) {
@@ -26,6 +28,11 @@ public class RegistreContracteController {
     @Autowired
     public void setApRequestDao(APRequestDAO apRequestDao) {
         this.apRequestDao = apRequestDao;
+    }
+
+    @Autowired
+    public void setValidator(RegistreContracteValidator validator) {
+        this.validator = validator;
     }
 
     // Listado: técnico ve todos, usuario OVI solo los suyos
@@ -55,25 +62,31 @@ public class RegistreContracteController {
         return "registreContracte/add";
     }
 
-    // POST add: guarda el contracte, actualitza estat request i mostra confirmació
+    // POST add: valida, guarda, actualitza estat request i mostra confirmació
     @PostMapping("/add")
     public String processAddSubmit(
             @ModelAttribute("registreContracte") RegistreContracte registreContracte,
-            Model model) {
+            BindingResult bindingResult, Model model) {
+
+        validator.validate(registreContracte, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "registreContracte/add";
+        }
 
         registreContracteDao.addContracte(registreContracte);
 
-        // Actualitzar estat de la request a "Tancada amb contracte"
         APRequest request = apRequestDao.getAPRequest(registreContracte.getIdRequest());
         if (request != null) {
             request.setEstatRequest("Tancada amb contracte");
             apRequestDao.updateAPRequest(request);
         }
 
-        model.addAttribute("mensaje",
-                "Contracte registrat correctament! S'ha simulat l'enviament d'un correu al Tècnic OVI " +
-                        "notificant que s'ha formalitzat un contracte per a la sol·licitud #" +
-                        registreContracte.getIdRequest() + ".");
+        model.addAttribute("tipus", "acceptat");
+        model.addAttribute("destinatari", "Usuari OVI");
+        model.addAttribute("assumpte", "Contracte registrat correctament");
+        model.addAttribute("cos", "El contracte per a la sol·licitud #" +
+                registreContracte.getIdRequest() +
+                " ha sigut registrat correctament. Ja pots consultar-lo des del teu panell.");
         return "admin/confirmacion-aprovada";
     }
 
@@ -85,7 +98,14 @@ public class RegistreContracteController {
 
     @PostMapping("/update")
     public String processUpdateSubmit(
-            @ModelAttribute("registreContracte") RegistreContracte registreContracte) {
+            @ModelAttribute("registreContracte") RegistreContracte registreContracte,
+            BindingResult bindingResult, Model model) {
+
+        validator.validate(registreContracte, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "registreContracte/update";
+        }
+
         registreContracteDao.updateContracte(registreContracte);
         return "redirect:list";
     }
