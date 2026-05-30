@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - SgOVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-light">
+<header class="main-header text-white p-3 d-flex justify-content-between align-items-center">
+    <div class="logo fw-bold fs-4">Gestió OVI</div>
+    <div class="d-flex align-items-center">
+        <span class="me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
+        <a th:href="@{/logout}" class="btn-logout-header">Tancar Sessió</a>
+    </div>
+</header>
+
+<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 1200px;">
+
+    <!-- TÍTOL -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center border-bottom pb-3 mb-4 gap-3">
+        <div>
+            <h2 class="text-dark fw-bold mb-1 border-0 pb-0">📊 Informes i Estadístiques</h2>
+            <p class="text-muted small mb-0">Resum en temps real de l'activitat del SgOVI.</p>
+        </div>
+    </div>
+
+    <!-- TARGETES RESUM -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 p-3 text-center">
+                <div style="font-size:2rem;">👥</div>
+                <h2 class="fw-bold text-dark mb-0" th:text="${totalUsuaris}">0</h2>
+                <p class="text-muted small mb-0">Usuaris OVI totals</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 p-3 text-center">
+                <div style="font-size:2rem;">📋</div>
+                <h2 class="fw-bold text-dark mb-0" th:text="${totalRequests}">0</h2>
+                <p class="text-muted small mb-0">Sol·licituds totals</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 p-3 text-center">
+                <div style="font-size:2rem;">🤝</div>
+                <h2 class="fw-bold text-dark mb-0" th:text="${totalAssistents}">0</h2>
+                <p class="text-muted small mb-0">Assistents totals</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 p-3 text-center">
+                <div style="font-size:2rem;">📄</div>
+                <h2 class="fw-bold text-dark mb-0" th:text="${contractesActius}">0</h2>
+                <p class="text-muted small mb-0">Contractes actius</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRÀFIQUES -->
+    <div class="row g-4">
+
+        <!-- USUARIS OVI -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Usuaris OVI per estat</h5>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🟡 Pendents</span>
+                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-2" th:text="${usuarisPendents}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#f39c12;"
+                                 th:style="'width:' + (${totalUsuaris} > 0 ? ${usuarisPendents * 100 / totalUsuaris} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🟢 Acceptats</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2" th:text="${usuarisAcceptats}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#1a7a3c;"
+                                 th:style="'width:' + (${totalUsuaris} > 0 ? ${usuarisAcceptats * 100 / totalUsuaris} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🔴 Rebutjats</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2" th:text="${usuarisRebutjats}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#e74c3c;"
+                                 th:style="'width:' + (${totalUsuaris} > 0 ? ${usuarisRebutjats * 100 / totalUsuaris} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSISTENTS -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Assistents per estat</h5>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🟡 Candidats pendents</span>
+                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-2" th:text="${assistentsCandidats}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#f39c12;"
+                                 th:style="'width:' + (${totalAssistents} > 0 ? ${assistentsCandidats * 100 / totalAssistents} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🟢 Acceptats</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2" th:text="${assistentsAcceptats}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#1a7a3c;"
+                                 th:style="'width:' + (${totalAssistents} > 0 ? ${assistentsAcceptats * 100 / totalAssistents} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🔴 Rebutjats</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2" th:text="${assistentsRebutjats}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#e74c3c;"
+                                 th:style="'width:' + (${totalAssistents} > 0 ? ${assistentsRebutjats * 100 / totalAssistents} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOL·LICITUDS AP -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Sol·licituds AP per estat</h5>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🟡 En revisió</span>
+                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-2" th:text="${requestEnRevisio}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#f39c12;"
+                                 th:style="'width:' + (${totalRequests} > 0 ? ${requestEnRevisio * 100 / totalRequests} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🟢 Aprovades</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2" th:text="${requestAprovada}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#1a7a3c;"
+                                 th:style="'width:' + (${totalRequests} > 0 ? ${requestAprovada * 100 / totalRequests} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🔴 Rebutjades</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2" th:text="${requestRebutjada}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#e74c3c;"
+                                 th:style="'width:' + (${totalRequests} > 0 ? ${requestRebutjada * 100 / totalRequests} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">⚫ Tancades amb contracte</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2" th:text="${requestTancada + requestTancadaFinalitzat}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#7f8c8d;"
+                                 th:style="'width:' + (${totalRequests} > 0 ? ${(requestTancada + requestTancadaFinalitzat) * 100 / totalRequests} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTRACTES -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Contractes</h5>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">🟢 Actius</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2" th:text="${contractesActius}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#1a7a3c;"
+                                 th:style="'width:' + (${totalContractes} > 0 ? ${contractesActius * 100 / totalContractes} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold text-secondary">⚫ Finalitzats</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2" th:text="${contractesFinalitzats}"></span>
+                        </div>
+                        <div class="progress" style="height:14px; border-radius:6px; background:#f1f5f9;">
+                            <div class="progress-bar" style="background-color:#7f8c8d;"
+                                 th:style="'width:' + (${totalContractes} > 0 ? ${contractesFinalitzats * 100 / totalContractes} : 0) + '%'"></div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <span class="small fw-bold text-secondary">Total contractes</span>
+                        <span class="small fw-bold text-dark" th:text="${totalContractes}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAULA RESUM -->
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Resum de serveis actius</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-secondary">
+                            <tr>
+                                <th class="py-3 px-4 fw-bold border-bottom-0">Indicador</th>
+                                <th class="py-3 px-4 fw-bold border-bottom-0 text-center">Valor</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="px-4 text-muted small">Usuaris OVI pendents d'assistent (sol·licituds aprovades sense contracte)</td>
+                                <td class="px-4 text-center"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-bold" th:text="${requestAprovada}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 text-muted small">Usuaris amb contracte actiu</td>
+                                <td class="px-4 text-center"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-bold" th:text="${contractesActius}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 text-muted small">Contractes finalitzats (historial d'assignacions)</td>
+                                <td class="px-4 text-center"><span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-2 fw-bold" th:text="${contractesFinalitzats}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 text-muted small">Sol·licituds en revisió pel tècnic</td>
+                                <td class="px-4 text-center"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-bold" th:text="${requestEnRevisio}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 text-muted small">Assistents disponibles (acceptats)</td>
+                                <td class="px-4 text-center"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-bold" th:text="${assistentsAcceptats}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 text-muted small">Candidats a assistent pendents de validació</td>
+                                <td class="px-4 text-center"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-bold" th:text="${assistentsCandidats}"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-5 pt-3 border-top">
+        <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">← Tornar al menú principal</a>
+    </div>
+
+</main>
+</body>
+</html>
