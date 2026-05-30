@@ -2,19 +2,46 @@
 <html lang="ca" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registre Completat</title>
+    <title>Registre Completat - Projecte OVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-    <div class="form-container" style="text-align: center; margin: 50px auto; max-width: 600px;">
-        <h1 style="border-bottom: none; color: #2ecc71;">✅ Sol·licitud enviada</h1>
-        <p style="font-size: 16px; margin-top: 20px;">
-            Gràcies per registrar-te. La teua sol·licitud s'ha guardat amb l'estat <strong>Pendent</strong>.
+<body class="bg-light">
+
+<main class="portal-wrapper">
+    <div class="portal-card text-center" style="max-width: 550px; padding: 3rem 2.5rem;">
+        
+        <div class="mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" fill="#2ecc71" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </svg>
+        </div>
+
+        <h1 class="portal-logo fs-3 mb-3 text-dark">Sol·licitud Enviada!</h1>
+        
+        <p class="text-muted fs-6 mb-4">
+            Gràcies per registrar-te. Hem rebut les teues dades correctament i el teu compte es troba actualment en estat de <strong>Pendent de Validació</strong>.
         </p>
-        <p style="font-size: 16px; margin-bottom: 30px;">
-            Un administrador revisarà el teu perfil. Podràs entrar quan la sol·licitud siga acceptada.
-        </p>
-        <a th:href="@{/}" class="btn-submit" style="text-decoration: none;">Tornar a l'Inici</a>
+
+        <div class="p-4 mb-4 rounded" style="background-color: #f8fafc; border-left: 4px solid #2980b9; text-align: left;">
+            <p class="mb-2 text-dark fs-6 fw-bold d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#2980b9" class="bi bi-info-circle-fill me-2" viewBox="0 0 16 16">
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+                Què passa ara?
+            </p>
+            <p class="text-muted small mb-0 lh-base">
+                Un <strong>Tècnic de l'OVI</strong> revisarà pròximament el teu perfil. En breu rebràs un <strong>correu electrònic</strong> informant-te de si la teua sol·licitud ha sigut acceptada o rebutjada per a poder accedir a l'espai de treball.<br><br>
+                <em>* Et recomanem revisar la teua carpeta de correu brossa (Spam) per si de cas.</em>
+            </p>
+        </div>
+
+        <a th:href="@{/}" class="btn-portal-primary text-center px-4 py-2 mt-3 w-100 d-block text-decoration-none">
+            Tornar a la pàgina principal
+        </a>
+
     </div>
+</main>
+
 </body>
 </html>

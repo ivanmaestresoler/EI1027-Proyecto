@@ -1,118 +1,138 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Nou Usuari OVI</title>
+    <title>Registre Usuari OVI - Projecte OVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<main class="main-content">
-    <div class="form-container">
-        <h1>Nou Usuari OVI</h1>
+<body class="bg-light">
+
+<main class="portal-wrapper py-5">
+    <div class="portal-card" style="max-width: 600px; padding: 3rem 2.5rem;">
+        
+        <div class="text-center mb-5 pb-2 border-bottom">
+            <h1 class="portal-logo fs-3 mb-2">Registre d'Usuari OVI</h1>
+            <p class="text-muted small">Omple els següents camps per a crear el teu compte d'accés.</p>
+        </div>
+
         <form th:action="@{/usuari/add}" th:object="${usuariOVI}" method="post" novalidate>
             
-            <div class="form-group">
-                <label>DNI/NIE:</label>
-                <input type="text" th:field="*{dni}" />
+            <h5 class="text-secondary fw-bold mb-4 small text-uppercase tracking-wider">1. Dades Personals</h5>
+            
+            <div class="mb-4">
+                <label for="dni" class="form-label fw-bold text-dark mb-1">DNI / NIE</label>
+                <input type="text" id="dni" th:field="*{dni}" class="form-control custom-input w-100" placeholder="12345678A" />
                 <span th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" class="error-message"></span>
             </div>
 
-            <div class="form-group">
-                <label>Nom:</label>
-                <input type="text" th:field="*{nom}" />
+            <div class="mb-4">
+                <label for="nom" class="form-label fw-bold text-dark mb-1">Nom</label>
+                <input type="text" id="nom" th:field="*{nom}" class="form-control custom-input w-100" placeholder="El teu nom" />
                 <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error-message"></span>
             </div>
 
-            <div class="form-group">
-                <label>Primer Cognom:</label>
-                <input type="text" th:field="*{cognom1}" />
+            <div class="mb-4">
+                <label for="cognom1" class="form-label fw-bold text-dark mb-1">Primer Cognom</label>
+                <input type="text" id="cognom1" th:field="*{cognom1}" class="form-control custom-input w-100" placeholder="Primer cognom" />
                 <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message"></span>
             </div>
 
-            <div class="form-group">
-                <label>Segon Cognom:</label>
-                <input type="text" th:field="*{cognom2}" />
+            <div class="mb-4">
+                <label for="cognom2" class="form-label fw-bold text-dark mb-1">Segon Cognom</label>
+                <input type="text" id="cognom2" th:field="*{cognom2}" class="form-control custom-input w-100" placeholder="Segon cognom (opcional)" />
             </div>
 
-            <div class="form-group">
-                <label>Data Naixement:</label>
-                <input type="date" th:field="*{dataNaixement}" th:max="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" />
+            <div class="mb-4">
+                <label for="dataNaixement" class="form-label fw-bold text-dark mb-1">Data de Naixement</label>
+                <input type="date" id="dataNaixement" th:field="*{dataNaixement}" class="form-control custom-input w-100" th:max="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" />
                 <span th:if="${#fields.hasErrors('dataNaixement')}" th:errors="*{dataNaixement}" class="error-message"></span>
             </div>
 
-            <div class="form-group">
-                <label>Gènere:</label>
-                <div style="display: flex; gap: 15px; margin-top: 5px;">
-                    <div th:each="g, gStat : ${generos}" style="display: flex; align-items: center; gap: 5px;">
-                        <input type="radio" th:field="*{genere}" th:value="${g}" th:id="${'genere_' + gStat.index}" />
-                        <label th:for="${'genere_' + gStat.index}" th:text="${g}" style="margin: 0; font-weight: normal;"></label>
+            <div class="mb-5">
+                <label class="form-label fw-bold text-dark mb-2 d-block">Gènere</label>
+                <div class="d-flex flex-column gap-2">
+                    <div th:each="g, gStat : ${generos}" class="form-check">
+                        <input class="form-check-input" type="radio" th:field="*{genere}" th:value="${g}" th:id="${'genere_' + gStat.index}" />
+                        <label class="form-check-label text-muted" th:for="${'genere_' + gStat.index}" th:text="${g}"></label>
                     </div>
                 </div>
-                <span th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}" class="error-message"></span>
+                <span th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}" class="error-message mt-2"></span>
             </div>
 
-            <div class="form-group">
-                <label>Telèfon:</label>
-                <input type="text" th:field="*{telefon}" />
+            <h5 class="text-secondary fw-bold mb-4 small text-uppercase tracking-wider">2. Contacte i Ubicació</h5>
+
+            <div class="mb-4">
+                <label for="telefon" class="form-label fw-bold text-dark mb-1">Telèfon de contacte</label>
+                <input type="text" id="telefon" th:field="*{telefon}" class="form-control custom-input w-100" placeholder="Ex: 600123456" />
                 <span th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}" class="error-message"></span>
             </div>
 
-            <div class="form-group">
-                <label>Email:</label>
-                <input type="email" th:field="*{email}" />
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label>Contrasenya:</label>
-                <input type="password" th:field="*{contrasenya}" />
-                <span th:if="${#fields.hasErrors('contrasenya')}" th:errors="*{contrasenya}" class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label>Direcció:</label>
-                <input type="text" th:field="*{direccio}" />
+            <div class="mb-4">
+                <label for="direccio" class="form-label fw-bold text-dark mb-1">Direcció Completa</label>
+                <input type="text" id="direccio" th:field="*{direccio}" class="form-control custom-input w-100" placeholder="Carrer, Número, Porta..." />
                 <span th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="error-message"></span>
             </div>
 
-            <div class="form-group">
-                <label>Poble:</label>
-                <select th:field="*{nombrePueblo}">
-                    <option value="">Selecciona un poble...</option>
-                    <option th:each="p : ${pueblos}"
-                            th:value="${p.nombre}"
-                            th:text="${p.nombre}"></option>
+            <div class="mb-5">
+                <label for="nombrePueblo" class="form-label fw-bold text-dark mb-1">Poble / Municipi</label>
+                <select id="nombrePueblo" th:field="*{nombrePueblo}" class="form-select custom-input w-100">
+                    <option value="">Selecciona el teu poble...</option>
+                    <option th:each="p : ${pueblos}" th:value="${p.nombre}" th:text="${p.nombre}"></option>
                 </select>
-                <span th:if="${#fields.hasErrors('nombrePueblo')}"
-                      th:errors="*{nombrePueblo}"
-                      class="error-message"></span>
+                <span th:if="${#fields.hasErrors('nombrePueblo')}" th:errors="*{nombrePueblo}" class="error-message"></span>
             </div>
 
-            <div class="form-group">
-                <label>Tipus Assistència:</label>
-                <select th:field="*{tipusAssistencia}">
+            <h5 class="text-secondary fw-bold mb-4 small text-uppercase tracking-wider">3. Credencials del Compte</h5>
+
+            <div class="mb-4">
+                <label for="email" class="form-label fw-bold text-dark mb-1">Correu Electrònic (Email)</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control custom-input w-100" placeholder="nom@exemple.com" />
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+            </div>
+
+            <div class="mb-5">
+                <label for="contrasenya" class="form-label fw-bold text-dark mb-1">Crea la teua Contrasenya</label>
+                <input type="password" id="contrasenya" th:field="*{contrasenya}" class="form-control custom-input w-100" placeholder="Mínim 6 caràcters" />
+                <span th:if="${#fields.hasErrors('contrasenya')}" th:errors="*{contrasenya}" class="error-message"></span>
+            </div>
+
+            <h5 class="text-secondary fw-bold mb-4 small text-uppercase tracking-wider">4. Servei Sol·licitat</h5>
+
+            <div class="mb-5">
+                <label for="tipusAssistencia" class="form-label fw-bold text-dark mb-1">Tipus d'Assistència que requereixes</label>
+                <select id="tipusAssistencia" th:field="*{tipusAssistencia}" class="form-select custom-input w-100">
                     <option value="">-- Selecciona una opció --</option>
-                    <option th:each="t : ${tiposAsistencia}" 
-                            th:value="${t}" 
-                            th:text="${t}">
-                    </option>
+                    <option th:each="t : ${tiposAsistencia}" th:value="${t}" th:text="${t}"></option>
                 </select>
                 <span th:if="${#fields.hasErrors('tipusAssistencia')}" th:errors="*{tipusAssistencia}" class="error-message"></span>
             </div>
 
-            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
-                <input type="checkbox" th:field="*{consentimentLOPD}" id="lopdCheckbox" style="margin: 0; width: auto;" />
-                <label for="lopdCheckbox" style="margin: 0;">Acceptar LOPD</label>
-                <span th:if="${#fields.hasErrors('consentimentLOPD')}" th:errors="*{consentimentLOPD}" class="error-message"></span>
+            <div class="lopd-container-prominent mb-5">
+                <div class="form-check d-flex align-items-start gap-3">
+                    <input type="checkbox" th:field="*{consentimentLOPD}" id="lopdCheckbox" class="form-check-input lopd-check-grande" novalidate/>
+                    
+                    <label for="lopdCheckbox" class="form-check-label lopd-label-text lh-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill lopd-icon me-1" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+                        <strong>Accepte la política de privacitat</strong> i el tractament de les meues dades de salut per a la correcta gestió del servei d'assistència personal (LOPD).
+                    </label>
+                </div>
+                <span th:if="${#fields.hasErrors('consentimentLOPD')}" th:errors="*{consentimentLOPD}" class="error-message d-block mt-3 fw-semibold bg-danger bg-opacity-10 p-2 rounded text-center"></span>
             </div>
 
-            <div style="margin-top: 20px;">
-                <button type="submit" class="btn-submit">Guardar Usuari OVI</button>
-                <button type="reset" class="btn-reset">Netejar</button>
-                <a th:href="@{/registre}" style="margin-left: 10px;">Salir</a>
+            <div class="d-flex flex-column gap-3 pt-2 border-top">
+                <button type="submit" class="btn-portal-primary w-100 border-0 py-2 fs-6 text-center">Crear el meu Compte d'Usuari</button>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <a th:href="@{/registre}" class="text-decoration-none text-secondary hover-blue small fw-medium">
+                        ← Tornar enrere
+                    </a>
+                    <button type="reset" class="btn-portal-reset">Netejar formulari</button>
+                </div>
             </div>
+
         </form>
     </div>
 </main>
+
 </body>
 </html>

@@ -405,3 +405,109 @@ h2.mb-4.border-bottom {
 .hover-blue:hover {
     color: #2980b9 !important;
 }
+.lopd-container-prominent {
+    background-color: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.03);
+}
+
+/* Cambio de color sutil al marcar el check */
+.lopd-container-prominent:has(.form-check-input:checked) {
+    border-color: #2980b9;
+    background-color: #fbfdff;
+    box-shadow: 0 4px 12px rgba(41, 128, 185, 0.08);
+}
+
+/* Agrandamos el checkbox y le damos estilo propio */
+.lopd-check-grande {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    margin-top: 0 !important;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 2px solid #cbd5e1 !important;
+}
+
+.lopd-check-grande:checked {
+    background-color: #2980b9 !important;
+    border-color: #2980b9 !important;
+}
+
+/* Estilo para la etiqueta y el icono */
+.lopd-label-text {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.lopd-icon {
+    color: #94a3b8;
+    transition: color 0.3s ease;
+}
+
+.lopd-container-prominent:has(.form-check-input:checked) .lopd-icon {
+    color: #2980b9;
+}
+.btn-portal-reset {
+    color: #6c757d !important; /* El mateix gris de text-secondary */
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem; /* Mida "small" igual que l'altre botó */
+    transition: color 0.2s ease;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.btn-portal-reset:hover {
+    color: #2980b9 !important; /* El mateix blau de hover-blue */
+    text-decoration: none !important; /* Sense subratllat, igual que Tornar Enrere */
+    cursor: pointer;
+}
+.pagination .page-link {
+    color: #475569 !important; /* Gris oscuro elegante de base */
+    border-color: #e2e8f0 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efecto Hover: se ilumina en azul con un fondo sutil */
+.pagination .page-item:not(.disabled) .page-link:hover {
+    color: #2980b9 !important;
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Estado deshabilitado (cuando no se puede hacer click) */
+.pagination .page-item.disabled .page-link {
+    color: #94a3b8 !important;
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    cursor: not-allowed;
+}
+.btn-portal-approve {
+    background-color: #2980b9 !important; /* Blau corporatiu, igual que els altres botons d'acció */
+    color: #ffffff !important;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-size: 0.875rem; /* Mida "small" */
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-portal-approve:hover {
+    background-color: #1a5276 !important; /* Blau més fosc al passar el ratolí */
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
