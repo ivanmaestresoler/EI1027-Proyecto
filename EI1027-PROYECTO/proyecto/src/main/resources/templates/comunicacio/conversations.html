@@ -1,57 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
     <meta charset="UTF-8">
-    <title>Converses - Projecte OVI</title>
+    <title>Les meues Converses - Projecte OVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<header class="main-header">
-    <div class="logo"><strong>Gestió OVI</strong></div>
-    <div class="user-zone">
-        <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
-        <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+<body class="bg-light">
+
+<header class="main-header text-white p-3 d-flex justify-content-between align-items-center">
+    <div class="logo fw-bold fs-4">Gestió OVI</div>
+    <div class="user-zone d-flex align-items-center">
+        <div th:if="${session.usuario != null}">
+            <span class="me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
+            <a th:href="@{/logout}" class="btn-logout-header">Tancar Sessió</a>
+        </div>
     </div>
 </header>
-<main class="main-content">
-    <h1>Les meues Converses</h1>
 
-    <div th:if="${#lists.isEmpty(conversations)}"
-         style="text-align:center; padding:30px; background:#fff3cd; border-radius:8px;">
-        <p>Encara no tens cap conversa. Els usuaris OVI et podran contactar des de les seues sol·licituds.</p>
+<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 1200px;">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center border-bottom pb-3 mb-4 gap-3">
+        <div>
+            <h2 class="text-dark fw-bold mb-1 border-0 pb-0">Les meues Converses</h2>
+            <p class="text-muted small mb-0">Historial de xats actius amb els usuaris i assistents de la plataforma.</p>
+        </div>
     </div>
 
-    <table class="data-table" th:unless="${#lists.isEmpty(conversations)}">
-        <thead>
-        <tr>
-            <th>Amb qui</th>
-            <th>Últim missatge</th>
-            <th>Data</th>
-            <th>Missatges</th>
-            <th>Acció</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="conv : ${conversations}">
-            <td><strong th:text="${conv.nomAltre}"></strong></td>
-            <td th:text="${conv.ultimMissatge}"></td>
-            <td th:text="${conv.dataUltim}"></td>
-            <td th:text="${conv.numMissatges}"></td>
-            <td>
-                <a th:href="@{/comunicacio/xat/{id}(id=${conv.idSeleccion})}"
-                   class="btn-submit" style="text-decoration:none; padding:6px 14px;">
-                    Obrir Xat
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:if="${#lists.isEmpty(conversations)}" class="text-center py-5 bg-white rounded shadow-sm border">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#94a3b8" class="bi bi-chat-left-dots mb-3" viewBox="0 0 16 16">
+            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+        </svg>
+        <p class="mb-0 fs-5 text-muted fw-medium">Encara no tens cap conversa activa.</p>
+    </div>
 
-    <br>
-    <a th:href="@{/}"
-       style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold;">
-        ← Tornar a l'Inici
-    </a>
+    <div class="card shadow-sm border-0" th:unless="${#lists.isEmpty(conversations)}">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary">
+                <tr>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Amb qui</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Últim missatge</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Data</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0 text-center">Missatges</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0 text-center">Accions</th>
+                </tr>
+                </thead>
+                <tbody class="border-top-0">
+                <tr th:each="conv : ${conversations}">
+                    <td class="px-4 fw-medium text-dark" th:text="${conv.nomAltre}"></td>
+                    <td class="px-4 text-muted" th:text="${conv.ultimMissatge}" style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></td>
+                    <td class="px-4 text-muted" th:text="${conv.dataUltim}"></td>
+                    <td class="px-4 text-center">
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 fw-medium" th:text="${conv.numMissatges}"></span>
+                    </td>
+                    <td class="px-4 text-center">
+                        <div class="d-flex justify-content-center gap-2">
+                            <a th:href="@{/comunicacio/xat/{id}(id=${conv.idSeleccion})}" class="btn btn-sm btn-outline-primary px-3">Obrir Xat</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-5 pt-3 border-top">
+        <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">
+            ← Tornar al menú principal
+        </a>
+    </div>
+
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

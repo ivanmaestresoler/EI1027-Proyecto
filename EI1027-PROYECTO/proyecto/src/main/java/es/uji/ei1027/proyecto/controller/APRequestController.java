@@ -58,6 +58,10 @@ public class APRequestController {
         model.addAttribute("generos", Arrays.asList("Masculí", "Femení", "Prefereixc no dir-ho"));
         model.addAttribute("pueblos", puebloDao.getPueblos());
         model.addAttribute("idiomas", idiomaDao.getIdiomas());
+        
+        // AQUÍ AÑADIMOS LA FORMACIÓN ACADÉMICA EXACTA DE TU BASE DE DATOS
+        model.addAttribute("formacionesAcademica", Arrays.asList(
+                "ESO", "BATXILLERAT", "FPGM", "FPGS", "GRAU UNIVERSITARI"));
     }
 
     @RequestMapping("/list")

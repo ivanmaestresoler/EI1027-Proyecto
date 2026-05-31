@@ -4,76 +4,84 @@
     <meta charset="UTF-8">
     <title>Xat - Projecte OVI</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        .xat-container { max-width: 700px; margin: 0 auto; }
-        .missatge-box { border: 1px solid #ddd; border-radius: 8px; padding: 20px; background: white; min-height: 300px; max-height: 500px; overflow-y: auto; margin-bottom: 20px; }
-        .missatge { margin-bottom: 15px; }
-        .missatge.meu { text-align: right; }
-        .missatge.meu .bombolla { background: #1a5276; color: white; display: inline-block; padding: 10px 15px; border-radius: 18px 18px 4px 18px; max-width: 70%; }
-        .missatge.altre .bombolla { background: #ecf0f1; color: #333; display: inline-block; padding: 10px 15px; border-radius: 18px 18px 18px 4px; max-width: 70%; }
-        .nom-hora { font-size: 0.8em; color: #999; margin-bottom: 4px; }
-        .meu .nom-hora { text-align: right; }
-        textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; resize: vertical; min-height: 80px; box-sizing: border-box; }
-    </style>
 </head>
 <body>
 <header class="main-header">
     <div class="logo"><strong>Gestió OVI</strong></div>
     <div class="user-zone">
         <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
-        <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+        <a th:href="@{/logout}" class="btn-logout-header">Tancar Sesió</a>
     </div>
 </header>
-<main class="main-content">
-    <h1>Conversa</h1>
 
-    <div class="xat-container">
-        <!-- Historial de missatges -->
+<main class="main-content">
+    
+    <div class="xat-wrapper">
+        <div class="xat-header-whatsapp">
+            <div class="xat-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                </svg>
+            </div>
+            <div class="xat-header-meta">
+                <span class="xat-header-name" 
+                      th:text="${nomAltre != null ? nomAltre : (#lists.isEmpty(missatges) ? 'Conversa' : missatges.^[!esMeu]?.nomFrom)}">
+                    Nom i Cognoms
+                </span>
+            </div>
+        </div>
+
         <div class="missatge-box" id="missatgeBox">
             <div th:if="${#lists.isEmpty(missatges)}" style="text-align:center; color:#999; padding:40px;">
                 Encara no hi ha missatges. Inicia la conversa!
             </div>
+            
             <div th:each="m : ${missatges}"
                  class="missatge"
                  th:classappend="${m.esMeu} ? ' meu' : ' altre'">
                 <div class="nom-hora">
-                    <span th:text="${m.nomFrom}"></span> ·
+                    <span th:if="${!m.esMeu}" th:text="${m.nomFrom}" style="font-weight: 600; margin-right: 4px;"></span>
+                    <span th:if="${!m.esMeu}"> · </span>
                     <span th:text="${m.dataEnviament}"></span>
                 </div>
                 <div class="bombolla" th:text="${m.missatge}"></div>
             </div>
         </div>
 
-        <!-- Formulari per enviar missatge -->
-        <form th:action="@{/comunicacio/xat/{id}(id=${idSeleccion})}"
-              th:object="${nouMissatge}" method="post">
-            <input type="hidden" th:field="*{idSeleccion}" />
-            <input type="hidden" th:field="*{idFrom}" />
-            <input type="hidden" th:field="*{idTo}" />
-            <input type="hidden" th:field="*{dataEnviament}" />
+        <div class="xat-footer">
+            <form th:action="@{/comunicacio/xat/{id}(id=${idSeleccion})}"
+                  th:object="${nouMissatge}" method="post">
+                <input type="hidden" th:field="*{idSeleccion}" />
+                <input type="hidden" th:field="*{idFrom}" />
+                <input type="hidden" th:field="*{idTo}" />
+                <input type="hidden" th:field="*{dataEnviament}" />
 
-            <textarea th:field="*{missatge}"
-                      placeholder="Escriu el teu missatge..."
-                      required></textarea>
-            <br>
-            <button type="submit" class="btn-submit" style="margin-top:10px;">Enviar</button>
-        </form>
+                <div class="input-chat-container">
+                    <textarea th:field="*{missatge}"
+                              placeholder="Escriu el teu missatge..."
+                              required></textarea>
+                    
+                    <button type="submit" class="btn-enviar-chat">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        <br>
+    <div style="max-width: 700px; margin: 0 auto; padding: 0 5px;">
         <a th:if="${session.usuario.tipusUsuari == 'AssistentPersonal'}"
            th:href="@{/comunicacio/conversations}"
-           style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold;">
+           class="btn-tornar-enrere">
             ← Tornar a les converses
         </a>
         <a th:unless="${session.usuario.tipusUsuari == 'AssistentPersonal'}"
            href="javascript:history.back()"
-           style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold; cursor:pointer;">
-            ← Tornar a la sol·licitud
+           class="btn-tornar-enrere">
+            ← Tornar enrere
         </a>
     </div>
 </main>
+
 <script>
-    // Auto-scroll al final del xat
     var box = document.getElementById('missatgeBox');
     if (box) box.scrollTop = box.scrollHeight;
 </script>

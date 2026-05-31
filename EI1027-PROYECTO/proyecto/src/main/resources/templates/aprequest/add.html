@@ -1,76 +1,114 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
-    <title>Nova Petició d'Assistència</title>
+    <title>Nova Petició d'Assistència - Projecte OVI</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h2>Registrar Petició d'Assistència Personal</h2>
-                </div>
-                <div class="card-body">
-                    <form action="#" th:action="@{/aprequest/add}" th:object="${aprequest}" method="post">
+<body class="bg-light">
 
-                        <div class="form-group">
-                            <label for="idIdioma">Idioma Preferit:</label>
-                            <select th:field="*{idIdioma}" class="form-control" id="idIdioma">
-                                <option value="">Selecciona un idioma...</option>
-                                <option th:each="i : ${idiomas}" th:value="${i.idIdioma}" th:text="${i.nombre}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="dataSollicitud">Data de la Sol·licitud:</label>
-                            <input type="date" th:field="*{dataSollicitud}" class="form-control" id="dataSollicitud" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tipusAssistencia">Tipus d'Assistència Requerida:</label>
-                            <select th:field="*{tipusAssistencia}" class="form-control" id="tipusAssistencia">
-                                <option value="">Selecciona un tipus...</option>
-                                <option th:each="tipo : ${tiposAssistencia}" th:value="${tipo}" th:text="${tipo}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="localitat">Localitat on es requereix el servei:</label>
-                            <select th:field="*{localitat}" class="form-control" id="localitat">
-                                <option value="">Selecciona una localitat...</option>
-                                <option th:each="p : ${pueblos}" th:value="${p.nombre}" th:text="${p.nombre}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="genereAssistent">Preferència de Gènere de l'Assistent:</label>
-                            <select th:field="*{genereAssistent}" class="form-control" id="genereAssistent">
-                                <option th:each="g : ${generos}" th:value="${g}" th:text="${g}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="formacioAcademica">Formació Acadèmica específica requerida:</label>
-                            <input type="text" th:field="*{formacioAcademica}" class="form-control" id="formacioAcademica" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="experienciaPrevia">Descripció de l'Experiència Prèvia necessària:</label>
-                            <textarea th:field="*{experienciaPrevia}" class="form-control" id="experienciaPrevia" rows="3"></textarea>
-                        </div>
-
-                        <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-success">Enviar Petició</button>
-                            <a href="/" class="btn btn-secondary">Cancel·lar</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<header class="main-header text-white p-3 d-flex justify-content-between align-items-center">
+    <div class="logo fw-bold fs-4">Gestió OVI</div>
+    <div class="user-zone d-flex align-items-center">
+        <div th:if="${session.usuario != null}">
+            <span class="me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
+            <a th:href="@{/logout}" class="btn-logout-header">Tancar Sessió</a>
         </div>
     </div>
-</div>
+</header>
+
+<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 1200px;">
+
+    <div class="border-bottom pb-3 mb-4">
+        <h2 class="text-dark fw-bold mb-1 border-0 pb-0">Registrar Petició d'Assistència Personal</h2>
+        <p class="text-muted small mb-0">Emplena el formulari per sol·licitar un servei d'assistència indicant les preferències i necessitats.</p>
+    </div>
+
+    <div class="card shadow-sm border-0 bg-white p-4 p-md-5 mx-auto" style="max-width: 750px;">
+        <form th:action="@{/aprequest/add}" th:object="${aprequest}" method="post" class="needs-validation">
+
+            <div class="row g-4">
+                
+                <div class="col-md-12">
+                    <label for="dataSollicitud" class="form-label text-secondary fw-semibold">Data de la Sol·licitud:</label>
+                    <input type="date" id="dataSollicitud" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:field="*{dataSollicitud}" required />
+                    <div th:if="${#fields.hasErrors('dataSollicitud')}" th:errors="*{dataSollicitud}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="tipusAssistencia" class="form-label text-secondary fw-semibold">Tipus d'Assistència Requerida:</label>
+                    <select id="tipusAssistencia" class="form-select py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" th:field="*{tipusAssistencia}" required>
+                        <option value="">Selecciona un tipus...</option>
+                        <option th:each="tipo : ${tiposAssistencia}" th:value="${tipo}" th:text="${tipo}"></option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('tipusAssistencia')}" th:errors="*{tipusAssistencia}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="idIdioma" class="form-label text-secondary fw-semibold">Idioma Preferit:</label>
+                    <select id="idIdioma" class="form-select py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" th:field="*{idIdioma}" required>
+                        <option value="">Selecciona un idioma...</option>
+                        <option th:each="i : ${idiomas}" th:value="${i.idIdioma}" th:text="${i.nombre}"></option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('idIdioma')}" th:errors="*{idIdioma}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="localitat" class="form-label text-secondary fw-semibold">Localitat on es requereix el servei:</label>
+                    <select id="localitat" class="form-select py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" th:field="*{localitat}" required>
+                        <option value="">Selecciona una localitat...</option>
+                        <option th:each="p : ${pueblos}" th:value="${p.nombre}" th:text="${p.nombre}"></option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('localitat')}" th:errors="*{localitat}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="genereAssistent" class="form-label text-secondary fw-semibold">Preferència de Gènere de l'Assistent:</label>
+                    <select id="genereAssistent" class="form-select py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" th:field="*{genereAssistent}" required>
+                        <option th:each="g : ${generos}" th:value="${g}" th:text="${g}"></option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('genereAssistent')}" th:errors="*{genereAssistent}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="formacioAcademica" class="form-label text-secondary fw-semibold">Formació Acadèmica específica requerida:</label>
+                    <select id="formacioAcademica" class="form-select py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" th:field="*{formacioAcademica}" required>
+                        <option value="">Selecciona la formació requerida...</option>
+                        <option th:each="fa : ${formacionesAcademica}" th:value="${fa}" th:text="${fa}"></option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('formacioAcademica')}" th:errors="*{formacioAcademica}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="experienciaPrevia" class="form-label text-secondary fw-semibold">Descripció de l'Experiència Prèvia necessària:</label>
+                    <textarea id="experienciaPrevia" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                              th:field="*{experienciaPrevia}" rows="3" placeholder="Detalla aquí si requereixes experiència prèvia específica..."></textarea>
+                    <div th:if="${#fields.hasErrors('experienciaPrevia')}" th:errors="*{experienciaPrevia}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center gap-3 mt-5 pt-3 border-top">
+                <a th:href="@{/}" class="btn btn-outline-secondary px-4 py-2 rounded-3 fw-medium">
+                    Cancel·lar
+                </a>
+                <button type="submit" class="btn-portal-primary px-4 py-2 rounded-3 fw-semibold fs-6">
+                    Enviar Petició
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="mt-5 pt-3 border-top">
+        <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">
+            ← Tornar al menú principal
+        </a>
+    </div>
+
+</main>
+
 </body>
 </html>
