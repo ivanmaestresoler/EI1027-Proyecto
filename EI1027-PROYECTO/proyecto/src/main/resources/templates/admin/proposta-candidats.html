@@ -2,107 +2,159 @@
 <html lang="ca" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Generar Proposta de Candidats</title>
+  <title>Generar Proposta de Candidats - Projecte OVI</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<header class="main-header">
-  <div class="logo"><strong>Gestió OVI</strong></div>
+<body class="bg-light">
+
+<header class="main-header text-white p-3 d-flex justify-content-between align-items-center">
+  <div class="logo fw-bold fs-4">Gestió OVI</div>
+  <div class="user-zone d-flex align-items-center">
+      <div th:if="${session.usuario != null}">
+          <span class="me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
+          <a th:href="@{/logout}" class="btn-logout-header">Tancar Sessió</a>
+      </div>
+  </div>
 </header>
-<main class="main-content">
-  <h1>Petició #<span th:text="${aprequest.idRequest}"></span> — Proposta de Candidats</h1>
 
-  <div class="card" style="margin-bottom: 20px;">
-    <p><strong>Localitat:</strong> <span th:text="${aprequest.localitat}"></span></p>
-    <p><strong>Tipus d'assistència:</strong> <span th:text="${aprequest.tipusAssistencia}"></span></p>
-    <p><strong>Preferència de gènere:</strong> <span th:text="${aprequest.genereAssistent}"></span></p>
-    <p><strong>Estat:</strong> <span th:text="${aprequest.estatRequest}"></span></p>
+<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 1200px;">
+
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center border-bottom pb-3 mb-4 gap-3">
+      <div>
+          <h2 class="text-dark fw-bold mb-1 border-0 pb-0">
+              Petició #<span th:text="${aprequest.idRequest}"></span> — Proposta de Candidats
+          </h2>
+          <p class="text-muted small mb-0">Selecciona i proposa els assistents personals més adequats per a aquesta sol·licitud.</p>
+      </div>
   </div>
 
-  <!-- Candidats ja proposats -->
-  <h2>Candidats ja proposats</h2>
-  <div th:if="${#lists.isEmpty(idsJaProposats)}" class="alert" style="background:#fff3cd; padding:10px; border-radius:4px;">
-    Encara no hi ha cap candidat proposat per a aquesta petició.
+  <div class="card shadow-sm border-0 mb-5 bg-white">
+    <div class="card-body p-4 d-flex flex-wrap gap-4">
+        <div>
+            <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Localitat</span>
+            <span class="fs-6 fw-medium text-dark" th:text="${aprequest.localitat}"></span>
+        </div>
+        <div class="border-start ps-4">
+            <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Tipus d'assistència</span>
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 fw-medium" th:text="${aprequest.tipusAssistencia}"></span>
+        </div>
+        <div class="border-start ps-4">
+            <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Preferència de gènere</span>
+            <span class="fs-6 fw-medium text-dark" th:text="${aprequest.genereAssistent}"></span>
+        </div>
+        <div class="border-start ps-4">
+            <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Estat</span>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-1 fw-medium" th:text="${aprequest.estatRequest}"></span>
+        </div>
+    </div>
   </div>
 
-  <table class="data-table" th:unless="${#lists.isEmpty(idsJaProposats)}" style="margin-bottom:30px;">
-    <thead>
-    <tr>
-      <th>Nom i Cognoms</th>
-      <th>Localitat</th>
-      <th>Gènere</th>
-      <th>Acció</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="candidat : ${candidatsAdients}" th:if="${idsJaProposats.contains(candidat.idUsuario)}">
-      <td th:text="${candidat.nom + ' ' + candidat.cognom1}"></td>
-      <td th:text="${candidat.nombrePueblo}"></td>
-      <td th:text="${candidat.genere}"></td>
-      <td>
-        <a th:href="@{/admin/eliminar-candidat/{idRequest}/{idAssistent}(idRequest=${aprequest.idRequest}, idAssistent=${candidat.idUsuario})}"
-           onclick="return confirm('Segur que vols eliminar aquest candidat de la proposta?')"
-           style="display:inline-block; background-color:#7b241c; color:#fff; padding:6px 12px; border-radius:4px; text-decoration:none; font-weight:bold;">
-          Eliminar
-        </a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-  <!-- Candidats adients del match -->
-  <h2>Candidats adients (Match)</h2>
-  <p>Selecciona els assistents que vols proposar a l'usuari OVI:</p>
-
-  <div th:if="${#lists.isEmpty(candidatsAdients)}" style="color:#7b241c; font-weight:bold;">
-    No s'han trobat candidats que complisquen els requisits.
+  <h4 class="fw-bold text-dark mb-3">Candidats ja proposats</h4>
+  
+  <div th:if="${#lists.isEmpty(idsJaProposats)}" class="text-center py-4 bg-white rounded shadow-sm border mb-5">
+      <p class="mb-0 text-muted small fw-medium">Encara no hi ha cap candidat proposat per a aquesta petició.</p>
   </div>
 
-  <table class="data-table" th:unless="${#lists.isEmpty(candidatsAdients)}">
-    <thead>
-    <tr>
-      <th>Nom i Cognoms</th>
-      <th>Localitat</th>
-      <th>Gènere</th>
-      <th>Tipus</th>
-      <th>Acció</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="candidat : ${candidatsAdients}">
-      <td th:text="${candidat.nom + ' ' + candidat.cognom1}"></td>
-      <td th:text="${candidat.nombrePueblo}"></td>
-      <td th:text="${candidat.genere}"></td>
-      <td th:text="${candidat.tipus}"></td>
-      <td>
-        <!-- Si ja està proposat mostra "Proposat" -->
-        <span th:if="${idsJaProposats.contains(candidat.idUsuario)}"
-              style="color:#1a7a3c; font-weight:bold;">✅ Proposat</span>
+  <div class="card shadow-sm border-0 mb-5" th:unless="${#lists.isEmpty(idsJaProposats)}">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light text-secondary">
+          <tr>
+            <th class="py-3 px-4 fw-bold border-bottom-0">Nom i Cognoms</th>
+            <th class="py-3 px-4 fw-bold border-bottom-0">Localitat</th>
+            <th class="py-3 px-4 fw-bold border-bottom-0">Gènere</th>
+            <th class="py-3 px-4 fw-bold border-bottom-0 text-center">Acció</th>
+          </tr>
+        </thead>
+        <tbody class="border-top-0">
+          <tr th:each="candidat : ${candidatsAdients}" th:if="${idsJaProposats.contains(candidat.idUsuario)}">
+            <td class="px-4 fw-medium text-dark" th:text="${candidat.nom + ' ' + candidat.cognom1}"></td>
+            <td class="px-4 text-muted" th:text="${candidat.nombrePueblo}"></td>
+            <td class="px-4 text-muted" th:text="${candidat.genere}"></td>
+            <td class="px-4 text-center">
+              <a th:href="@{/admin/eliminar-candidat/{idRequest}/{idAssistent}(idRequest=${aprequest.idRequest}, idAssistent=${candidat.idUsuario})}"
+                 onclick="return confirm('Segur que vols eliminar aquest candidat de la proposta?')"
+                 class="btn btn-sm btn-outline-danger px-3">
+                 Eliminar
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-        <!-- Si no està proposat mostra botó per afegir -->
-        <a th:unless="${idsJaProposats.contains(candidat.idUsuario)}"
-           th:href="@{/admin/proposar-candidat/{idRequest}/{idAssistent}(idRequest=${aprequest.idRequest}, idAssistent=${candidat.idUsuario})}"
-           style="display:inline-block; background-color:#1a7a3c; color:#fff; padding:6px 12px; border-radius:4px; text-decoration:none; font-weight:bold;">
-          Proposar
-        </a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
 
-  <!-- Botons finals -->
-  <div style="margin-top: 30px;">
-    <a th:href="@{/admin/aprovar-petici/{id}(id=${aprequest.idRequest})}"
-       th:if="${!#lists.isEmpty(idsJaProposats)}"
-       style="display:inline-block; background-color:#1a7a3c; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold; margin-right:8px;">
-      Aprovar Petició i Notificar Usuari
-    </a>
-    <a onclick="history.back()"
-       style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; text-decoration:none; font-weight:bold; cursor:pointer;">
-      ← Tornar
-    </a>
+  <h4 class="fw-bold text-dark mb-1">Candidats adients (Match)</h4>
+  <p class="text-muted small mb-3">Selecciona els assistents que vols proposar a l'usuari OVI:</p>
+
+  <div th:if="${#lists.isEmpty(candidatsAdients)}" class="text-center py-4 bg-white rounded shadow-sm border mb-4">
+      <p class="mb-0 text-danger fw-medium small">No s'han trobat candidats que complisquen els requisits.</p>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4" th:unless="${#lists.isEmpty(candidatsAdients)}">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light text-secondary">
+          <tr>
+            <th class="py-3 px-4 fw-bold border-bottom-0">Nom i Cognoms</th>
+            <th class="py-3 px-4 fw-bold border-bottom-0">Localitat</th>
+            <th class="py-3 px-4 fw-bold border-bottom-0">Gènere</th>
+            <th class="py-3 px-4 fw-bold border-bottom-0">Tipus</th>
+            <th class="py-3 px-4 fw-bold border-bottom-0 text-center">Acció</th>
+          </tr>
+        </thead>
+        <tbody class="border-top-0">
+          <tr th:each="candidat : ${candidatsAdients}">
+            <td class="px-4 fw-medium text-dark" th:text="${candidat.nom + ' ' + candidat.cognom1}"></td>
+            <td class="px-4 text-muted" th:text="${candidat.nombrePueblo}"></td>
+            <td class="px-4 text-muted" th:text="${candidat.genere}"></td>
+            <td class="px-4">
+                <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded-pill px-3 py-1 fw-medium" th:text="${candidat.tipus}"></span>
+            </td>
+            <td class="px-4 text-center">
+              
+              <span th:if="${idsJaProposats.contains(candidat.idUsuario)}"
+                    class="d-inline-flex align-items-center gap-1 text-success fw-bold py-1 px-2 bg-success bg-opacity-10 rounded-3 small">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                  </svg>
+                  Proposat
+              </span>
+
+              <a th:unless="${idsJaProposats.contains(candidat.idUsuario)}"
+                 th:href="@{/admin/proposar-candidat/{idRequest}/{idAssistent}(idRequest=${aprequest.idRequest}, idAssistent=${candidat.idUsuario})}"
+                 class="btn btn-sm btn-outline-success px-3 fw-medium">
+                 Proposar
+              </a>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-5 pt-3 border-top">
+      
+      <a onclick="history.back()" class="text-decoration-none text-secondary hover-blue fw-medium mb-3 mb-md-0 d-inline-flex align-items-center gap-1" style="cursor:pointer;">
+          ← Tornar
+      </a>
+
+      <div th:if="${!#lists.isEmpty(idsJaProposats)}">
+          <a th:href="@{/admin/aprovar-petici/{id}(id=${aprequest.idRequest})}"
+             class="btn btn-success px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-sm">
+             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                  <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.001.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+             </svg>
+             Aprovar Petició i Notificar Usuari
+          </a>
+      </div>
   </div>
 
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
