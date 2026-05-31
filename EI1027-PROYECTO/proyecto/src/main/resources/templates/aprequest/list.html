@@ -92,13 +92,13 @@
                                    Detall
                                 </a>
 
-                                <a th:if="${req.estatRequest == 'En revisió'}"
+                                <a th:if="${req.estatRequest == 'En revisió' and session.usuario.tipusUsuari == 'Admin'}"
                                    th:href="@{/admin/generar-proposta/{id}(id=${req.idRequest})}"
                                    class="btn btn-sm btn-outline-primary px-2 text-nowrap">
                                    Generar Proposta
                                 </a>
 
-                                <a th:if="${req.estatRequest == 'En revisió'}"
+                                <a th:if="${req.estatRequest == 'En revisió' and session.usuario.tipusUsuari == 'Admin'}"
                                    th:href="@{/admin/rebutjar-petici/{id}(id=${req.idRequest})}"
                                    class="btn btn-sm btn-outline-danger px-2"
                                    onclick="return confirm('Estàs segur de rebutjar aquesta petició d\'assistència?');">
