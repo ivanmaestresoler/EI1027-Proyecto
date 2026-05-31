@@ -49,18 +49,21 @@
         </div>
 
         <div class="xat-footer">
-            <form th:action="@{/comunicacio/xat/{id}(id=${idSeleccion})}"
+            <div th:if="${session.usuario.tipusUsuari == 'admin'}"
+                 style="padding:12px; text-align:center; color:#999; font-size:0.9em;">
+                Mode lectura — l'admin no pot enviar missatges.
+            </div>
+            <form th:unless="${session.usuario.tipusUsuari == 'admin'}"
+                  th:action="@{/comunicacio/xat/{id}(id=${idSeleccion})}"
                   th:object="${nouMissatge}" method="post">
                 <input type="hidden" th:field="*{idSeleccion}" />
                 <input type="hidden" th:field="*{idFrom}" />
                 <input type="hidden" th:field="*{idTo}" />
                 <input type="hidden" th:field="*{dataEnviament}" />
-
                 <div class="input-chat-container">
-                    <textarea th:field="*{missatge}"
-                              placeholder="Escriu el teu missatge..."
-                              required></textarea>
-                    
+            <textarea th:field="*{missatge}"
+                      placeholder="Escriu el teu missatge..."
+                      required></textarea>
                     <button type="submit" class="btn-enviar-chat">Enviar</button>
                 </div>
             </form>

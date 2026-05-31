@@ -140,19 +140,27 @@ public class ComunicacioController {
         return "redirect:/comunicacio/xat/" + idSeleccion;
     }
 
-    // ── ADD SIMPLE (des del detalle de la petició) ──────────────────────────
     @GetMapping("/add")
     public String addComunicacio(Model model, HttpSession session,
                                  @RequestParam(required = false) Integer idSeleccion) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        ComunicacioUsuariOVIPAP comunicacio = new ComunicacioUsuariOVIPAP();
+        if (usuario == null) return "redirect:/login";
 
-        if (idSeleccion != null) {
-            comunicacio.setIdSeleccion(idSeleccion);
-            if (usuario != null) comunicacio.setIdFrom(usuario.getIdUsuario());
-            Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
-            if (seleccion != null) comunicacio.setIdTo(seleccion.getIdAssistent());
+        // Admin solo puede ver, no enviar
+        if (usuario.getTipusUsuari().equals("admin")) {
+            return "redirect:/comunicacio/list";
         }
+
+        // Si no hay idSeleccion válido, volver atrás
+        if (idSeleccion == null) {
+            return "redirect:/aprequest/list";
+        }
+
+        ComunicacioUsuariOVIPAP comunicacio = new ComunicacioUsuariOVIPAP();
+        comunicacio.setIdSeleccion(idSeleccion);
+        comunicacio.setIdFrom(usuario.getIdUsuario());
+        Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
+        if (seleccion != null) comunicacio.setIdTo(seleccion.getIdAssistent());
         comunicacio.setDataEnviament(LocalDateTime.now());
         model.addAttribute("comunicacio", comunicacio);
         return "redirect:/comunicacio/xat/" + idSeleccion;
@@ -162,6 +170,8 @@ public class ComunicacioController {
     public String processAddSubmit(@ModelAttribute("comunicacio") ComunicacioUsuariOVIPAP comunicacio,
                                    HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+        if (usuario.getTipusUsuari().equals("admin")) return "redirect:/comunicacio/list";
         if (comunicacio.getIdSeleccion() == 0) return "redirect:/aprequest/list";
         if (usuario != null) comunicacio.setIdFrom(usuario.getIdUsuario());
         comunicacioDao.addComunicacio(comunicacio);

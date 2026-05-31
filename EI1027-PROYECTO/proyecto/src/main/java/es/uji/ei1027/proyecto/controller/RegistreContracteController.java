@@ -38,18 +38,16 @@ public class RegistreContracteController {
     }
 
     @GetMapping("/list")
-    public String listContractes(Model model, HttpSession session, @RequestParam(value = "page", defaultValue = "1") int page) {
+    public String listContractes(Model model, HttpSession session,
+                                 @RequestParam(value = "page", defaultValue = "1") int page) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) {
-            return "redirect:/login";
-        }
+        if (usuario == null) return "redirect:/login";
 
         int pageSize = 5;
         int offset = (page - 1) * pageSize;
         List<RegistreContracte> contractes;
-        int totalRecords = 0;
+        int totalRecords;
 
-        // Filtramos la paginación según el rol
         if (usuario.getTipusUsuari().equals("UsuariOVI")) {
             contractes = registreContracteDao.getContractesByUsuariPaginats(usuario.getIdUsuario(), pageSize, offset);
             totalRecords = registreContracteDao.getTotalContractesByUsuari(usuario.getIdUsuario());
@@ -66,11 +64,9 @@ public class RegistreContracteController {
         model.addAttribute("contractes", contractes);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-
         return "registreContracte/list";
     }
 
-    // GET add: recibe idRequest e idAssistent opcionales desde el detalle
     @GetMapping("/add")
     public String addContracte(Model model,
                                @RequestParam(required = false) Integer idRequest,
@@ -82,7 +78,6 @@ public class RegistreContracteController {
         return "registreContracte/add";
     }
 
-    // POST add: valida, guarda, actualitza estat request i mostra confirmació
     @PostMapping("/add")
     public String processAddSubmit(
             @ModelAttribute("registreContracte") RegistreContracte registreContracte,
@@ -111,7 +106,10 @@ public class RegistreContracteController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateContracte(Model model, @PathVariable int id) {
+    public String updateContracte(Model model, @PathVariable int id, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+        if (usuario.getTipusUsuari().equals("admin")) return "redirect:/registreContracte/list";
         model.addAttribute("registreContracte", registreContracteDao.getContracte(id));
         return "registreContracte/update";
     }
@@ -119,19 +117,21 @@ public class RegistreContracteController {
     @PostMapping("/update")
     public String processUpdateSubmit(
             @ModelAttribute("registreContracte") RegistreContracte registreContracte,
-            BindingResult bindingResult, Model model) {
-
+            BindingResult bindingResult, Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+        if (usuario.getTipusUsuari().equals("admin")) return "redirect:/registreContracte/list";
         validator.validate(registreContracte, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "registreContracte/update";
-        }
-
+        if (bindingResult.hasErrors()) return "registreContracte/update";
         registreContracteDao.updateContracte(registreContracte);
         return "redirect:list";
     }
 
     @GetMapping("/delete/{id}")
-    public String processDelete(@PathVariable int id) {
+    public String processDelete(@PathVariable int id, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+        if (usuario.getTipusUsuari().equals("admin")) return "redirect:/registreContracte/list";
         registreContracteDao.deleteContracte(id);
         return "redirect:../list";
     }
