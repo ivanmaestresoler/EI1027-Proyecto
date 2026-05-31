@@ -1,42 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Comunicació</title>
+    <title>Editar Comunicació - Projecte OVI</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<header class="main-header">
-    <div class="logo"><strong>Gestió OVI</strong></div>
+<body class="bg-light">
+
+<header class="main-header text-white p-3 d-flex justify-content-between align-items-center">
+    <div class="logo fw-bold fs-4">Gestió OVI</div>
+    <div class="user-zone d-flex align-items-center">
+        <div th:if="${session.usuario != null}">
+            <span class="me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
+            <a th:href="@{/logout}" class="btn-logout-header">Tancar Sessió</a>
+        </div>
+    </div>
 </header>
-<main class="main-content">
-    <h1>Editar Missatge</h1>
-    <form th:action="@{/comunicacio/update}" th:object="${comunicacio}" method="post">
-        <input type="hidden" th:field="*{idComunicacio}" />
-        <div class="form-group">
-            <label>ID Selecció:</label>
-            <input type="number" th:field="*{idSeleccion}" required />
-        </div>
-        <div class="form-group">
-            <label>Missatge:</label>
-            <textarea th:field="*{missatge}" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; min-height:100px;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>ID Remitent (id_from):</label>
-            <input type="number" th:field="*{idFrom}" required />
-        </div>
-        <div class="form-group">
-            <label>ID Destinatari (id_to):</label>
-            <input type="number" th:field="*{idTo}" required />
-        </div>
-        <div class="form-group">
-            <label>Data Enviament:</label>
-            <input type="datetime-local" th:field="*{dataEnviament}" required />
-        </div>
-        <button type="submit" class="btn-submit">Actualitzar</button>
-    </form>
-    <br>
-    <a th:href="@{/comunicacio/list}">← Tornar</a>
+
+<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 1200px;">
+
+    <div class="border-bottom pb-3 mb-4">
+        <h2 class="text-dark fw-bold mb-1 border-0 pb-0">✉️ Editar Missatge</h2>
+        <p class="text-muted small mb-0">Modifica els paràmetres, el contingut o els identificadors de la comunicació seleccionada.</p>
+    </div>
+
+    <div class="card shadow-sm border-0 bg-white p-4 p-md-5 mx-auto" style="max-width: 750px;">
+        <form th:action="@{/comunicacio/update}" th:object="${comunicacio}" method="post" class="needs-validation">
+            
+            <input type="hidden" th:field="*{idComunicacio}" />
+
+            <div class="row g-4">
+                
+                <div class="col-md-12">
+                    <label for="idSeleccion" class="form-label text-secondary fw-semibold">ID Procés de Selecció:</label>
+                    <input type="number" id="idSeleccion" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:field="*{idSeleccion}" required placeholder="Ex: 102" />
+                    <div th:if="${#fields.hasErrors('idSeleccion')}" th:errors="*{idSeleccion}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="missatge" class="form-label text-secondary fw-semibold">Contingut del Missatge:</label>
+                    <textarea id="missatge" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                              th:field="*{missatge}" rows="5" required placeholder="Escriu el contingut de la comunicació aquí..."></textarea>
+                    <div th:if="${#fields.hasErrors('missatge')}" th:errors="*{missatge}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="idFrom" class="form-label text-secondary fw-semibold">ID Remitent (Des de):</label>
+                    <input type="number" id="idFrom" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:field="*{idFrom}" required placeholder="Ex: 45" />
+                    <div th:if="${#fields.hasErrors('idFrom')}" th:errors="*{idFrom}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="idTo" class="form-label text-secondary fw-semibold">ID Destinatari (Per a):</label>
+                    <input type="number" id="idTo" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:field="*{idTo}" required placeholder="Ex: 89" />
+                    <div th:if="${#fields.hasErrors('idTo')}" th:errors="*{idTo}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="dataEnviament" class="form-label text-secondary fw-semibold">Data i Hora d'Enviament:</label>
+                    <input type="datetime-local" id="dataEnviament" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:field="*{dataEnviament}" required />
+                    <div th:if="${#fields.hasErrors('dataEnviament')}" th:errors="*{dataEnviament}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center gap-3 mt-5 pt-3 border-top">
+                <a th:href="@{/comunicacio/list}" class="btn btn-outline-secondary px-4 py-2 rounded-3 fw-medium">
+                    Cancel·lar
+                </a>
+                <button type="submit" class="btn-portal-primary px-4 py-2 rounded-3 fw-semibold fs-6">
+                    Guardar Canvis
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="mt-5 pt-3 border-top">
+        <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">
+            ← Tornar al menú principal
+        </a>
+    </div>
+
 </main>
+
 </body>
 </html>

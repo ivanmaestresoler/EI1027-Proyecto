@@ -1,69 +1,91 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
     <meta charset="UTF-8">
     <title>Editar Contracte - Projecte OVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<header class="main-header">
-    <div class="logo"><strong>Gestió OVI</strong></div>
-    <div class="user-zone">
+<body class="bg-light">
+
+<header class="main-header text-white p-3 d-flex justify-content-between align-items-center" style="background-color: #2c3e50;">
+    <div class="logo fw-bold fs-4">Gestió OVI</div>
+    <div class="user-zone d-flex align-items-center">
         <div th:if="${session.usuario == null}">
-            <a th:href="@{/login}" class="btn-login">Iniciar Sesió</a>
+            <a th:href="@{/login}" class="btn btn-sm btn-outline-light px-3">Iniciar Sessió</a>
         </div>
         <div th:if="${session.usuario != null}">
-            <span class="user-greeting">Hola, <span th:text="${session.usuario.nom}"></span></span>
-            <a th:href="@{/logout}" class="btn-logout">Tancar Sesió</a>
+            <span class="text-white me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
+            <a th:href="@{/logout}" class="btn btn-sm btn-outline-light px-3">Tancar Sessió</a>
         </div>
     </div>
 </header>
-<main class="main-content">
-    <h1>Editar Contracte</h1>
-    <form th:action="@{/registreContracte/update}" th:object="${registreContracte}" method="post">
-        <input type="hidden" th:field="*{idContracte}" />
 
-        <div class="form-group">
-            <label>ID Request:</label>
-            <input type="number" th:field="*{idRequest}" required />
-            <span th:if="${#fields.hasErrors('idRequest')}"
-                  th:errors="*{idRequest}"
-                  style="color:red; font-size:0.9em;"></span>
+<main class="container mt-5 mb-5" style="max-width: 700px;">
+    
+    <div class="bg-white p-4 rounded-3 shadow-sm border mb-4">
+        <h2 class="text-dark fw-bold mb-1 fs-3">Editar Contracte</h2>
+        <p class="text-muted small mb-0">Modifica els térmens, vigència o paràmetres del contracte seleccionat.</p>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
+            <form th:action="@{/registreContracte/update}" th:object="${registreContracte}" method="post">
+                
+                <input type="hidden" th:field="*{idContracte}" />
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-bold text-uppercase">ID de la Petició</label>
+                        <input type="number" class="form-control" th:field="*{idRequest}" required />
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idRequest')}" th:errors="*{idRequest}"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-bold text-uppercase">ID de l'Assistent</label>
+                        <input type="number" class="form-control" th:field="*{idAssistent}" required />
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idAssistent')}" th:errors="*{idAssistent}"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-bold text-uppercase">Data d'Inici</label>
+                        <input type="date" class="form-control" 
+                               id="dataInici" 
+                               name="dataInici" 
+                               th:value="${registreContracte.dataInici != null ? #temporals.format(registreContracte.dataInici, 'yyyy-MM-dd') : ''}" 
+                               required />
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataInici')}" th:errors="*{dataInici}"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-bold text-uppercase">Data de Fi</label>
+                        <input type="date" class="form-control" 
+                               id="dataFi" 
+                               name="dataFi" 
+                               th:value="${registreContracte.dataFi != null ? #temporals.format(registreContracte.dataFi, 'yyyy-MM-dd') : ''}" />
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataFi')}" th:errors="*{dataFi}"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label text-secondary small fw-bold text-uppercase">Ruta del Document PDF</label>
+                        <input type="text" class="form-control" th:field="*{rutaPdf}" placeholder="Ex: /documents/contractes/contracte_01.pdf" />
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4 pt-3 border-top">
+                    <button type="submit" class="btn btn-primary px-4 py-2 fw-medium rounded-3 shadow-sm">
+                        Actualitzar Contracte
+                    </button>
+                    <a onclick="history.back()" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-3 shadow-sm" style="cursor:pointer;">
+                        Cancel·lar
+                    </a>
+                </div>
+
+            </form>
         </div>
-
-        <div class="form-group">
-            <label>ID Assistent:</label>
-            <input type="number" th:field="*{idAssistent}" required />
-            <span th:if="${#fields.hasErrors('idAssistent')}"
-                  th:errors="*{idAssistent}"
-                  style="color:red; font-size:0.9em;"></span>
-        </div>
-
-        <div class="form-group">
-            <label>Data Inici:</label>
-            <input type="date" th:field="*{dataInici}" required />
-            <span th:if="${#fields.hasErrors('dataInici')}"
-                  th:errors="*{dataInici}"
-                  style="color:red; font-size:0.9em;"></span>
-        </div>
-
-        <div class="form-group">
-            <label>Data Fi:</label>
-            <input type="date" th:field="*{dataFi}" />
-            <span th:if="${#fields.hasErrors('dataFi')}"
-                  th:errors="*{dataFi}"
-                  style="color:red; font-size:0.9em;"></span>
-        </div>
-
-        <div class="form-group">
-            <label>Ruta PDF:</label>
-            <input type="text" th:field="*{rutaPdf}" />
-        </div>
-
-        <button type="submit" class="btn-submit">Actualitzar</button>
-    </form>
-    <br>
-    <a th:href="@{/registreContracte/list}" class="btn-login">Tornar</a>
+    </div>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
