@@ -82,18 +82,6 @@
                             Sense document
                         </span>
                     </td>
-                    <!-- Botons: només si no és admin -->
-                    <td th:if="${session.usuario.tipusUsuari != 'admin'}" class="px-4 text-center">
-                        <div class="d-flex justify-content-center gap-2">
-                            <a th:href="@{/registreContracte/update/{id}(id=${con.idContracte})}"
-                               class="btn btn-sm btn-outline-primary px-3">Editar</a>
-                            <a th:href="@{/registreContracte/delete/{id}(id=${con.idContracte})}"
-                               class="btn btn-sm btn-outline-danger px-3"
-                               onclick="return confirm('Segur que vols esborrar aquest contracte? Aquesta accio no es pot desfer.')">
-                                Esborrar
-                            </a>
-                        </div>
-                    </td>
                 </tr>
                 </tbody>
             </table>

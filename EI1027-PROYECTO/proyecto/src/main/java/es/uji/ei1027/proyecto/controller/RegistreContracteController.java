@@ -129,10 +129,6 @@ public class RegistreContracteController {
 
     @GetMapping("/delete/{id}")
     public String processDelete(@PathVariable int id, HttpSession session) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) return "redirect:/login";
-        if (usuario.getTipusUsuari().equals("admin")) return "redirect:/registreContracte/list";
-        registreContracteDao.deleteContracte(id);
-        return "redirect:../list";
+        return "redirect:/registreContracte/list";
     }
 }
