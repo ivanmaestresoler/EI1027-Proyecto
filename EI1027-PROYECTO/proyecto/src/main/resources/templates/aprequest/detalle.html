@@ -84,9 +84,7 @@
         </div>
     </div>
 
-    <!-- Candidats: NOMÉS per a UsuariOVI -->
-    <div class="card shadow-sm border-0 rounded-3"
-         th:if="${session.usuario.tipusUsuari == 'UsuariOVI'}">
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
         <div class="card-body p-4">
             <h3 class="h5 fw-bold text-secondary mb-4 pb-2 border-bottom">Candidats Proposats pel Tecnic OVI</h3>
 
@@ -105,7 +103,7 @@
                         <th class="py-3 px-3 fw-bold">Correu Electronic</th>
                         <th class="py-3 px-3 fw-bold">Telefon</th>
                         <th class="py-3 px-3 fw-bold text-center">Data Proposta</th>
-                        <th class="py-3 px-4 fw-bold text-center" style="width: 340px;">Accions</th>
+                        <th th:if="${session.usuario.tipusUsuari == 'UsuariOVI'}" class="py-3 px-4 fw-bold text-center" style="width: 340px;">Accions</th>
                     </tr>
                     </thead>
                     <tbody class="text-dark fs-6">
@@ -115,7 +113,7 @@
                         <td class="py-3 px-3 text-muted" th:text="${candidat.telefon}">-</td>
                         <td class="py-3 px-3 text-center text-muted small fw-medium"
                             th:text="${#temporals.format(candidat.dataProposta, 'dd/MM/yyyy HH:mm')}">-</td>
-                        <td class="py-3 px-4 text-center">
+                        <td th:if="${session.usuario.tipusUsuari == 'UsuariOVI'}" class="py-3 px-4 text-center">
                             <div class="d-flex justify-content-center gap-2">
                                 <a th:href="@{/comunicacio/xat/{id}(id=${candidat.idSeleccion})}"
                                    class="btn btn-sm btn-outline-secondary px-3 py-2 fw-medium shadow-sm">
