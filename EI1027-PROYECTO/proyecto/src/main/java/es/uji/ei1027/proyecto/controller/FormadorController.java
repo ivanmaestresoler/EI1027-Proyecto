@@ -3,10 +3,14 @@ package es.uji.ei1027.proyecto.controller;
 import es.uji.ei1027.proyecto.dao.FormadorDao;
 import es.uji.ei1027.proyecto.model.Formador;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/formador")
@@ -80,8 +84,14 @@ public class FormadorController {
     }
 
     @RequestMapping(value="/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        formadorDao.deleteFormador(id);
+    public String processDelete(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            formadorDao.deleteFormador(id);
+            redirectAttributes.addFlashAttribute("success", "Formador esborrat correctament.");
+        } catch (DataIntegrityViolationException e) {
+            // Si salta el error de la clave foránea, lo capturamos y enviamos un mensaje a la vista
+            redirectAttributes.addFlashAttribute("error", "No es pot esborrar aquest formador perquè té activitats de formació assignades.");
+        }
         return "redirect:/formador/list";
     }
 }

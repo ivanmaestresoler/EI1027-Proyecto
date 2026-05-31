@@ -2,7 +2,7 @@
 <html lang="ca" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Afegir Formador - Projecte OVI</title>
+    <title>Editar Formador - Projecte OVI</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -18,54 +18,68 @@
     </div>
 </header>
 
-<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 700px;">
+<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 800px;">
 
     <div class="border-bottom pb-3 mb-4">
-        <h2 class="text-dark fw-bold mb-1 border-0 pb-0">Afegir nou Formador</h2>
-        <p class="text-muted small mb-0">Introdueix les dades del nou professional de formacio.</p>
+        <h2 class="text-dark fw-bold mb-1 border-0 pb-0">Editar Formador</h2>
+        <p class="text-muted small mb-0">Modifica les dades d'aquest professional de formació.</p>
     </div>
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-            <form th:action="@{/formador/add}" th:object="${formador}" method="post">
+    <div class="card shadow-sm border-0 bg-white">
+        <div class="card-body p-4 p-md-5">
+            
+            <form th:action="@{/formador/update}" th:object="${formador}" method="post">
+                
+                <input type="hidden" th:field="*{idFormador}" />
 
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Nom:</label>
-                        <input type="text" th:field="*{nom}" class="form-control custom-input" />
-                        <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error-message"></span>
+                <div class="row g-4">
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-dark">Nom:</label>
+                        <input type="text" th:field="*{nom}" class="form-control custom-input" placeholder="Escriu el nom complet" required />
+                        <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="error-message d-block mt-1"></span>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Primer Cognom:</label>
-                        <input type="text" th:field="*{cognom1}" class="form-control custom-input" />
-                        <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message"></span>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark">Primer Cognom:</label>
+                        <input type="text" th:field="*{cognom1}" class="form-control custom-input" placeholder="Escriu el primer cognom" required />
+                        <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message d-block mt-1"></span>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Segon Cognom:</label>
-                        <input type="text" th:field="*{cognom2}" class="form-control custom-input" />
-                        <span th:if="${#fields.hasErrors('cognom2')}" th:errors="*{cognom2}" class="error-message"></span>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark">Segon Cognom:</label>
+                        <input type="text" th:field="*{cognom2}" class="form-control custom-input" placeholder="Escriu el segon cognom (opcional)" />
+                        <span th:if="${#fields.hasErrors('cognom2')}" th:errors="*{cognom2}" class="error-message d-block mt-1"></span>
                     </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark">Email de contacte:</label>
+                        <input type="email" th:field="*{emailContacte}" class="form-control custom-input" placeholder="correu@exemple.com" required />
+                        <span th:if="${#fields.hasErrors('emailContacte')}" th:errors="*{emailContacte}" class="error-message d-block mt-1"></span>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark">Especialitat:</label>
+                        <input type="text" th:field="*{especialitat}" class="form-control custom-input" placeholder="Ex: Informàtica, Idiomes, Mobilitat..." required />
+                        <span th:if="${#fields.hasErrors('especialitat')}" th:errors="*{especialitat}" class="error-message d-block mt-1"></span>
+                    </div>
+                    
                 </div>
 
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Email de contacte:</label>
-                        <input type="email" th:field="*{emailContacte}" class="form-control custom-input" />
-                        <span th:if="${#fields.hasErrors('emailContacte')}" th:errors="*{emailContacte}" class="error-message"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Especialitat:</label>
-                        <input type="text" th:field="*{especialitat}" class="form-control custom-input" />
-                        <span th:if="${#fields.hasErrors('especialitat')}" th:errors="*{especialitat}" class="error-message"></span>
-                    </div>
-                </div>
-
-                <div class="mt-4 d-flex gap-3">
-                    <button type="submit" class="btn-submit">Guardar Formador</button>
-                    <a th:href="@{/formador/list}"
-                       style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 20px; border-radius:4px; text-decoration:none; font-weight:bold;">
-                        &larr; Cancel.lar
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-5 pt-4 border-top gap-3">
+                    
+                    <a th:href="@{/formador/list}" class="btn-tornar-enrere order-2 order-md-1" style="padding: 10px 15px;">
+                        ← Cancel·lar i tornar
                     </a>
+                    
+                    <button type="submit" class="btn-portal-primary order-1 order-md-2 d-inline-flex align-items-center gap-2 m-0" style="border: none; cursor: pointer; padding: 10px 24px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
+                            <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5v-13Z"/>
+                            <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5V16Zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V0ZM9 1h2v4H9V1Z"/>
+                        </svg>
+                        Guardar Canvis
+                    </button>
+                    
                 </div>
 
             </form>
@@ -73,5 +87,7 @@
     </div>
 
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
