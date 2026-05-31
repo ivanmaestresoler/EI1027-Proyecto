@@ -92,7 +92,7 @@
                 <div class="row g-3 mt-2">
                     <div class="col-md-6">
                         <label class="form-label fw-bold text-dark mb-1">Data de Naixement:</label>
-                        <input type="date" th:field="*{dataNaixement}" class="form-control custom-input" />
+                        <input type="date" th:field="*{dataNaixement}" id="dataNaixement" class="form-control custom-input" />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold text-dark mb-1">Gènere:</label>
@@ -123,5 +123,24 @@
         </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputFecha = document.getElementById("dataNaixement");
+        if (inputFecha) {
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            let mm = hoy.getMonth() + 1; // El mes comença des de 0
+            let dd = hoy.getDate();
+
+            if (mm < 10) mm = '0' + mm;
+            if (dd < 10) dd = '0' + dd;
+
+            const fechaMaxima = yyyy + '-' + mm + '-' + dd;
+            inputFecha.setAttribute("max", fechaMaxima);
+        }
+    });
+</script>
+
 </body>
 </html>

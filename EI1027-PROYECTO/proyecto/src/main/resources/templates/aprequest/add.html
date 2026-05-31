@@ -110,5 +110,23 @@
 
 </main>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputDataSollicitud = document.getElementById("dataSollicitud");
+        if (inputDataSollicitud) {
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            let mm = hoy.getMonth() + 1;
+            let dd = hoy.getDate();
+
+            if (mm < 10) mm = '0' + mm;
+            if (dd < 10) dd = '0' + dd;
+
+            const dataAvui = yyyy + '-' + mm + '-' + dd;
+            inputDataSollicitud.setAttribute("min", dataAvui);
+        }
+    });
+</script>
+
 </body>
 </html>

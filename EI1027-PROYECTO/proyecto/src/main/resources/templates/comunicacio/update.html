@@ -22,10 +22,20 @@
 
     <div class="border-bottom pb-3 mb-4">
         <h2 class="text-dark fw-bold mb-1 border-0 pb-0">✉️ Editar Missatge</h2>
-        <p class="text-muted small mb-0">Modifica els paràmetres, el contingut o els identificadors de la comunicació seleccionada.</p>
+        <p class="text-muted small mb-0">Només pots modificar el contingut del missatge. La resta de dades estructurals no es poden alterar.</p>
     </div>
 
     <div class="card shadow-sm border-0 bg-white p-4 p-md-5 mx-auto" style="max-width: 750px;">
+        
+        <div class="alert alert-info border-0 shadow-sm d-flex align-items-center mb-4" role="alert" style="background-color: #e0f2fe; color: #0369a1;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle-fill me-2 flex-shrink-0" viewBox="0 0 16 16">
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </svg>
+            <div>
+                <strong>Informació:</strong> Per motius de seguretat i integritat de les dades, els identificadors i la data d'enviament no es poden modificar.
+            </div>
+        </div>
+
         <form th:action="@{/comunicacio/update}" th:object="${comunicacio}" method="post" class="needs-validation">
             
             <input type="hidden" th:field="*{idComunicacio}" />
@@ -34,9 +44,9 @@
                 
                 <div class="col-md-12">
                     <label for="idSeleccion" class="form-label text-secondary fw-semibold">ID Procés de Selecció:</label>
-                    <input type="number" id="idSeleccion" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
-                           th:field="*{idSeleccion}" required placeholder="Ex: 102" />
-                    <div th:if="${#fields.hasErrors('idSeleccion')}" th:errors="*{idSeleccion}" class="text-danger small mt-1 fw-medium"></div>
+                    <input type="number" id="idSeleccion" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-muted bg-secondary bg-opacity-10" 
+                           th:value="*{idSeleccion}" disabled="disabled" />
+                    <input type="hidden" th:field="*{idSeleccion}" />
                 </div>
 
                 <div class="col-md-12">
@@ -48,23 +58,23 @@
 
                 <div class="col-md-6">
                     <label for="idFrom" class="form-label text-secondary fw-semibold">ID Remitent (Des de):</label>
-                    <input type="number" id="idFrom" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
-                           th:field="*{idFrom}" required placeholder="Ex: 45" />
-                    <div th:if="${#fields.hasErrors('idFrom')}" th:errors="*{idFrom}" class="text-danger small mt-1 fw-medium"></div>
+                    <input type="number" id="idFrom" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-muted bg-secondary bg-opacity-10" 
+                           th:value="*{idFrom}" disabled="disabled" />
+                    <input type="hidden" th:field="*{idFrom}" />
                 </div>
 
                 <div class="col-md-6">
                     <label for="idTo" class="form-label text-secondary fw-semibold">ID Destinatari (Per a):</label>
-                    <input type="number" id="idTo" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
-                           th:field="*{idTo}" required placeholder="Ex: 89" />
-                    <div th:if="${#fields.hasErrors('idTo')}" th:errors="*{idTo}" class="text-danger small mt-1 fw-medium"></div>
+                    <input type="number" id="idTo" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-muted bg-secondary bg-opacity-10" 
+                           th:value="*{idTo}" disabled="disabled" />
+                    <input type="hidden" th:field="*{idTo}" />
                 </div>
 
                 <div class="col-md-12">
                     <label for="dataEnviament" class="form-label text-secondary fw-semibold">Data i Hora d'Enviament:</label>
-                    <input type="datetime-local" id="dataEnviament" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
-                           th:field="*{dataEnviament}" required />
-                    <div th:if="${#fields.hasErrors('dataEnviament')}" th:errors="*{dataEnviament}" class="text-danger small mt-1 fw-medium"></div>
+                    <input type="datetime-local" id="dataEnviament" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-muted bg-secondary bg-opacity-10" 
+                           th:value="*{dataEnviament}" disabled="disabled" />
+                    <input type="hidden" th:field="*{dataEnviament}" />
                 </div>
 
             </div>
