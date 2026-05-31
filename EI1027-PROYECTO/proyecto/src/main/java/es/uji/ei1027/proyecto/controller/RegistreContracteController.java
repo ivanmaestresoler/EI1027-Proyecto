@@ -70,7 +70,11 @@ public class RegistreContracteController {
     @GetMapping("/add")
     public String addContracte(Model model,
                                @RequestParam(required = false) Integer idRequest,
-                               @RequestParam(required = false) Integer idAssistent) {
+                               @RequestParam(required = false) Integer idAssistent,
+                               HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+        if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
         RegistreContracte rc = new RegistreContracte();
         if (idRequest != null) rc.setIdRequest(idRequest);
         if (idAssistent != null) rc.setIdAssistent(idAssistent);
@@ -81,21 +85,18 @@ public class RegistreContracteController {
     @PostMapping("/add")
     public String processAddSubmit(
             @ModelAttribute("registreContracte") RegistreContracte registreContracte,
-            BindingResult bindingResult, Model model) {
-
+            BindingResult bindingResult, Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) return "redirect:/login";
+        if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
         validator.validate(registreContracte, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "registreContracte/add";
-        }
-
+        if (bindingResult.hasErrors()) return "registreContracte/add";
         registreContracteDao.addContracte(registreContracte);
-
         APRequest request = apRequestDao.getAPRequest(registreContracte.getIdRequest());
         if (request != null) {
             request.setEstatRequest("Tancada amb contracte");
             apRequestDao.updateAPRequest(request);
         }
-
         model.addAttribute("tipus", "acceptat");
         model.addAttribute("destinatari", "Usuari OVI");
         model.addAttribute("assumpte", "Contracte registrat correctament");
@@ -109,7 +110,7 @@ public class RegistreContracteController {
     public String updateContracte(Model model, @PathVariable int id, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
-        if (usuario.getTipusUsuari().equals("admin")) return "redirect:/registreContracte/list";
+        if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
         model.addAttribute("registreContracte", registreContracteDao.getContracte(id));
         return "registreContracte/update";
     }
@@ -120,7 +121,7 @@ public class RegistreContracteController {
             BindingResult bindingResult, Model model, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
-        if (usuario.getTipusUsuari().equals("admin")) return "redirect:/registreContracte/list";
+        if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
         validator.validate(registreContracte, bindingResult);
         if (bindingResult.hasErrors()) return "registreContracte/update";
         registreContracteDao.updateContracte(registreContracte);

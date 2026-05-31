@@ -37,14 +37,14 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label text-secondary small fw-bold text-uppercase">ID de la Petició</label>
-                        <input type="number" class="form-control" th:field="*{idRequest}" required />
-                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idRequest')}" th:errors="*{idRequest}"></div>
+                        <input type="text" class="form-control bg-light" th:value="*{idRequest}" disabled />
+                        <input type="hidden" th:field="*{idRequest}" />
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label text-secondary small fw-bold text-uppercase">ID de l'Assistent</label>
-                        <input type="number" class="form-control" th:field="*{idAssistent}" required />
-                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idAssistent')}" th:errors="*{idAssistent}"></div>
+                        <input type="text" class="form-control bg-light" th:value="*{idAssistent}" disabled />
+                        <input type="hidden" th:field="*{idAssistent}" />
                     </div>
 
                     <div class="col-md-6">

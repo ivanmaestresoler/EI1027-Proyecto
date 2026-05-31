@@ -23,22 +23,15 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center border-bottom pb-3 mb-4 gap-3">
         <div>
             <h2 class="text-dark fw-bold mb-1 border-0 pb-0">Llista de Seleccions</h2>
-            <p class="text-muted small mb-0">Gestió, assignació i processos de selecció actius entre usuaris i assistents.</p>
+            <p class="text-muted small mb-0">Gestio, assignacio i processos de seleccio actius entre usuaris i assistents.</p>
         </div>
-        <a th:if="${session.usuario.tipusUsuari != 'admin'}"
-           th:href="@{/seleccion/add}" class="btn-portal-primary d-inline-flex align-items-center gap-2 py-2 px-3 fs-6">            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person-check-fill" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-            </svg>
-            Afegir Nova Selecció
-        </a>
     </div>
 
     <div th:if="${#lists.isEmpty(seleccions)}" class="text-center py-5 bg-white rounded shadow-sm border">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#94a3b8" class="bi bi-inboxes mb-3" viewBox="0 0 16 16">
             <path d="M4.98 1a.5.5 0 0 0-.39.188L1.54 5H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0A.5.5 0 0 1 10 5h4.46l-3.05-3.812A.5.5 0 0 0 11.02 1H4.98zm9.954 5H10.45a2.5 2.5 0 0 1-4.9 0H1.066l.32 2.562A.5.5 0 0 0 1.884 9h12.234a.5.5 0 0 0 .496-.438L14.933 6zM3.809 1h8.382l3.15 3.937v.384l-.32 2.56a1.5 1.5 0 0 1-1.488 1.314H1.884A1.5 1.5 0 0 1 .396 7.876L.076 5.316V4.937L3.21 1h.599zm-2.07 9h12.522l.344 2.753a1.5 1.5 0 0 1-1.488 1.687H2.884a1.5 1.5 0 0 1-1.489-1.687L1.74 10z"/>
         </svg>
-        <p class="mb-0 fs-5 text-muted fw-medium">No hi ha cap procés de selecció registrat encara.</p>
+        <p class="mb-0 fs-5 text-muted fw-medium">No hi ha cap proces de seleccio registrat encara.</p>
     </div>
 
     <div class="card shadow-sm border-0" th:unless="${#lists.isEmpty(seleccions)}">
@@ -46,11 +39,10 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light text-secondary">
                 <tr>
-                    <th class="py-3 px-4 fw-bold border-bottom-0">ID Selecció</th>
-                    <th class="py-3 px-4 fw-bold border-bottom-0">ID Sol·licitud (Request)</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">ID Seleccio</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">ID Sol.licitud (Request)</th>
                     <th class="py-3 px-4 fw-bold border-bottom-0">ID Assistent</th>
                     <th class="py-3 px-4 fw-bold border-bottom-0">Data de la Proposta</th>
-                    <th class="py-3 px-4 fw-bold border-bottom-0 text-center">Accions</th>
                 </tr>
                 </thead>
                 <tbody class="border-top-0">
@@ -59,39 +51,35 @@
                     <td class="px-4 text-muted" th:text="${selec.idRequest}"></td>
                     <td class="px-4 text-muted" th:text="${selec.idAssistent}"></td>
                     <td class="px-4 text-dark" th:text="${selec.dataProposta}"></td>
-                    <td class="px-4 text-center">
-                        <div class="d-flex justify-content-center gap-2">
-                            <a th:href="@{/seleccion/update/{id}(id=${selec.idSeleccion})}" class="btn btn-sm btn-outline-primary px-3">Editar</a>
-                            <a th:href="@{/seleccion/delete/{id}(id=${selec.idSeleccion})}"
-                               class="btn btn-sm btn-outline-danger px-3"
-                               onclick="return confirm('Segur que vols esborrar aquesta selecció? Aquesta acció no es pot desfer.')">Esborrar</a>
-                        </div>
-                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <nav aria-label="Navegació de pàgines" class="mt-4" th:unless="${#lists.isEmpty(seleccions)}">
+    <nav aria-label="Navegacio de pagines" class="mt-4" th:unless="${#lists.isEmpty(seleccions)}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage <= 1} ? 'disabled'">
-                <a class="page-link px-3 py-2 fw-medium" th:href="@{/seleccion/list(page=${currentPage - 1})}" tabindex="-1">Anterior</a>
+                <a class="page-link px-3 py-2 fw-medium"
+                   th:href="@{/seleccion/list(page=${currentPage - 1})}"
+                   tabindex="-1">Anterior</a>
             </li>
             <li class="page-item disabled">
                 <span class="page-link px-4 py-2">
-                    Pàgina <strong class="text-dark" th:text="${currentPage}"></strong> de <strong class="text-dark" th:text="${totalPages}"></strong>
+                    Pagina <strong class="text-dark" th:text="${currentPage}"></strong>
+                    de <strong class="text-dark" th:text="${totalPages}"></strong>
                 </span>
             </li>
             <li class="page-item" th:classappend="${currentPage >= totalPages} ? 'disabled'">
-                <a class="page-link px-3 py-2 fw-medium" th:href="@{/seleccion/list(page=${currentPage + 1})}">Següent</a>
+                <a class="page-link px-3 py-2 fw-medium"
+                   th:href="@{/seleccion/list(page=${currentPage + 1})}">Seguent</a>
             </li>
         </ul>
     </nav>
 
     <div class="mt-5 pt-3 border-top">
         <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">
-            ← Tornar al menú principal
+            &larr; Tornar al menu principal
         </a>
     </div>
 
