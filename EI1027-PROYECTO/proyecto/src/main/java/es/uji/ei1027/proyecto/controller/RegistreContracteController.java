@@ -2,8 +2,10 @@ package es.uji.ei1027.proyecto.controller;
 
 import es.uji.ei1027.proyecto.dao.APRequestDAO;
 import es.uji.ei1027.proyecto.dao.RegistreContracteDao;
+import es.uji.ei1027.proyecto.dao.AssistentPersonalDao;
 import es.uji.ei1027.proyecto.model.APRequest;
 import es.uji.ei1027.proyecto.model.RegistreContracte;
+import es.uji.ei1027.proyecto.model.AssistentPersonal;
 import es.uji.ei1027.proyecto.model.Usuario;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -21,6 +24,7 @@ public class RegistreContracteController {
     private RegistreContracteDao registreContracteDao;
     private APRequestDAO apRequestDao;
     private RegistreContracteValidator validator;
+    private AssistentPersonalDao assistentPersonalDao;
 
     @Autowired
     public void setRegistreContracteDao(RegistreContracteDao registreContracteDao) {
@@ -35,6 +39,11 @@ public class RegistreContracteController {
     @Autowired
     public void setValidator(RegistreContracteValidator validator) {
         this.validator = validator;
+    }
+
+    @Autowired
+    public void setAssistentPersonalDao(AssistentPersonalDao assistentPersonalDao) {
+        this.assistentPersonalDao = assistentPersonalDao;
     }
 
     @GetMapping("/list")
@@ -79,6 +88,13 @@ public class RegistreContracteController {
         if (idRequest != null) rc.setIdRequest(idRequest);
         if (idAssistent != null) rc.setIdAssistent(idAssistent);
         model.addAttribute("registreContracte", rc);
+        model.addAttribute("dataAvui", LocalDate.now());
+        if (idAssistent != null) {
+            AssistentPersonal ap = assistentPersonalDao.getAssistentPersonal(idAssistent);
+            if (ap != null) {
+                model.addAttribute("nomAssistent", ap.getNom() + " " + ap.getCognom1());
+            }
+        }
         return "registreContracte/add";
     }
 
@@ -90,7 +106,14 @@ public class RegistreContracteController {
         if (usuario == null) return "redirect:/login";
         if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
         validator.validate(registreContracte, bindingResult);
-        if (bindingResult.hasErrors()) return "registreContracte/add";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("dataAvui", LocalDate.now());
+            AssistentPersonal ap = assistentPersonalDao.getAssistentPersonal(registreContracte.getIdAssistent());
+            if (ap != null) {
+                model.addAttribute("nomAssistent", ap.getNom() + " " + ap.getCognom1());
+            }
+            return "registreContracte/add";
+        }
         registreContracteDao.addContracte(registreContracte);
         APRequest request = apRequestDao.getAPRequest(registreContracte.getIdRequest());
         if (request != null) {
@@ -111,7 +134,15 @@ public class RegistreContracteController {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
         if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
-        model.addAttribute("registreContracte", registreContracteDao.getContracte(id));
+        RegistreContracte rc = registreContracteDao.getContracte(id);
+        model.addAttribute("registreContracte", rc);
+        model.addAttribute("dataAvui", LocalDate.now());
+        if (rc != null) {
+            AssistentPersonal ap = assistentPersonalDao.getAssistentPersonal(rc.getIdAssistent());
+            if (ap != null) {
+                model.addAttribute("nomAssistent", ap.getNom() + " " + ap.getCognom1());
+            }
+        }
         return "registreContracte/update";
     }
 
@@ -123,7 +154,14 @@ public class RegistreContracteController {
         if (usuario == null) return "redirect:/login";
         if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
         validator.validate(registreContracte, bindingResult);
-        if (bindingResult.hasErrors()) return "registreContracte/update";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("dataAvui", LocalDate.now());
+            AssistentPersonal ap = assistentPersonalDao.getAssistentPersonal(registreContracte.getIdAssistent());
+            if (ap != null) {
+                model.addAttribute("nomAssistent", ap.getNom() + " " + ap.getCognom1());
+            }
+            return "registreContracte/update";
+        }
         registreContracteDao.updateContracte(registreContracte);
         return "redirect:list";
     }

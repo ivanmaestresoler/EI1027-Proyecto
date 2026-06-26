@@ -4,6 +4,7 @@ import es.uji.ei1027.proyecto.model.RegistreContracte;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import java.time.LocalDate;
 
 @Component
 public class RegistreContracteValidator implements Validator {
@@ -17,25 +18,24 @@ public class RegistreContracteValidator implements Validator {
     public void validate(Object obj, Errors errors) {
         RegistreContracte contracte = (RegistreContracte) obj;
 
-        // idRequest obligatori
         if (contracte.getIdRequest() == 0) {
             errors.rejectValue("idRequest", "obligatori",
                     "Cal indicar la sol·licitud associada al contracte.");
         }
 
-        // idAssistent obligatori
         if (contracte.getIdAssistent() == 0) {
             errors.rejectValue("idAssistent", "obligatori",
                     "Cal indicar l'assistent associat al contracte.");
         }
 
-        // dataInici obligatoria
         if (contracte.getDataInici() == null) {
             errors.rejectValue("dataInici", "obligatori",
                     "Cal introduir la data d'inici del contracte.");
+        } else if (contracte.getDataInici().isBefore(LocalDate.now())) {
+            errors.rejectValue("dataInici", "dataInvalida",
+                    "La data d'inici no pot ser anterior a la data d'avui.");
         }
 
-        // dataFi no pot ser anterior a dataInici
         if (contracte.getDataInici() != null && contracte.getDataFi() != null) {
             if (contracte.getDataFi().isBefore(contracte.getDataInici())) {
                 errors.rejectValue("dataFi", "dataInvalida",

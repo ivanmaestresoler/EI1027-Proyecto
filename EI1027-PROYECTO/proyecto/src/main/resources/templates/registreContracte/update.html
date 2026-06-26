@@ -1,134 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
-    <meta charset="UTF-8">
     <title>Editar Contracte - Projecte OVI</title>
+    <meta charset="UTF-8" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="bg-light">
 
-<header class="main-header text-white p-3 d-flex justify-content-between align-items-center" style="background-color: #2c3e50;">
+<header class="main-header text-white p-3 d-flex justify-content-between align-items-center">
     <div class="logo fw-bold fs-4">Gestió OVI</div>
     <div class="user-zone d-flex align-items-center">
-        <div th:if="${session.usuario == null}">
-            <a th:href="@{/login}" class="btn btn-sm btn-outline-light px-3">Iniciar Sessió</a>
-        </div>
         <div th:if="${session.usuario != null}">
-            <span class="text-white me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
-            <a th:href="@{/logout}" class="btn btn-sm btn-outline-light px-3">Tancar Sessió</a>
+            <span class="me-3">Hola, <strong th:text="${session.usuario.nom}"></strong></span>
+            <a th:href="@{/logout}" class="btn-logout-header">Tancar Sessió</a>
         </div>
     </div>
 </header>
 
-<main class="container mt-5 mb-5" style="max-width: 700px;">
-    
-    <div class="bg-white p-4 rounded-3 shadow-sm border mb-4">
-        <h2 class="text-dark fw-bold mb-1 fs-3">Editar Contracte</h2>
-        <p class="text-muted small mb-0">Modifica els térmens, vigència o paràmetres del contracte seleccionat.</p>
+<main class="container-fluid mt-5 px-4 mb-5" style="max-width: 1200px;">
+
+    <div class="border-bottom pb-3 mb-4">
+        <h2 class="text-dark fw-bold mb-1 border-0 pb-0">📝 Editar Contracte d'Assistència</h2>
+        <p class="text-muted small mb-0">Modifica els detalls o corregeix la informació del contracte existent.</p>
     </div>
 
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body p-4">
+    <div class="card shadow-sm border-0 bg-white p-4 p-md-5 mx-auto" style="max-width: 750px;">
+        <form th:action="@{/registreContracte/update}" th:object="${registreContracte}" method="post" class="needs-validation">
 
-            <div class="alert alert-info border-0 shadow-sm d-flex align-items-center mb-4" role="alert" style="background-color: #e0f2fe; color: #0369a1;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle-fill me-2 flex-shrink-0" viewBox="0 0 16 16">
-                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                </svg>
-                <div>
-                    <strong>Informació:</strong> Per mantenir la integritat del registre, l'ID de la Petició i l'ID de l'Assistent no es poden modificar.
+            <input type="hidden" th:field="*{idContracte}" />
+            <input type="hidden" th:field="*{idRequest}" />
+            <input type="hidden" th:field="*{idAssistent}" />
+
+            <div class="row g-4">
+                
+                <div class="col-md-12">
+                    <label class="form-label text-secondary fw-semibold">Assistent Personal Assignat:</label>
+                    <input type="text" class="form-control py-2 px-3 bg-secondary bg-opacity-10 text-muted rounded-3" 
+                           th:value="${nomAssistent != null ? nomAssistent : 'ID Assistent: ' + registreContracte.idAssistent}" 
+                           disabled="disabled" />
                 </div>
+
+                <div class="col-md-6">
+                    <label for="dataInici" class="form-label text-secondary fw-semibold">Data d'Inici:</label>
+                    <input type="date" id="dataInici" name="dataInici" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:value="${registreContracte.dataInici != null ? #temporals.format(registreContracte.dataInici, 'yyyy-MM-dd') : ''}"
+                           th:min="${dataAvui}" required />
+                    <div th:if="${#fields.hasErrors('dataInici')}" th:errors="*{dataInici}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="dataFi" class="form-label text-secondary fw-semibold">Data de Fi:</label>
+                    <input type="date" id="dataFi" name="dataFi" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:value="${registreContracte.dataFi != null ? #temporals.format(registreContracte.dataFi, 'yyyy-MM-dd') : ''}" />
+                    <div th:if="${#fields.hasErrors('dataFi')}" th:errors="*{dataFi}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="rutaPdf" class="form-label text-secondary fw-semibold">Document PDF (Ruta o enllaç del contracte firmat):</label>
+                    <input type="text" id="rutaPdf" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                           th:field="*{rutaPdf}" required placeholder="Ex: /arxius/contracte_firmat.pdf" />
+                    <div th:if="${#fields.hasErrors('rutaPdf')}" th:errors="*{rutaPdf}" class="text-danger small mt-1 fw-medium"></div>
+                </div>
+
             </div>
 
-            <form th:action="@{/registreContracte/update}" th:object="${registreContracte}" method="post">
-                
-                <input type="hidden" th:field="*{idContracte}" />
+            <div class="d-flex justify-content-end align-items-center gap-3 mt-5 pt-3 border-top">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2 rounded-3 fw-medium">
+                    Tornar enrere
+                </a>
+                <button type="submit" class="btn-portal-primary px-4 py-2 rounded-3 fw-semibold fs-6">
+                    Actualitzar Contracte
+                </button>
+            </div>
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label text-secondary small fw-bold text-uppercase">ID de la Petició</label>
-                        <input type="text" class="form-control bg-secondary bg-opacity-10 text-muted" th:value="*{idRequest}" disabled="disabled" />
-                        <input type="hidden" th:field="*{idRequest}" />
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label text-secondary small fw-bold text-uppercase">ID de l'Assistent</label>
-                        <input type="text" class="form-control bg-secondary bg-opacity-10 text-muted" th:value="*{idAssistent}" disabled="disabled" />
-                        <input type="hidden" th:field="*{idAssistent}" />
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label text-secondary small fw-bold text-uppercase">Data d'Inici</label>
-                        <input type="date" class="form-control" 
-                               id="dataInici" 
-                               name="dataInici" 
-                               th:value="${registreContracte.dataInici != null ? #temporals.format(registreContracte.dataInici, 'yyyy-MM-dd') : ''}" 
-                               required />
-                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataInici')}" th:errors="*{dataInici}"></div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label text-secondary small fw-bold text-uppercase">Data de Fi</label>
-                        <input type="date" class="form-control" 
-                               id="dataFi" 
-                               name="dataFi" 
-                               th:value="${registreContracte.dataFi != null ? #temporals.format(registreContracte.dataFi, 'yyyy-MM-dd') : ''}" />
-                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataFi')}" th:errors="*{dataFi}"></div>
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label text-secondary small fw-bold text-uppercase">Ruta del Document PDF</label>
-                        <input type="text" class="form-control" th:field="*{rutaPdf}" placeholder="Ex: /documents/contractes/contracte_01.pdf" />
-                    </div>
-                </div>
-
-                <div class="d-flex gap-2 mt-4 pt-3 border-top">
-                    <button type="submit" class="btn btn-primary px-4 py-2 fw-medium rounded-3 shadow-sm">
-                        Actualitzar Contracte
-                    </button>
-                    <a onclick="history.back()" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-3 shadow-sm" style="cursor:pointer;">
-                        Cancel·lar
-                    </a>
-                </div>
-
-            </form>
-        </div>
+        </form>
     </div>
+
+    <div class="mt-5 pt-3 border-top">
+        <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">
+            ← Tornar al menú principal
+        </a>
+    </div>
+
 </main>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const inputDataInici = document.getElementById("dataInici");
-        const inputDataFi = document.getElementById("dataFi");
-
-        if (inputDataInici && inputDataFi) {
-            const hoy = new Date();
-            const yyyy = hoy.getFullYear();
-            let mm = hoy.getMonth() + 1;
-            let dd = hoy.getDate();
-
-            if (mm < 10) mm = '0' + mm;
-            if (dd < 10) dd = '0' + dd;
-
-            const dataAvui = yyyy + '-' + mm + '-' + dd;
-            inputDataInici.setAttribute("min", dataAvui);
-
-            function actualitzarMinimDataFi() {
-                const dataIniciSeleccionada = inputDataInici.value;
-                if (dataIniciSeleccionada) {
-                    inputDataFi.setAttribute("min", dataIniciSeleccionada);
-                    if (inputDataFi.value && inputDataFi.value < dataIniciSeleccionada) {
-                        inputDataFi.value = "";
-                    }
-                }
-            }
-
-            actualitzarMinimDataFi();
-            inputDataInici.addEventListener("change", actualitzarMinimDataFi);
-        }
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

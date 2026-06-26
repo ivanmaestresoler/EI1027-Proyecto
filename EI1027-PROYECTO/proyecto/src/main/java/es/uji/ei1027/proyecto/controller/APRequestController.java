@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,9 +60,10 @@ public class APRequestController {
         model.addAttribute("pueblos", puebloDao.getPueblos());
         model.addAttribute("idiomas", idiomaDao.getIdiomas());
         
-        // AQUÍ AÑADIMOS LA FORMACIÓN ACADÉMICA EXACTA DE TU BASE DE DATOS
         model.addAttribute("formacionesAcademica", Arrays.asList(
                 "ESO", "BATXILLERAT", "FPGM", "FPGS", "GRAU UNIVERSITARI"));
+                
+        model.addAttribute("dataAvui", LocalDate.now());
     }
 
     @RequestMapping("/list")
@@ -101,31 +103,24 @@ public class APRequestController {
     public String listSenseProposta(Model model, jakarta.servlet.http.HttpSession session,
                                     @RequestParam(value = "page", defaultValue = "1") int page) {
         
-        // Verificamos sesión
         es.uji.ei1027.proyecto.model.Usuario usuario =
                 (es.uji.ei1027.proyecto.model.Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
 
-        // Configuramos la paginación (5 elementos por página, igual que el resto)
         int pageSize = 5;
         int offset = (page - 1) * pageSize;
         
-        // FORZAMOS EL FILTRO: Solo queremos las que están "En revisió"
         String estadoFijo = "En revisió";
 
-        // Obtenemos solo los registros necesarios de la BD
         List<APRequest> requests = apRequestDao.getAPRequestsFiltradesPaginadas(estadoFijo, pageSize, offset);
         int totalRecords = apRequestDao.countAPRequestsFiltrades(estadoFijo);
 
-        // Calculamos el total de páginas
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
         if (totalPages == 0) totalPages = 1;
 
-        // Pasamos los datos a la vista
         model.addAttribute("requests", requests);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        
         
         return "admin/peticions-pendents"; 
     }
@@ -184,7 +179,6 @@ public class APRequestController {
         return "redirect:/aprequest/list";
     }
 
-    // DETALLE — carrega nom i cognoms del assistent i idSeleccion per al xat
     @RequestMapping(value="/detalle/{id}", method = RequestMethod.GET)
     public String veureDetalle(Model model, @PathVariable int id,
                                jakarta.servlet.http.HttpSession session) {
@@ -195,7 +189,6 @@ public class APRequestController {
 
         List<Seleccion> seleccions = seleccionDao.getSeleccionsByRequest(id);
 
-        // Crear llista de candidats amb nom i idSeleccion
         List<java.util.Map<String, Object>> candidats = new ArrayList<>();
         for (Seleccion s : seleccions) {
             AssistentPersonal a = assistentPersonalDao.getAssistentPersonal(s.getIdAssistent());

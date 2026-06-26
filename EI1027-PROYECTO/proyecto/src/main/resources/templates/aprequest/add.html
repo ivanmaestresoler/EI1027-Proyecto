@@ -33,7 +33,7 @@
                 <div class="col-md-12">
                     <label for="dataSollicitud" class="form-label text-secondary fw-semibold">Data de la Sol·licitud:</label>
                     <input type="date" id="dataSollicitud" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
-                           th:field="*{dataSollicitud}" required />
+                           th:field="*{dataSollicitud}" th:min="${dataAvui}" required />
                     <div th:if="${#fields.hasErrors('dataSollicitud')}" th:errors="*{dataSollicitud}" class="text-danger small mt-1 fw-medium"></div>
                 </div>
 
@@ -109,24 +109,6 @@
     </div>
 
 </main>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const inputDataSollicitud = document.getElementById("dataSollicitud");
-        if (inputDataSollicitud) {
-            const hoy = new Date();
-            const yyyy = hoy.getFullYear();
-            let mm = hoy.getMonth() + 1;
-            let dd = hoy.getDate();
-
-            if (mm < 10) mm = '0' + mm;
-            if (dd < 10) dd = '0' + dd;
-
-            const dataAvui = yyyy + '-' + mm + '-' + dd;
-            inputDataSollicitud.setAttribute("min", dataAvui);
-        }
-    });
-</script>
 
 </body>
 </html>

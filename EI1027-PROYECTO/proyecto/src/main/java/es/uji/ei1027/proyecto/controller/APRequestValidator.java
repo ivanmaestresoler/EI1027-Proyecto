@@ -4,6 +4,7 @@ import es.uji.ei1027.proyecto.model.APRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import java.time.LocalDate;
 
 @Component
 public class APRequestValidator implements Validator {
@@ -23,6 +24,8 @@ public class APRequestValidator implements Validator {
 
         if (req.getDataSollicitud() == null) {
             errors.rejectValue("dataSollicitud", "obligatori", "Cal introduir la data de la sol·licitud");
+        } else if (req.getDataSollicitud().isBefore(LocalDate.now())) {
+            errors.rejectValue("dataSollicitud", "dataPasada", "La data de sol·licitud no pot ser anterior a la data d'avui");
         }
 
         if (req.getTipusAssistencia() == null || req.getTipusAssistencia().trim().isEmpty()) {

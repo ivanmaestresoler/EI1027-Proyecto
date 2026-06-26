@@ -4,6 +4,8 @@ import es.uji.ei1027.proyecto.model.UsuariOVI;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import java.time.LocalDate;
+
 @Component
 public class UsuariOVIValidator implements Validator {
 
@@ -52,6 +54,8 @@ public class UsuariOVIValidator implements Validator {
 
         if (usuari.getDataNaixement() == null) {
             errors.rejectValue("dataNaixement", "obligatori", "Cal introduir la data de naixement");
+        } else if (usuari.getDataNaixement().isAfter(LocalDate.now())) {
+            errors.rejectValue("dataNaixement", "futura", "La data de naixement no pot ser una data futura");
         }
 
         if (usuari.getNombrePueblo() == null || usuari.getNombrePueblo().trim().isEmpty()) {
