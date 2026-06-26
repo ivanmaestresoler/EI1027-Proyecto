@@ -21,8 +21,8 @@
 
 <main class="container mt-5 mb-5">
     <h2 class="mb-4 border-bottom pb-2 card-title-custom" style="font-size: 1.6rem;">
-        Editant el Perfil d'Assistent de: 
-        <span th:text="${assistent.nom}" class="text-primary"></span> 
+        Editant el Perfil d'Assistent de:
+        <span th:text="${assistent.nom}" class="text-primary"></span>
         <span th:text="${assistent.cognom1}" class="text-primary"></span>
     </h2>
 
@@ -48,7 +48,7 @@
                     <label class="form-label fw-bold text-dark mb-1">DNI/NIE:</label>
                     <input type="text" th:value="*{dni}" disabled="disabled" class="form-control custom-input bg-secondary bg-opacity-10" />
                     <div class="form-text text-muted mt-1" style="font-size: 0.85rem;">
-                        * Aquest <strong>no es pot modificar</strong> 
+                        * Aquest <strong>no es pot modificar</strong>
                     </div>
                     <input type="hidden" th:field="*{dni}" />
                 </div>

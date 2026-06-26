@@ -27,11 +27,11 @@
 
         <div class="text-start mt-4 p-4 rounded-3 shadow-sm bg-white"
              th:style="${tipus == 'acceptat'} ? 'border: 1px solid #e2e8f0; border-left: 5px solid #10b981;' : 'border: 1px solid #e2e8f0; border-left: 5px solid #ef4444;'">
-            
+
             <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
                 <div class="bg-light rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#64748b" class="bi bi-envelope-paper-fill" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M6.5 9.5 3 7.5v-6A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v6l-3.5 2L8 8.75l-1.5.75ZM1.059 3.635 2 3.145v3.531l-1.422.812A1.5 1.5 0 0 0 0 8.783V12.5a1.5 1.5 0 0 0 1.5 1.5h13a1.5 1.5 0 0 0 1.5-1.5V8.783a1.5 1.5 0 0 0-.578-1.295L14 6.676V3.144l.941.491A1.5 1.5 0 0 1 16 4.957V12.5A2.5 2.5 0 0 1 13.5 15h-13A2.5 2.5 0 0 1 0 12.5V4.957a1.5 1.5 0 0 1 .838-1.344l.221-.116Z"/>
+                        <path fill-rule="evenodd" d="M6.5 9.5 3 7.5v-6A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v6l-3.5 2L8 8.75l-1.5.75ZM1.059 3.635 2 3.145v3.531l-1.422.812A1.5 1.5 0 0 0 0 8.783V12.5a1.5 1.5 0 0 0 1.5 1.5h13a1.5 1.5 0 0 0 1.5-1.5V8.783a1.5 1.5 0 0 0-.578-1.295L14 6.676V3.144l.941.491A1.5 1.5 0 0 1 16 4.957V12.5A2.5 2.5 0 0 1 13.5 15h-13A2.5 2.5 0 0 1 0 12.5V4.957a1.5 1.5 0 0 1 .838-1.344l.221-.116Z"/>
                     </svg>
                 </div>
                 <div>
@@ -42,19 +42,19 @@
                         <span class="fw-bold text-secondary">A:</span> <span th:text="${destinatari}"></span>
                     </div>
                     <div class="small text-dark mt-2">
-                        <span class="fw-bold bg-light px-2 py-1 rounded text-secondary border">Assumpte:</span> 
+                        <span class="fw-bold bg-light px-2 py-1 rounded text-secondary border">Assumpte:</span>
                         <span class="fw-medium ms-1" th:text="${assumpte}"></span>
                     </div>
                 </div>
             </div>
 
             <div class="email-body text-dark lh-base" style="font-size: 0.95rem; white-space: pre-wrap;" th:text="${cos}">
-                </div>
-            
+            </div>
+
         </div>
 
         <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mt-5">
-            <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2 fw-medium border-2">
+            <a th:href="@{/aprequest/list}" class="btn btn-outline-secondary px-4 py-2 fw-medium border-2">
                 ← Tornar al llistat
             </a>
             <a th:href="@{/}" class="btn-portal-primary px-4 py-2 text-decoration-none">

@@ -80,9 +80,7 @@
                     <td class="px-4 text-center">
                         <div class="d-flex justify-content-center gap-2">
                             <a th:href="@{/assistentPersonal/update/{id}(id=${assistent.idUsuario})}" class="btn btn-sm btn-outline-primary px-3">Editar</a>
-                            <a th:href="@{/assistentPersonal/delete/{id}(id=${assistent.idUsuario})}"
-                               class="btn btn-sm btn-outline-danger px-3"
-                               onclick="return confirm('Segur que vols esborrar aquest assistent? Aquesta acció no es pot desfer.')">Esborrar</a>
+                            <a th:href="@{/assistentPersonal/delete/{id}(id=${assistent.idUsuario})}" class="btn btn-sm btn-outline-danger px-3">Esborrar</a>
                         </div>
                     </td>
                 </tr>

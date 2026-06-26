@@ -163,7 +163,7 @@ public class RegistreContracteController {
             return "registreContracte/update";
         }
         registreContracteDao.updateContracte(registreContracte);
-        return "redirect:list";
+        return "redirect:/registreContracte/list"; // Asegurado redireccionamiento absoluto aquí
     }
 
     @GetMapping("/delete/{id}")

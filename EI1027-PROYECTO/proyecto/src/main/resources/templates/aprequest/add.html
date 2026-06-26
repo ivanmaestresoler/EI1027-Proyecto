@@ -26,13 +26,13 @@
     </div>
 
     <div class="card shadow-sm border-0 bg-white p-4 p-md-5 mx-auto" style="max-width: 750px;">
-        <form th:action="@{/aprequest/add}" th:object="${aprequest}" method="post" class="needs-validation">
+        <form th:action="@{/aprequest/add}" th:object="${aprequest}" method="post">
 
             <div class="row g-4">
-                
+
                 <div class="col-md-12">
                     <label for="dataSollicitud" class="form-label text-secondary fw-semibold">Data de la Sol·licitud:</label>
-                    <input type="date" id="dataSollicitud" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                    <input type="date" id="dataSollicitud" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark"
                            th:field="*{dataSollicitud}" th:min="${dataAvui}" required />
                     <div th:if="${#fields.hasErrors('dataSollicitud')}" th:errors="*{dataSollicitud}" class="text-danger small mt-1 fw-medium"></div>
                 </div>
@@ -83,7 +83,7 @@
 
                 <div class="col-md-12">
                     <label for="experienciaPrevia" class="form-label text-secondary fw-semibold">Descripció de l'Experiència Prèvia necessària:</label>
-                    <textarea id="experienciaPrevia" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark" 
+                    <textarea id="experienciaPrevia" class="form-control py-2 px-3 border-secondary border-opacity-25 rounded-3 text-dark"
                               th:field="*{experienciaPrevia}" rows="3" placeholder="Detalla aquí si requereixes experiència prèvia específica..."></textarea>
                     <div th:if="${#fields.hasErrors('experienciaPrevia')}" th:errors="*{experienciaPrevia}" class="text-danger small mt-1 fw-medium"></div>
                 </div>

@@ -15,7 +15,7 @@
 </header>
 
 <main class="main-content">
-    
+
     <div class="xat-wrapper">
         <div class="xat-header-whatsapp">
             <div class="xat-avatar">
@@ -24,7 +24,7 @@
                 </svg>
             </div>
             <div class="xat-header-meta">
-                <span class="xat-header-name" 
+                <span class="xat-header-name"
                       th:text="${nomAltre != null ? nomAltre : (#lists.isEmpty(missatges) ? 'Conversa' : missatges.^[!esMeu]?.nomFrom)}">
                     Nom i Cognoms
                 </span>
@@ -35,7 +35,7 @@
             <div th:if="${#lists.isEmpty(missatges)}" style="text-align:center; color:#999; padding:40px;">
                 Encara no hi ha missatges. Inicia la conversa!
             </div>
-            
+
             <div th:each="m : ${missatges}"
                  class="missatge"
                  th:classappend="${m.esMeu} ? ' meu' : ' altre'">
@@ -71,15 +71,8 @@
     </div>
 
     <div style="max-width: 700px; margin: 0 auto; padding: 0 5px;">
-        <a th:if="${session.usuario.tipusUsuari == 'AssistentPersonal'}"
-           th:href="@{/comunicacio/conversations}"
-           class="btn-tornar-enrere">
+        <a th:href="@{/comunicacio/conversations}" class="btn-tornar-enrere">
             ← Tornar a les converses
-        </a>
-        <a th:unless="${session.usuario.tipusUsuari == 'AssistentPersonal'}"
-           href="javascript:history.back()"
-           class="btn-tornar-enrere">
-            ← Tornar enrere
         </a>
     </div>
 </main>
