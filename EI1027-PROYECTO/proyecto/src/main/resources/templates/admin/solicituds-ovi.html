@@ -25,21 +25,20 @@
         <p class="text-muted small mb-0">Panell de verificació d'usuaris pendents de validació per a l'accés a la plataforma.</p>
     </div>
 
-    <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4 p-3 d-flex align-items-center" role="alert" style="background-color: #ecfdf5; color: #065f46;">
+    <div th:if="${mensaje}" class="alert alert-success border-0 shadow-sm mb-4 p-3 d-flex align-items-center" role="alert" style="background-color: #ecfdf5; color: #065f46;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill me-2" viewBox="0 0 16 16">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
         </svg>
         <div>
             <strong th:text="${mensaje}"></strong>
         </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
     <div th:if="${#lists.isEmpty(usuaris)}" class="text-center py-5 bg-white rounded shadow-sm border">
         <div class="mb-3 text-muted">
             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#2980b9" class="bi bi-shield-check" viewBox="0 0 16 16">
-              <path d="M5.338 1.59a.5.5 0 0 1 .428-.274zm1.192-.49A1.5 1.5 0 0 0 5.17 1.841L1.573 3.617A1.5 1.5 0 0 0 .75 4.956c0 4.14 2.894 7.694 6.75 8.651a.75.75 0 0 0 .5 0c3.856-.957 6.75-4.51 6.75-8.651a1.5 1.5 0 0 0-.823-1.338L10.83 1.84a1.5 1.5 0 0 0-1.36 0L5.338 1.59zM7.5 2.502V12.4c-3.111-.876-5.5-3.83-5.5-7.444 0-.446.27-.852.684-1.05l3.6-1.799a.5.5 0 0 1 .454 0L7.5 2.502z"/>
-              <path d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                <path d="M5.338 1.59a.5.5 0 0 1 .428-.274zm1.192-.49A1.5 1.5 0 0 0 5.17 1.841L1.573 3.617A1.5 1.5 0 0 0 .75 4.956c0 4.14 2.894 7.694 6.75 8.651a.75.75 0 0 0 .5 0c3.856-.957 6.75-4.51 6.75-8.651a1.5 1.5 0 0 0-.823-1.338L10.83 1.84a1.5 1.5 0 0 0-1.36 0L5.338 1.59zM7.5 2.502V12.4c-3.111-.876-5.5-3.83-5.5-7.444 0-.446.27-.852.684-1.05l3.6-1.799a.5.5 0 0 1 .454 0L7.5 2.502z"/>
+                <path d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
             </svg>
         </div>
         <p class="mb-1 fs-5 text-dark fw-medium">Tot al dia!</p>
@@ -50,34 +49,33 @@
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light text-secondary">
-                    <tr>
-                        <th class="py-3 px-4 fw-bold border-bottom-0">Nom</th>
-                        <th class="py-3 px-4 fw-bold border-bottom-0">Cognoms</th>
-                        <th class="py-3 px-4 fw-bold border-bottom-0">DNI / NIE</th>
-                        <th class="py-3 px-4 fw-bold border-bottom-0">Correu Electrònic</th>
-                        <th class="py-3 px-4 fw-bold border-bottom-0 text-center" style="width: 220px;">Accions</th>
-                    </tr>
+                <tr>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Nom</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Cognoms</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">DNI / NIE</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Correu Electrònic</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0 text-center" style="width: 220px;">Accions</th>
+                </tr>
                 </thead>
                 <tbody class="border-top-0">
-                    <tr th:each="usuari : ${usuaris}">
-                        <td class="px-4 fw-medium text-dark" th:text="${usuari.nom}"></td>
-                        <td class="px-4 text-dark" th:text="${usuari.cognom1} + ' ' + (${usuari.cognom2} ?: '')"></td>
-                        <td class="px-4 text-muted fw-mono" th:text="${usuari.dni}"></td>
-                        <td class="px-4 text-muted small" th:text="${usuari.email}"></td>
-                        <td class="px-4 text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                <a th:href="@{/admin/aprovar-usuari/{id}(id=${usuari.idUsuario})}" 
-                                   class="btn btn-sm btn-outline-primary px-3">
-                                   Aprovar
-                                </a>
-                                <a th:href="@{/admin/rebutjar-usuari/{id}(id=${usuari.idUsuario})}" 
-                                   class="btn btn-sm btn-outline-danger px-3" 
-                                   onclick="return confirm('Estàs segur que vols rebutjar aquest usuari de l\'OVI? Aquesta acció eliminarà la sol·licitud.')">
-                                   Rebutjar
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                <tr th:each="usuari : ${usuaris}">
+                    <td class="px-4 fw-medium text-dark" th:text="${usuari.nom}"></td>
+                    <td class="px-4 text-dark" th:text="${usuari.cognom1} + ' ' + (${usuari.cognom2} ?: '')"></td>
+                    <td class="px-4 text-muted fw-mono" th:text="${usuari.dni}"></td>
+                    <td class="px-4 text-muted small" th:text="${usuari.email}"></td>
+                    <td class="px-4 text-center">
+                        <div class="d-flex justify-content-center gap-2">
+                            <a th:href="@{/admin/aprovar-usuari/{id}(id=${usuari.idUsuario})}"
+                               class="btn btn-sm btn-outline-primary px-3">
+                                Aprovar
+                            </a>
+                            <a th:href="@{/admin/rebutjar-usuari/{id}(id=${usuari.idUsuario})}"
+                               class="btn btn-sm btn-outline-danger px-3">
+                                Rebutjar
+                            </a>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -91,6 +89,5 @@
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

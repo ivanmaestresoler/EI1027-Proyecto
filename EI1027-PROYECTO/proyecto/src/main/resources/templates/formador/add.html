@@ -30,7 +30,7 @@
             <form th:action="@{/formador/add}" th:object="${formador}" method="post">
 
                 <div class="row g-4">
-                    
+
                     <div class="col-md-12">
                         <label class="form-label fw-bold text-dark">Nom:</label>
                         <input type="text" th:field="*{nom}" class="form-control custom-input" placeholder="Escriu el nom complet" required />
@@ -42,7 +42,7 @@
                         <input type="text" th:field="*{cognom1}" class="form-control custom-input" placeholder="Escriu el primer cognom" required />
                         <span th:if="${#fields.hasErrors('cognom1')}" th:errors="*{cognom1}" class="error-message d-block mt-1"></span>
                     </div>
-                    
+
                     <div class="col-md-6">
                         <label class="form-label fw-bold text-dark">Segon Cognom:</label>
                         <input type="text" th:field="*{cognom2}" class="form-control custom-input" placeholder="Escriu el segon cognom (opcional)" />
@@ -54,21 +54,21 @@
                         <input type="email" th:field="*{emailContacte}" class="form-control custom-input" placeholder="correu@exemple.com" required />
                         <span th:if="${#fields.hasErrors('emailContacte')}" th:errors="*{emailContacte}" class="error-message d-block mt-1"></span>
                     </div>
-                    
+
                     <div class="col-md-6">
                         <label class="form-label fw-bold text-dark">Especialitat:</label>
                         <input type="text" th:field="*{especialitat}" class="form-control custom-input" placeholder="Ex: Informàtica, Idiomes, Mobilitat..." required />
                         <span th:if="${#fields.hasErrors('especialitat')}" th:errors="*{especialitat}" class="error-message d-block mt-1"></span>
                     </div>
-                    
+
                 </div>
 
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-5 pt-4 border-top gap-3">
-                    
+
                     <a th:href="@{/formador/list}" class="btn-tornar-enrere order-2 order-md-1" style="padding: 10px 15px;">
                         ← Cancel·lar i tornar
                     </a>
-                    
+
                     <button type="submit" class="btn-portal-primary order-1 order-md-2 d-inline-flex align-items-center gap-2 m-0" style="border: none; cursor: pointer; padding: 10px 24px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
                             <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5v-13Z"/>
@@ -76,7 +76,7 @@
                         </svg>
                         Guardar Formador
                     </button>
-                    
+
                 </div>
 
             </form>
@@ -85,6 +85,5 @@
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

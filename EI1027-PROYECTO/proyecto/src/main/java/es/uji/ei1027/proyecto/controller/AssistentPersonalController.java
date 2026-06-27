@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +70,17 @@ public class AssistentPersonalController {
         return "assistentPersonal/add";
     }
 
+    @RequestMapping(value="/delete/{idUsuario}")
+    public String processDelete(@PathVariable int idUsuario, RedirectAttributes redirectAttributes) {
+        try {
+            assistentPersonalDao.deleteAssistentPersonal(idUsuario);
+            redirectAttributes.addFlashAttribute("mensaje", "L'assistent s'ha esborrat correctament.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("error", "Acció denegada: No es pot esborrar l'assistent perquè té contractes, missatges o altres processos actius vinculats al seu perfil.");
+        }
+        return "redirect:/assistentPersonal/list";
+    }
+
     @RequestMapping(value="/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("assistent") AssistentPersonal assistent,
                                    BindingResult bindingResult, Model model) {
@@ -79,7 +92,7 @@ public class AssistentPersonalController {
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         assistent.setContrasenya(passwordEncryptor.encryptPassword(assistent.getContrasenya()));
         try {
-            assistentPersonalDao.addAssistentPersonal(assistent); 
+            assistentPersonalDao.addAssistentPersonal(assistent);
         } catch (DuplicateKeyException e) {
             bindingResult.rejectValue("email", "duplicat", "Aquest correu electrònic ja està registrat al sistema.");
             cargaAtributos(model);
@@ -116,12 +129,6 @@ public class AssistentPersonalController {
         if (usuario != null && usuario.getTipusUsuari().equals("AssistentPersonal")) {
             return "redirect:/";
         }
-        return "redirect:/assistentPersonal/list";
-    }
-
-    @RequestMapping(value="/delete/{idUsuario}")
-    public String processDelete(@PathVariable int idUsuario) {
-        assistentPersonalDao.deleteAssistentPersonal(idUsuario);
         return "redirect:/assistentPersonal/list";
     }
 

@@ -14,11 +14,11 @@
 
     <form th:action="@{/comunicacio/add}" th:object="${comunicacio}" method="post">
 
-        <!-- Camps ocults — s'omplin automàticament -->
         <input type="hidden" th:field="*{idSeleccion}" />
         <input type="hidden" th:field="*{idFrom}" />
         <input type="hidden" th:field="*{idTo}" />
-        <input type="hidden" name="dataEnviament" th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm:ss')}" />
+        <input type="hidden" name="dataEnviament" th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm:ss')}" />
+
         <div class="form-group">
             <label>Missatge:</label>
             <textarea th:field="*{missatge}" required
@@ -30,9 +30,9 @@
     </form>
 
     <br>
-    <a onclick="history.back()"
+    <a th:href="@{/comunicacio/list}"
        style="display:inline-block; background-color:#34495e; color:#fff; padding:10px 18px; border-radius:4px; cursor:pointer; font-weight:bold; text-decoration:none;">
-        ← Tornar
+        ← Tornar a la llista
     </a>
 </main>
 </body>

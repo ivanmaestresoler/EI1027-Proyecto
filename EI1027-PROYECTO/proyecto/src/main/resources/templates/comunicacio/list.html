@@ -67,8 +67,7 @@
                         <div class="d-flex justify-content-center gap-2">
                             <a th:href="@{/comunicacio/update/{id}(id=${com.idComunicacio})}" class="btn btn-sm btn-outline-primary px-3">Editar</a>
                             <a th:href="@{/comunicacio/delete/{id}(id=${com.idComunicacio})}"
-                               class="btn btn-sm btn-outline-danger px-3"
-                               onclick="return confirm('Estàs segur d\'esborrar aquesta comunicació? Aquesta acció no es pot desfer.')">Esborrar</a>
+                               class="btn btn-sm btn-outline-danger px-3">Esborrar</a>
                         </div>
                     </td>
                 </tr>
@@ -99,7 +98,7 @@
 
         </ul>
     </nav>
-    
+
     <div class="mt-5 pt-3 border-top">
         <a th:href="@{/}" class="text-decoration-none text-secondary hover-blue fw-medium">
             ← Tornar al menú principal
