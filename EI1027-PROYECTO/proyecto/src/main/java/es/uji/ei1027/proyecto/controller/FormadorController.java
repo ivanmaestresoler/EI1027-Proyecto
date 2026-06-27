@@ -66,8 +66,9 @@ public class FormadorController {
         return "formador/update";
     }
 
+    // AÑADIDO: 'Model model' en los parámetros del método
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("formador") Formador formador, BindingResult bindingResult) {
+    public String processUpdateSubmit(@ModelAttribute("formador") Formador formador, BindingResult bindingResult, Model model) {
         FormadorValidator formadorValidator = new FormadorValidator();
         formadorValidator.validate(formador, bindingResult);
 
@@ -80,7 +81,13 @@ public class FormadorController {
             return "formador/update";
         }
         formadorDao.updateFormador(formador);
-        return "redirect:/formador/list";
+
+        // Atributos actualizados para el contexto de Formador
+        model.addAttribute("titol", "Formador actualitzat");
+        model.addAttribute("missatge", "Les dades del formador s'han desat correctament.");
+        model.addAttribute("urlTornar", "/formador/list");
+
+        return "confirmacion-editat";
     }
 
     @RequestMapping(value="/delete/{id}")

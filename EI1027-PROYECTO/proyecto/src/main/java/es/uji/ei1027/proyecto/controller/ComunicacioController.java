@@ -36,7 +36,6 @@ public class ComunicacioController {
     public void setUsuarioDao(UsuarioDao usuarioDao) { this.usuarioDao = usuarioDao; }
 
     // ── LLISTA DE CONVERSATIONS ─────────────────────────────────────────────
-    // Assistent veu les seues converses agrupades per selecció (usuari OVI)
     @GetMapping("/conversations")
     public String listConversations(Model model, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -58,7 +57,6 @@ public class ComunicacioController {
                 conv.put("idSeleccion", s.getIdSeleccion());
                 conv.put("idAssistent", s.getIdAssistent());
 
-                // Nom de l'altre participant
                 int idAltre = usuario.getTipusUsuari().equals("AssistentPersonal")
                         ? missatges.get(0).getIdFrom()
                         : s.getIdAssistent();
@@ -84,7 +82,6 @@ public class ComunicacioController {
         List<ComunicacioUsuariOVIPAP> missatges =
                 comunicacioDao.getComunicacionsBySeleccion(idSeleccion);
 
-        // Preparar missatges amb noms
         List<Map<String, Object>> missatgesEnriquits = new ArrayList<>();
         for (ComunicacioUsuariOVIPAP m : missatges) {
             Map<String, Object> item = new HashMap<>();
@@ -96,16 +93,13 @@ public class ComunicacioController {
             missatgesEnriquits.add(item);
         }
 
-        // Prepara nou missatge buit
         ComunicacioUsuariOVIPAP nouMissatge = new ComunicacioUsuariOVIPAP();
         nouMissatge.setIdSeleccion(idSeleccion);
         nouMissatge.setIdFrom(usuario.getIdUsuario());
 
-        // id_to = l'altre participant
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion != null) {
             if (usuario.getTipusUsuari().equals("AssistentPersonal")) {
-                // buscar l'usuari OVI que ha enviat algun missatge
                 if (!missatges.isEmpty()) {
                     nouMissatge.setIdTo(missatges.get(0).getIdFrom());
                 }
@@ -146,12 +140,10 @@ public class ComunicacioController {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
 
-        // Admin solo puede ver, no enviar
         if (usuario.getTipusUsuari().equals("admin")) {
             return "redirect:/comunicacio/list";
         }
 
-        // Si no hay idSeleccion válido, volver atrás
         if (idSeleccion == null) {
             return "redirect:/aprequest/list";
         }
@@ -173,11 +165,12 @@ public class ComunicacioController {
         if (usuario == null) return "redirect:/login";
         if (usuario.getTipusUsuari().equals("admin")) return "redirect:/comunicacio/list";
         if (comunicacio.getIdSeleccion() == 0) return "redirect:/aprequest/list";
-        if (usuario != null) comunicacio.setIdFrom(usuario.getIdUsuario());
+        comunicacio.setIdFrom(usuario.getIdUsuario());
         comunicacioDao.addComunicacio(comunicacio);
         return "redirect:/comunicacio/xat/" + comunicacio.getIdSeleccion();
     }
 
+    // ── LLISTAT GENERAL — amb noms en lloc d'IDs ─────────────────────────────
     @RequestMapping("/list")
     public String listComunicacions(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
         int pageSize = 5;
@@ -186,7 +179,24 @@ public class ComunicacioController {
         int totalRecords = comunicacioDao.getTotalComunicacions();
         int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
 
-        model.addAttribute("comunicacions", comunicacioDao.getComunicacionsPaginades(pageSize, offset));
+        List<ComunicacioUsuariOVIPAP> comunicacionsBase = comunicacioDao.getComunicacionsPaginades(pageSize, offset);
+
+        List<Map<String, Object>> comunicacions = new ArrayList<>();
+        for (ComunicacioUsuariOVIPAP c : comunicacionsBase) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("idComunicacio", c.getIdComunicacio());
+            item.put("missatge", c.getMissatge());
+            item.put("dataEnviament", c.getDataEnviament());
+
+            Usuario from = usuarioDao.getUsuario(c.getIdFrom());
+            Usuario to = usuarioDao.getUsuario(c.getIdTo());
+            item.put("nomFrom", from != null ? from.getNom() + " " + from.getCognom1() : "Usuari #" + c.getIdFrom());
+            item.put("nomTo", to != null ? to.getNom() + " " + to.getCognom1() : "Usuari #" + c.getIdTo());
+
+            comunicacions.add(item);
+        }
+
+        model.addAttribute("comunicacions", comunicacions);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
 
