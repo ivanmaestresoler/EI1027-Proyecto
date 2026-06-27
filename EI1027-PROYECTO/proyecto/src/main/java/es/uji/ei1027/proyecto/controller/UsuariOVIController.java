@@ -16,10 +16,12 @@ import es.uji.ei1027.proyecto.model.Usuario;
 import jakarta.servlet.http.HttpSession;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -138,13 +140,19 @@ public class UsuariOVIController {
     @PostMapping("/update")
     public String processUpdateSubmit(@ModelAttribute("usuariOVI") UsuariOVI usuariOVI,
                                       BindingResult bindingResult, Model model,
-                                      HttpSession session) {
+                                      HttpSession session,
+                                      RedirectAttributes redirectAttributes) { // <-- AÑADIDO AQUI
+
         usuariOVIValidator.validate(usuariOVI, bindingResult);
         if (bindingResult.hasErrors()) {
             cargaAtributosFormulario(model);
             return "usuari/update";
         }
+
         usuariOVIDAO.updateUsuariOVI(usuariOVI);
+
+        // --- MENSAJE DE CONFIRMACIÓN DE ÉXITO ---
+        redirectAttributes.addFlashAttribute("mensaje", "Les dades de l'usuari s'han actualitzat correctament.");
 
         // Redirigir según rol
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -155,9 +163,14 @@ public class UsuariOVIController {
     }
 
     @GetMapping("/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        usuariOVIDAO.deleteUsuariOVI(id);
-        return "redirect:../list";
+    public String processDelete(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            usuariOVIDAO.deleteUsuariOVI(id);
+            redirectAttributes.addFlashAttribute("mensaje", "L'usuari s'ha esborrat correctament.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("error", "Acció denegada: No es pot esborrar l'usuari perquè té peticions, contractes o missatges actius vinculats al seu perfil.");
+        }
+        return "redirect:/usuari/list";
     }
 
     // ── CANDIDATS I FINALITZAR CONTRACTE ───────────────────────────────────

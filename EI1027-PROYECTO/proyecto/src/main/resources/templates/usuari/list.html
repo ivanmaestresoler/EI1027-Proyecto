@@ -34,6 +34,24 @@
         </a>
     </div>
 
+    <div th:if="${mensaje}" class="alert alert-success border-0 shadow-sm mb-4 p-3 d-flex align-items-center" role="alert" style="background-color: #ecfdf5; color: #065f46;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill me-2" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </svg>
+        <div>
+            <strong th:text="${mensaje}"></strong>
+        </div>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger border-0 shadow-sm mb-4 p-3 d-flex align-items-center" role="alert" style="background-color: #fef2f2; color: #991b1b;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <div>
+            <strong th:text="${error}"></strong>
+        </div>
+    </div>
+
     <div th:if="${#lists.isEmpty(usuaris)}" class="text-center py-5 bg-white rounded shadow-sm border">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#94a3b8" class="bi bi-inboxes mb-3" viewBox="0 0 16 16">
             <path d="M4.98 1a.5.5 0 0 0-.39.188L1.54 5H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0A.5.5 0 0 1 10 5h4.46l-3.05-3.812A.5.5 0 0 0 11.02 1H4.98zm9.954 5H10.45a2.5 2.5 0 0 1-4.9 0H1.066l.32 2.562A.5.5 0 0 0 1.884 9h12.234a.5.5 0 0 0 .496-.438L14.933 6zM3.809 1h8.382l3.15 3.937v.384l-.32 2.56a1.5 1.5 0 0 1-1.488 1.314H1.884A1.5 1.5 0 0 1 .396 7.876L.076 5.316V4.937L3.21 1h.599zm-2.07 9h12.522l.344 2.753a1.5 1.5 0 0 1-1.488 1.687H2.884a1.5 1.5 0 0 1-1.489-1.687L1.74 10z"/>
@@ -66,7 +84,10 @@
                     <td class="px-4 text-center">
                         <div class="d-flex justify-content-center gap-2">
                             <a th:href="@{/usuari/update/{id}(id=${uOvi.idUsuario})}" class="btn btn-sm btn-outline-primary px-3">Editar</a>
-                            <a th:href="@{/usuari/delete/{id}(id=${uOvi.idUsuario})}" class="btn btn-sm btn-outline-danger px-3">Esborrar</a>
+
+                            <a th:href="@{/confirmar(missatge='Estàs segur que vols esborrar aquest usuari d OVI? Aquesta acció no es pot desfer.', urlDesti=@{/usuari/delete/{id}(id=${uOvi.idUsuario})}, urlRetorn=@{/usuari/list})}"
+                               class="btn btn-sm btn-outline-danger px-3">Esborrar</a>
+
                         </div>
                     </td>
                 </tr>
