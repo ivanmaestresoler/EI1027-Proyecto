@@ -140,9 +140,7 @@ public class UsuariOVIController {
     @PostMapping("/update")
     public String processUpdateSubmit(@ModelAttribute("usuariOVI") UsuariOVI usuariOVI,
                                       BindingResult bindingResult, Model model,
-                                      HttpSession session,
-                                      RedirectAttributes redirectAttributes) { // <-- AÑADIDO AQUI
-
+                                      HttpSession session) {
         usuariOVIValidator.validate(usuariOVI, bindingResult);
         if (bindingResult.hasErrors()) {
             cargaAtributosFormulario(model);
@@ -151,15 +149,16 @@ public class UsuariOVIController {
 
         usuariOVIDAO.updateUsuariOVI(usuariOVI);
 
-        // --- MENSAJE DE CONFIRMACIÓN DE ÉXITO ---
-        redirectAttributes.addFlashAttribute("mensaje", "Les dades de l'usuari s'han actualitzat correctament.");
+        model.addAttribute("missatge", "Les dades de l'usuari s'han actualitzat correctament en el sistema.");
 
-        // Redirigir según rol
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario != null && usuario.getTipusUsuari().equals("UsuariOVI")) {
-            return "redirect:/";
+            model.addAttribute("urlRetorn", "/"); // Si es el usuario, va al menú
+        } else {
+            model.addAttribute("urlRetorn", "/usuari/list"); // Si es el admin, vuelve a la lista
         }
-        return "redirect:/usuari/list";
+
+        return "operacio-completada";
     }
 
     @GetMapping("/delete/{id}")
