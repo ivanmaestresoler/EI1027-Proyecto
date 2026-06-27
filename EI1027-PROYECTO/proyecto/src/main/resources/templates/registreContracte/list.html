@@ -43,9 +43,9 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light text-secondary">
                 <tr>
-                    <th class="py-3 px-4 fw-bold border-bottom-0">ID Contracte</th>
-                    <th class="py-3 px-4 fw-bold border-bottom-0">ID Sol·licitud</th>
-                    <th class="py-3 px-4 fw-bold border-bottom-0">ID Assistent</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Nom Usuari</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Nom Assistent</th>
+                    <th class="py-3 px-4 fw-bold border-bottom-0">Tipus Assistència</th>
                     <th class="py-3 px-4 fw-bold border-bottom-0">Data Inici</th>
                     <th class="py-3 px-4 fw-bold border-bottom-0">Data Fi</th>
                     <th class="py-3 px-4 fw-bold border-bottom-0">Document PDF</th>
@@ -55,9 +55,9 @@
                 </thead>
                 <tbody class="border-top-0">
                 <tr th:each="con : ${contractes}">
-                    <td class="px-4 fw-medium text-dark" th:text="${con.idContracte}"></td>
-                    <td class="px-4 text-muted" th:text="${con.idRequest}"></td>
-                    <td class="px-4 text-muted" th:text="${con.idAssistent}"></td>
+                    <td class="px-4 text-dark fw-medium" th:text="${con.nomUsuari}"></td>
+                    <td class="px-4 text-muted" th:text="${con.nomAssistent}"></td>
+                    <td class="px-4 text-muted" th:text="${con.tipusAssistencia}"></td>
                     <td class="px-4 text-dark" th:text="${con.dataInici}"></td>
                     <td class="px-4 text-dark"
                         th:text="${con.dataFi != null ? con.dataFi : 'Vigent / Indefinit'}"></td>

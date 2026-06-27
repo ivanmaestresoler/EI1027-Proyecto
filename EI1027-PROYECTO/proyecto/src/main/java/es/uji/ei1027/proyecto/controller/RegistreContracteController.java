@@ -3,6 +3,7 @@ package es.uji.ei1027.proyecto.controller;
 import es.uji.ei1027.proyecto.dao.APRequestDAO;
 import es.uji.ei1027.proyecto.dao.RegistreContracteDao;
 import es.uji.ei1027.proyecto.dao.AssistentPersonalDao;
+import es.uji.ei1027.proyecto.dao.UsuarioDao;
 import es.uji.ei1027.proyecto.model.APRequest;
 import es.uji.ei1027.proyecto.model.RegistreContracte;
 import es.uji.ei1027.proyecto.model.AssistentPersonal;
@@ -25,6 +26,7 @@ public class RegistreContracteController {
     private APRequestDAO apRequestDao;
     private RegistreContracteValidator validator;
     private AssistentPersonalDao assistentPersonalDao;
+    private UsuarioDao usuarioDao;
 
     @Autowired
     public void setRegistreContracteDao(RegistreContracteDao registreContracteDao) {
@@ -44,6 +46,11 @@ public class RegistreContracteController {
     @Autowired
     public void setAssistentPersonalDao(AssistentPersonalDao assistentPersonalDao) {
         this.assistentPersonalDao = assistentPersonalDao;
+    }
+
+    @Autowired(required = false)
+    public void setUsuarioDao(UsuarioDao usuarioDao) {
+        this.usuarioDao = usuarioDao;
     }
 
     @GetMapping("/list")
@@ -66,6 +73,31 @@ public class RegistreContracteController {
         } else {
             contractes = registreContracteDao.getContractesPaginats(pageSize, offset);
             totalRecords = registreContracteDao.getTotalContractes();
+        }
+
+        for (RegistreContracte rc : contractes) {
+            APRequest req = apRequestDao.getAPRequest(rc.getIdRequest());
+            if (req != null) {
+                rc.setTipusAssistencia(req.getTipusAssistencia());
+                if (usuarioDao != null) {
+                    try {
+                        Usuario u = usuarioDao.getUsuario(req.getIdUsuari());
+                        if (u != null) {
+                            rc.setNomUsuari(u.getNom());
+                        } else {
+                            rc.setNomUsuari(String.valueOf(req.getIdUsuari()));
+                        }
+                    } catch (Exception e) {
+                        rc.setNomUsuari(String.valueOf(req.getIdUsuari()));
+                    }
+                } else {
+                    rc.setNomUsuari(String.valueOf(req.getIdUsuari()));
+                }
+            }
+            AssistentPersonal ap = assistentPersonalDao.getAssistentPersonal(rc.getIdAssistent());
+            if (ap != null) {
+                rc.setNomAssistent(ap.getNom() + (ap.getCognom1() != null ? " " + ap.getCognom1() : ""));
+            }
         }
 
         int totalPages = totalRecords == 0 ? 1 : (int) Math.ceil((double) totalRecords / pageSize);
@@ -163,7 +195,7 @@ public class RegistreContracteController {
             return "registreContracte/update";
         }
         registreContracteDao.updateContracte(registreContracte);
-        return "redirect:/registreContracte/list"; // Asegurado redireccionamiento absoluto aquí
+        return "redirect:/registreContracte/list";
     }
 
     @GetMapping("/delete/{id}")

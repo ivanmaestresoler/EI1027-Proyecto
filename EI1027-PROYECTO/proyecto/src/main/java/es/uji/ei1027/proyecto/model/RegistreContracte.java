@@ -9,6 +9,10 @@ public class RegistreContracte {
     private LocalDate dataInici;
     private LocalDate dataFi;
     private String rutaPdf;
+    
+    private String nomUsuari;
+    private String nomAssistent;
+    private String tipusAssistencia;
 
     public int getIdContracte() { return idContracte; }
     public void setIdContracte(int idContracte) { this.idContracte = idContracte; }
@@ -27,4 +31,13 @@ public class RegistreContracte {
 
     public String getRutaPdf() { return rutaPdf; }
     public void setRutaPdf(String rutaPdf) { this.rutaPdf = rutaPdf; }
+
+    public String getNomUsuari() { return nomUsuari; }
+    public void setNomUsuari(String nomUsuari) { this.nomUsuari = nomUsuari; }
+
+    public String getNomAssistent() { return nomAssistent; }
+    public void setNomAssistent(String nomAssistent) { this.nomAssistent = nomAssistent; }
+
+    public String getTipusAssistencia() { return tipusAssistencia; }
+    public void setTipusAssistencia(String tipusAssistencia) { this.tipusAssistencia = tipusAssistencia; }
 }
