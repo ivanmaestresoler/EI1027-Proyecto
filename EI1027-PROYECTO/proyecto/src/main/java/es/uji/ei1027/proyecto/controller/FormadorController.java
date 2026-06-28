@@ -9,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/formador")
@@ -66,7 +64,6 @@ public class FormadorController {
         return "formador/update";
     }
 
-    // AÑADIDO: 'Model model' en los parámetros del método
     @RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("formador") Formador formador, BindingResult bindingResult, Model model) {
         FormadorValidator formadorValidator = new FormadorValidator();
@@ -82,12 +79,12 @@ public class FormadorController {
         }
         formadorDao.updateFormador(formador);
 
-        // Atributos actualizados para el contexto de Formador
-        model.addAttribute("titol", "Formador actualitzat");
+        // MODIFICADO: Atributos ajustados para coincidir exactamente con 'operacio-completada.html'
         model.addAttribute("missatge", "Les dades del formador s'han desat correctament.");
-        model.addAttribute("urlTornar", "/formador/list");
+        model.addAttribute("urlRetorn", "/formador/list");
 
-        return "confirmacion-editat";
+        // MODIFICADO: Retornamos el nombre de tu plantilla existente
+        return "operacio-completada";
     }
 
     @RequestMapping(value="/delete/{id}")

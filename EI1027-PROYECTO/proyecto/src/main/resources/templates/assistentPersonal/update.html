@@ -34,15 +34,7 @@
                 <input type="hidden" th:field="*{contrasenya}" />
                 <input type="hidden" th:field="*{tipus}" />
 
-                <div class="mb-4" th:if="${session.usuario != null and session.usuario.tipusUsuari == 'admin'}">
-                    <label class="form-label fw-bold text-dark mb-1">Estat de la Sol·licitud:</label>
-                    <select th:field="*{estatAcceptat}" class="form-select custom-input">
-                        <option value="Candidat">Candidat</option>
-                        <option value="Acceptat">Acceptat</option>
-                        <option value="Rebutjat">Rebutjat</option>
-                    </select>
-                </div>
-                <input type="hidden" th:field="*{estatAcceptat}" th:if="${session.usuario == null or session.usuario.tipusUsuari != 'admin'}" />
+                <input type="hidden" th:field="*{estatAcceptat}" />
 
                 <div class="mb-4">
                     <label class="form-label fw-bold text-dark mb-1">DNI/NIE:</label>
