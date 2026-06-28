@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -112,10 +113,22 @@ public class RegistreContracteController {
     public String addContracte(Model model,
                                @RequestParam(required = false) Integer idRequest,
                                @RequestParam(required = false) Integer idAssistent,
-                               HttpSession session) {
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) { // <-- Requiere RedirectAttributes
+
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
         if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
+
+        // VALIDACIÓ: Si ja té contracte, el retornem al DETALL de la petició amb un error
+        if (idRequest != null) {
+            APRequest request = apRequestDao.getAPRequest(idRequest);
+            if (request != null && (request.getEstatRequest().equals("Tancada amb contracte") || request.getEstatRequest().equals("Tancada amb contracte finalitzat"))) {
+                redirectAttributes.addFlashAttribute("error", "Acció denegada: Aquesta petició d'assistència ja té un contracte actiu.");
+                return "redirect:/aprequest/detalle/" + idRequest;
+            }
+        }
+
         RegistreContracte rc = new RegistreContracte();
         if (idRequest != null) rc.setIdRequest(idRequest);
         if (idAssistent != null) rc.setIdAssistent(idAssistent);
@@ -133,10 +146,20 @@ public class RegistreContracteController {
     @PostMapping("/add")
     public String processAddSubmit(
             @ModelAttribute("registreContracte") RegistreContracte registreContracte,
-            BindingResult bindingResult, Model model, HttpSession session) {
+            BindingResult bindingResult, Model model, HttpSession session,
+            RedirectAttributes redirectAttributes) { // <-- Requiere RedirectAttributes
+
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) return "redirect:/login";
         if (!usuario.getTipusUsuari().equals("UsuariOVI")) return "redirect:/registreContracte/list";
+
+        // VALIDACIÓ EXTRA AL POST: Per si intenten forçar-ho
+        APRequest request = apRequestDao.getAPRequest(registreContracte.getIdRequest());
+        if (request != null && (request.getEstatRequest().equals("Tancada amb contracte") || request.getEstatRequest().equals("Tancada amb contracte finalitzat"))) {
+            redirectAttributes.addFlashAttribute("error", "No es pot crear el contracte perquè ja n'hi ha un d'actiu per a aquesta petició.");
+            return "redirect:/aprequest/detalle/" + registreContracte.getIdRequest();
+        }
+
         validator.validate(registreContracte, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("dataAvui", LocalDate.now());
@@ -146,12 +169,14 @@ public class RegistreContracteController {
             }
             return "registreContracte/add";
         }
+
         registreContracteDao.addContracte(registreContracte);
-        APRequest request = apRequestDao.getAPRequest(registreContracte.getIdRequest());
+
         if (request != null) {
             request.setEstatRequest("Tancada amb contracte");
             apRequestDao.updateAPRequest(request);
         }
+
         model.addAttribute("tipus", "acceptat");
         model.addAttribute("destinatari", "Usuari OVI");
         model.addAttribute("assumpte", "Contracte registrat correctament");

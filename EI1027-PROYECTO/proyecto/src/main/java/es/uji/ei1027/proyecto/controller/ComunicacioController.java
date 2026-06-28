@@ -35,7 +35,7 @@ public class ComunicacioController {
     @Autowired
     public void setUsuarioDao(UsuarioDao usuarioDao) { this.usuarioDao = usuarioDao; }
 
-    // ── LLISTA DE CONVERSATIONS ─────────────────────────────────────────────
+    // ── LLISTA DE CONVERSATIONS CORREGIDA ──────────────────────────────────
     @GetMapping("/conversations")
     public String listConversations(Model model, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -45,27 +45,50 @@ public class ComunicacioController {
         if (usuario.getTipusUsuari().equals("AssistentPersonal")) {
             seleccions = seleccionDao.getSeleccionsByAssistent(usuario.getIdUsuario());
         } else {
+            // Per a UsuariOVI i Admin, obtenim totes inicialment i filtrem després
             seleccions = seleccionDao.getSeleccions();
         }
 
         List<Map<String, Object>> conversations = new ArrayList<>();
         for (Seleccion s : seleccions) {
-            List<ComunicacioUsuariOVIPAP> missatges =
-                    comunicacioDao.getComunicacionsBySeleccion(s.getIdSeleccion());
-            if (!missatges.isEmpty()) {
-                Map<String, Object> conv = new HashMap<>();
-                conv.put("idSeleccion", s.getIdSeleccion());
-                conv.put("idAssistent", s.getIdAssistent());
+            List<ComunicacioUsuariOVIPAP> missatges = comunicacioDao.getComunicacionsBySeleccion(s.getIdSeleccion());
 
-                int idAltre = usuario.getTipusUsuari().equals("AssistentPersonal")
-                        ? missatges.get(0).getIdFrom()
-                        : s.getIdAssistent();
-                Usuario altre = usuarioDao.getUsuario(idAltre);
-                conv.put("nomAltre", altre != null ? altre.getNom() + " " + altre.getCognom1() : "Usuari #" + idAltre);
-                conv.put("ultimMissatge", missatges.get(missatges.size() - 1).getMissatge());
-                conv.put("dataUltim", missatges.get(missatges.size() - 1).getDataEnviament());
-                conv.put("numMissatges", missatges.size());
-                conversations.add(conv);
+            if (!missatges.isEmpty()) {
+
+                // COMPROVACIÓ DE SEGURETAT: Pertany aquesta conversa a l'usuari actual?
+                boolean belongsToUser = false;
+
+                if (usuario.getTipusUsuari().equals("admin") || usuario.getTipusUsuari().equals("Tecnic")) {
+                    belongsToUser = true; // L'administrador i tècnic ho veuen tot
+                } else if (usuario.getTipusUsuari().equals("AssistentPersonal")) {
+                    belongsToUser = true; // L'assistent ja està filtrat per DAO
+                } else {
+                    // Si és UsuariOVI, comprovem que siga el remitent o el destinatari d'algun missatge
+                    for (ComunicacioUsuariOVIPAP m : missatges) {
+                        if (m.getIdFrom() == usuario.getIdUsuario() || m.getIdTo() == usuario.getIdUsuario()) {
+                            belongsToUser = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Si la conversa és de l'usuari, l'afegim a la llista per mostrar-la
+                if (belongsToUser) {
+                    Map<String, Object> conv = new HashMap<>();
+                    conv.put("idSeleccion", s.getIdSeleccion());
+                    conv.put("idAssistent", s.getIdAssistent());
+
+                    int idAltre = usuario.getTipusUsuari().equals("AssistentPersonal")
+                            ? missatges.get(0).getIdFrom()
+                            : s.getIdAssistent();
+
+                    Usuario altre = usuarioDao.getUsuario(idAltre);
+                    conv.put("nomAltre", altre != null ? altre.getNom() + " " + altre.getCognom1() : "Usuari #" + idAltre);
+                    conv.put("ultimMissatge", missatges.get(missatges.size() - 1).getMissatge());
+                    conv.put("dataUltim", missatges.get(missatges.size() - 1).getDataEnviament());
+                    conv.put("numMissatges", missatges.size());
+                    conversations.add(conv);
+                }
             }
         }
 
@@ -73,7 +96,6 @@ public class ComunicacioController {
         return "comunicacio/conversations";
     }
 
-    // ── XAT D'UNA CONVERSA ──────────────────────────────────────────────────
     @GetMapping("/xat/{idSeleccion}")
     public String xat(@PathVariable int idSeleccion, Model model, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -170,7 +192,6 @@ public class ComunicacioController {
         return "redirect:/comunicacio/xat/" + comunicacio.getIdSeleccion();
     }
 
-    // ── LLISTAT GENERAL — amb noms en lloc d'IDs ─────────────────────────────
     @RequestMapping("/list")
     public String listComunicacions(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
         int pageSize = 5;
